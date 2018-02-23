@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.WebApi", "CryptoManager.WebApi\CryptoManager.WebApi.csproj", "{7BF6A5B2-1BAC-4986-8325-AB0E2214F276}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoManager.WebApi", "CryptoManager.WebApi\CryptoManager.WebApi.csproj", "{7BF6A5B2-1BAC-4986-8325-AB0E2214F276}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.WebApi.Test", "CryptoManager.WebApi.Test\CryptoManager.WebApi.Test.csproj", "{CF94E987-0140-4186-9737-E7A3AF7F26FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoManager.WebApi.Test", "CryptoManager.WebApi.Test\CryptoManager.WebApi.Test.csproj", "{CF94E987-0140-4186-9737-E7A3AF7F26FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.Repository", "CryptoManager.Repository\CryptoManager.Repository.csproj", "{A3FDB95A-026F-4FFF-84CE-A89C2E9A33F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.Business", "CryptoManager.Business\CryptoManager.Business.csproj", "{6791FB3C-DFA5-4E77-A262-9ED692DE5C27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.Domain", "CryptoManager.Domain\CryptoManager.Domain.csproj", "{FBD5F7B9-0F8D-4291-A91E-35E3C434D55F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.Repository.Test", "CryptoManager.Repository.Test\CryptoManager.Repository.Test.csproj", "{24C8A124-2910-4FEA-AB8C-EB216928D259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoManager.Business.Test", "CryptoManager.Business.Test\CryptoManager.Business.Test.csproj", "{179CF078-6406-42F7-9784-4FF7C50335D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{67712B1B-5BBB-45E6-9B22-2440E3925A6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +33,34 @@ Global
 		{CF94E987-0140-4186-9737-E7A3AF7F26FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF94E987-0140-4186-9737-E7A3AF7F26FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF94E987-0140-4186-9737-E7A3AF7F26FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FDB95A-026F-4FFF-84CE-A89C2E9A33F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FDB95A-026F-4FFF-84CE-A89C2E9A33F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FDB95A-026F-4FFF-84CE-A89C2E9A33F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FDB95A-026F-4FFF-84CE-A89C2E9A33F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6791FB3C-DFA5-4E77-A262-9ED692DE5C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6791FB3C-DFA5-4E77-A262-9ED692DE5C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6791FB3C-DFA5-4E77-A262-9ED692DE5C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6791FB3C-DFA5-4E77-A262-9ED692DE5C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD5F7B9-0F8D-4291-A91E-35E3C434D55F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD5F7B9-0F8D-4291-A91E-35E3C434D55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD5F7B9-0F8D-4291-A91E-35E3C434D55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD5F7B9-0F8D-4291-A91E-35E3C434D55F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24C8A124-2910-4FEA-AB8C-EB216928D259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C8A124-2910-4FEA-AB8C-EB216928D259}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C8A124-2910-4FEA-AB8C-EB216928D259}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C8A124-2910-4FEA-AB8C-EB216928D259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{179CF078-6406-42F7-9784-4FF7C50335D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{179CF078-6406-42F7-9784-4FF7C50335D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{179CF078-6406-42F7-9784-4FF7C50335D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{179CF078-6406-42F7-9784-4FF7C50335D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF94E987-0140-4186-9737-E7A3AF7F26FF} = {67712B1B-5BBB-45E6-9B22-2440E3925A6F}
+		{24C8A124-2910-4FEA-AB8C-EB216928D259} = {67712B1B-5BBB-45E6-9B22-2440E3925A6F}
+		{179CF078-6406-42F7-9784-4FF7C50335D9} = {67712B1B-5BBB-45E6-9B22-2440E3925A6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19CF4684-0C10-4648-9403-020C42D99C5C}

@@ -8,3 +8,14 @@
 /CryptoManager.Server/CryptoManager.WebApi.Test/obj
 /.vs
 /CryptoManager.Server/.vs
+/CryptoManager.Server/CryptoManager.Business/obj
+/CryptoManager.Server/CryptoManager.Business/bin/Debug/netstandard2.0
+/CryptoManager.Server/CryptoManager.Business.Test/bin/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Business.Test/obj/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Business.Test/obj
+/CryptoManager.Server/CryptoManager.Domain/bin/Debug/netstandard2.0
+/CryptoManager.Server/CryptoManager.Domain/obj
+/CryptoManager.Server/CryptoManager.Repository/bin/Debug/netstandard2.0
+/CryptoManager.Server/CryptoManager.Repository/obj
+/CryptoManager.Server/CryptoManager.Repository.Test/bin/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Repository.Test/obj
