@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/CryptoManager.Server/CryptoManager.WebApi/bin/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.WebApi/obj
+/CryptoManager.Server/CryptoManager.WebApi.Test/bin/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.WebApi.Test/obj
+/.vs
+/CryptoManager.Server/.vs
