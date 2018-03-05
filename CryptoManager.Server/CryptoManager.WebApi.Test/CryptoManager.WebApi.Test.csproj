@@ -2,20 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
+    <UserSecretsId>513b337b-1142-4337-8075-853468254ed3</UserSecretsId>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
+    <ProjectReference Include="..\CryptoManager.Repository\CryptoManager.Repository.csproj" />
     <ProjectReference Include="..\CryptoManager.WebApi\CryptoManager.WebApi.csproj" />
   </ItemGroup>
 

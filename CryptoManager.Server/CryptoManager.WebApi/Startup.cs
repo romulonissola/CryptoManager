@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using CryptoManager.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace CryptoManager.WebApi
 {
     public class Startup
     {
+        public IConfiguration _configuration { get; }
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -22,20 +25,38 @@ namespace CryptoManager.WebApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+            _configuration = builder.Build();
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            WebUtil.JwtKeyName = Configuration.GetSection("JwtKeyName").Value;
+            //using secret manager to develop with real code
+            WebUtil.JwtKeyName = _configuration["JwtKeyName"];
+            WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
+            WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
 
-            services.AddSingleton(typeof(JwtFactory));
+            services.AddDbContexts(_configuration.GetConnectionString("DefaultConnection"));
+            services.AddRepositories();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = WebUtil.FacebookAppId;
+                facebookOptions.AppSecret = WebUtil.FacebookAppSecret;
+            });
+
+            services.AddSingleton<JwtFactory>();
 
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter("Bearer"));
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -104,7 +125,8 @@ namespace CryptoManager.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "CryptoManager API V1");
             });
-
+            
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
