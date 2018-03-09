@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using CryptoManager.Domain.Mapper;
 
 namespace CryptoManager.WebApi
 {
@@ -41,7 +42,9 @@ namespace CryptoManager.WebApi
             WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
 
             services.AddDbContexts(_configuration.GetConnectionString("DefaultConnection"));
+            services.AddORM();
             services.AddRepositories();
+            
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
@@ -78,6 +81,13 @@ namespace CryptoManager.WebApi
                         ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
                     };
             });
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddAuthorization(auth =>
             {

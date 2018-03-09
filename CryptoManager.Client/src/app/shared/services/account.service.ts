@@ -71,15 +71,31 @@ export class AccountService {
       FB.getLoginStatus((response) => {
         if (response.status === 'connected') {
           return this.authFacebookUser(response.authResponse.accessToken)
-                                      .subscribe(data => observer.next(data));
+                                      .subscribe(
+                                        data =>
+                                        { 
+                                          observer.next(data);
+                                        },
+                                        error=> {
+                                          observer.error(error);
+                                        }
+                                      );
         } else {
           FB.login((loginResponse)=>{
             if(loginResponse.status !== 'not_authorized'){
               return this.authFacebookUser(loginResponse.authResponse.accessToken)
-                                          .subscribe(data => observer.next(data));
+                                      .subscribe(
+                                        data =>
+                                        { 
+                                          observer.next(data);
+                                        },
+                                        error=> {
+                                          observer.error(error);
+                                        }
+                                      );
             } else {
               this.purgeAuth();
-              observer.next(false);
+              observer.error("User Not logged");
             }
           }, {scope: this.fbApiPermission.join(',')});
         }
@@ -88,7 +104,6 @@ export class AccountService {
   }
 
   authFacebookUser(accessToken: string): Observable<boolean> {
-    debugger;
     let httpParams = new HttpParams()
     .append("accessToken", accessToken);
     return this.apiService.post(this.serviceURL + '/ExternalLoginFacebook', null, httpParams)

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -12,7 +12,8 @@ import { ApiService,
          AuthGuard,
          JwtService,
          AccountService,
-         JwtHelper} from './shared';
+         JwtHelper,
+         HttpErrorInterceptor } from './shared';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -41,7 +42,13 @@ export function createTranslateLoader(http: HttpClient) {
                 AuthGuard,
                 JwtService,
                 AccountService,
-                JwtHelper],
+                JwtHelper,
+                { 
+                    provide: HTTP_INTERCEPTORS, 
+                    useClass: HttpErrorInterceptor, 
+                    multi: true 
+                } 
+            ],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

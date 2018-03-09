@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CryptoManager.WebApi.Test.Mocks
+﻿namespace CryptoManager.WebApi.Test.Mocks
 {
     public static class Constants
     { 

@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Domain.IntegrationEntities.Facebook;
 using CryptoManager.WebApi.Utils;
@@ -28,7 +29,8 @@ namespace CryptoManager.WebApi.Controllers
 
         public AccountController(JwtFactory jwtFactory,
                                  SignInManager<ApplicationUser> signInManager,
-                                 UserManager<ApplicationUser> userManager)
+                                 UserManager<ApplicationUser> userManager,
+                                 IMapper mapper) : base(mapper)
         {
             _jwtFactory = jwtFactory;
             _signInManager = signInManager;

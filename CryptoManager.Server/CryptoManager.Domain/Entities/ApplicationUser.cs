@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CryptoManager.Domain.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<Guid>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -13,5 +12,7 @@ namespace CryptoManager.Domain.Entities
         public string Gender { get; set; }
         public string Locale { get; set; }
         public string PictureUrl { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

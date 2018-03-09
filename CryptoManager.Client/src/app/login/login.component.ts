@@ -10,7 +10,7 @@ import { Errors, AccountService } from '../shared/';
     animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit {
-    errors: Errors = {errors: {}};
+    errors = {};
     returnUrl: string;
 
     constructor(private route: ActivatedRoute,
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
     }
 
     onFacebookLogin(){
+        this.errors = {};
         this.accountService
         .facebookLogin()
         .subscribe(
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit {
             this.zone.run(() => this.router.navigateByUrl(this.returnUrl));
           },
           err => {
+            alert(JSON.stringify(err));
             this.errors = err;
           }
         );

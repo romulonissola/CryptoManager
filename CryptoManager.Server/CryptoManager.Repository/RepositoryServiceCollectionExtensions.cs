@@ -1,11 +1,11 @@
-﻿using CryptoManager.Domain.Entities;
+﻿using CryptoManager.Domain.Contracts.Repositories;
+using CryptoManager.Domain.Entities;
 using CryptoManager.Repository.DatabaseContext;
+using CryptoManager.Repository.Infrastructure;
+using CryptoManager.Repository.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CryptoManager.Repository
 {
@@ -17,12 +17,18 @@ namespace CryptoManager.Repository
             {
                 options.UseSqlServer(connectionString);
             });
+
+            services.AddDbContext<EntityContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+            });
+
             return services;
         }
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>
+            services.AddIdentity<ApplicationUser, ApplicationRole>
                     (options => {
                         options.Password.RequiredLength = 3;
                         options.Password.RequiredUniqueChars = 0;
@@ -33,6 +39,18 @@ namespace CryptoManager.Repository
                     })
                     .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                     .AddDefaultTokenProviders();
+
+            services.AddScoped<IExchangeRepository, ExchangeRepository>();
+            services.AddScoped<IAssetRepository, AssetRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddORM(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IORM<>), typeof(EntityRepository<>));
             return services;
         }
     }

@@ -1,22 +1,19 @@
 ﻿using CryptoManager.WebApi.Utils;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using CryptoManager.Repository;
 using CryptoManager.Repository.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using CryptoManager.Domain.Mapper;
 
 namespace CryptoManager.WebApi.Test.Mocks
 {
@@ -66,19 +63,35 @@ namespace CryptoManager.WebApi.Test.Mocks
 
         public void ConfigureServices(IServiceCollection services)
         {
-            WebUtil.JwtKeyName = _configuration["JwtKeyName"];
-            WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
-            WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
+            TestWebUtil.JwtKeyName = _configuration["JwtKeyName"];
+            TestWebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
+            TestWebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
+            TestWebUtil.FacebookAccessToken = _configuration["Authentication:Facebook:AccessToken"];
 
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
             {
                 options.UseInMemoryDatabase("DBINTEGRATIONTEST")
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             });
-            
-            services.AddRepositories();
 
+            services.AddDbContext<EntityContext>(options =>
+            {
+                options.UseInMemoryDatabase("DBINTEGRATIONTEST")
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+            });
+
+            services.AddORM();
+            services.AddRepositories();
+           
             services.AddSingleton(typeof(JwtFactory));
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
 
             services.AddCors();
             services.AddMvc();
