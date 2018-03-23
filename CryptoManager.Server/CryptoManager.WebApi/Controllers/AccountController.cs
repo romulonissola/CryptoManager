@@ -47,7 +47,7 @@ namespace CryptoManager.WebApi.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return new ObjectResult(await _userManager.FindByNameAsync(User.FindFirstValue("Email")));
+                return new ObjectResult(await _userManager.FindByIdAsync(User.FindFirstValue("Id")));
             }
             return BadRequest();
         }
@@ -105,7 +105,7 @@ namespace CryptoManager.WebApi.Controllers
                         return new BadRequestObjectResult(result);
                 }
 
-                var localUser = await _userManager.FindByNameAsync(userInfo.Email);
+                var localUser = await _userManager.FindByEmailAsync(userInfo.Email);
 
                 if (localUser == null)
                 {
@@ -124,6 +124,7 @@ namespace CryptoManager.WebApi.Controllers
         {
             var claims = new Claim[]
             {
+                new Claim("Id", user.Id.ToString()),
                 new Claim("Name", $"{user.FirstName} {user.LastName}"),
                 new Claim("Email", user.Email),
                 new Claim("PictureURL", user.PictureUrl),

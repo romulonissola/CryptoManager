@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve --ec true",
     "build": "ng build --prod",
+    "stop": "pkill --signal SIGINT crypto-manager.client",
     "gitbuild": "ng build --prod --base /romulonissola/CryptoManager/master/CryptoManager.Client/dist/",
     "test": "ng test",
     "lint": "ng lint",

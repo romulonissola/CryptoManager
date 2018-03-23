@@ -27,5 +27,18 @@
     "Pending Task" : "Pending Task",
     "In queue" : "In queue",
     "Mail" : "Mail",
-    "View All" : "View All"
+    "View All" : "View All",
+    "Exchanges Register" : "Exchanges Register",
+    "Exchanges" : "Exchanges",
+    "Name" : "Name",
+    "Website" : "Website",
+    "Api URL" : "Api URL",
+    "Save" : "Save",
+    "Add" : "Add",
+    "Edit" : "Edit",
+    "Delete" : "Delete",
+    "DeleteMessage": "Are you sure you want to delete?",
+    "Back" : "Back",
+    "Field required" : "Field required",
+    "Enabled" : "Enabled"
 }

@@ -1,0 +1,44 @@
+<div class="row" [@routerTransition]>
+    <div class="col-sm-12">
+        <div class="card mb-3">
+            <div class="card-header">{{ title }}</div>
+            <div class="card-body">
+              <form #form="ngForm" (ngSubmit)="save()">
+                  <fieldset class="form-group">
+                    <label>{{ 'Name' | translate }}</label>
+                    <input class="form-control" [(ngModel)]="exchange.name" name="name" #name="ngModel" required>
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">                 
+                      <div *ngIf="name.errors.required">
+                        {{ "Field required" | translate }}
+                      </div>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label>{{ 'Website' | translate }}</label>
+                    <input class="form-control" [(ngModel)]="exchange.website" name="website" #website="ngModel" required>
+                    <div *ngIf="website.invalid && (website.dirty || website.touched)" class="alert alert-danger">                 
+                      <div *ngIf="website.errors.required">
+                        {{ "Field required" | translate }}
+                      </div>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group">
+                    <label>{{ 'Api URL' | translate }}</label>
+                    <input class="form-control" [(ngModel)]="exchange.apiUrl" name="apiUrl" #apiUrl="ngModel" required>
+                    <div *ngIf="apiUrl.invalid && (apiUrl.dirty || apiUrl.touched)" class="alert alert-danger">                 
+                      <div *ngIf="apiUrl.errors.required">
+                        {{ "Field required" | translate }}
+                      </div>
+                    </div>
+                  </fieldset>
+                  <fieldset class="form-group" *ngIf="formState == 'Edit'">
+                    <input type="checkbox" [(ngModel)]="exchange.isEnabled" name="isEnabled">
+                    <label>{{ 'Enabled' | translate }}</label>
+                  </fieldset>
+                  <button type="submit" class="btn btn-secondary" [disabled]="form.invalid">{{ 'Save' | translate }}</button>
+                  <button class="btn btn-secondary" routerLink="/exchange">{{ 'Back' | translate }}</button>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>

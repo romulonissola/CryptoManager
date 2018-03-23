@@ -27,5 +27,18 @@
     "Pending Task" : "Tarefas Pendentes",
     "In queue" : "Em Fila",
     "Mail" : "Email",
-    "View All" : "Ver Todos"
+    "View All" : "Ver Todos",
+    "Exchanges Register" : "Cadastro de Exchanges",
+    "Exchanges" : "Exchanges",
+    "Name" : "Nome",
+    "Website" : "Website",
+    "Api URL" : "URL da API",
+    "Save" : "Salvar",
+    "Add" : "Adicionar",
+    "Edit" : "Editar",
+    "Delete" : "Deletar",
+    "DeleteMessage": "Deseja realmente deletar este registro?",
+    "Back" : "Voltar",
+    "Field required" : "Campo Obrigatório",
+    "Enabled" : "Habilitado"
 }

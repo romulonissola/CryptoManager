@@ -38,9 +38,10 @@ export class AccountService {
 
   populate() {
     if (this.jwtService.getToken()) {
-      if(this.currentUser == null){
+      if(this.currentUserSubject.value.toString() == {}){
         let tokenDecoded = this.jwtHelper.decodeToken(this.jwtService.getToken());
         let user: User = new User();
+        user.id = tokenDecoded.Id;
         user.email = tokenDecoded.Email;
         user.imageURL = tokenDecoded.PictureURL;
         user.username = tokenDecoded.Name;
@@ -110,6 +111,7 @@ export class AccountService {
         .pipe(map(data => {
           let tokenDecoded = this.jwtHelper.decodeToken(data);
           let user: User = new User();
+          user.id = tokenDecoded.Id;
           user.email = tokenDecoded.Email;
           user.imageURL = tokenDecoded.PictureURL;
           user.username = tokenDecoded.Name;

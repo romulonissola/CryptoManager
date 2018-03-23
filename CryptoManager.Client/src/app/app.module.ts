@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +13,7 @@ import { ApiService,
          AuthGuard,
          JwtService,
          AccountService,
+         ExchangeService,
          JwtHelper,
          HttpErrorInterceptor } from './shared';
 
@@ -35,13 +37,15 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        AppRoutingModule
+        AppRoutingModule,
+        FormsModule
     ],
     declarations: [AppComponent],
     providers: [ApiService,
                 AuthGuard,
                 JwtService,
                 AccountService,
+                ExchangeService,
                 JwtHelper,
                 { 
                     provide: HTTP_INTERCEPTORS, 
