@@ -10,34 +10,34 @@ using Microsoft.AspNetCore.Mvc;
 namespace CryptoManager.WebApi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Exchange")]
-    public class ExchangeController : BaseController
+    [Route("api/Asset")]
+    public class AssetController : BaseController
     {
-        private readonly IExchangeRepository _repository;
+        private readonly IAssetRepository _repository;
 
-        public ExchangeController(IExchangeRepository repository, IMapper mapper) : base(mapper)
+        public AssetController(IAssetRepository repository, IMapper mapper) : base(mapper)
         {
             _repository = repository;
         }
         /// <summary>
-        /// gets all exchanges from database
+        /// gets all Assets from database
         /// </summary>
-        /// <returns>list of all exchanges</returns>
+        /// <returns>list of all Assets</returns>
         /// <response code="200">if success</response>
         [HttpGet]
         [ProducesResponseType(typeof(ObjectResult), 200)]
         public async Task<IActionResult> Get()
         {
-            return Ok(_mapper.Map<List<ExchangeDTO>>(await _repository.GetAll()));
+            return Ok(_mapper.Map<List<AssetDTO>>(await _repository.GetAll()));
         }
 
         /// <summary>
-        /// gets an exchange by id
+        /// gets an Asset by id
         /// </summary>
-        /// <param name="id">Guid with id from an exchange</param>
-        /// <returns>Exchange that match with a parameter</returns>
+        /// <param name="id">Guid with id from an Asset</param>
+        /// <returns>Asset that match with a parameter</returns>
         /// <response code="200">if success</response>
-        /// <response code="404">if parameter don't match with an exchange</response>
+        /// <response code="404">if parameter don't match with an Asset</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ObjectResult), 404)]
         [ProducesResponseType(typeof(ObjectResult), 200)]
@@ -48,39 +48,39 @@ namespace CryptoManager.WebApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<ExchangeDTO>(entity));
+            return Ok(_mapper.Map<AssetDTO>(entity));
         }
 
         /// <summary>
-        /// Save an exchange in database
+        /// Save an Asset in database
         /// </summary>
-        /// <param name="entity">exchange to save in database</param>
+        /// <param name="entity">Asset to save in database</param>
         /// <response code="200">if success</response>
         [HttpPost]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> Post([FromBody]ExchangeDTO entity)
+        public async Task<IActionResult> Post([FromBody]AssetDTO entity)
         {
-            return Ok(_mapper.Map<ExchangeDTO>(await _repository.InsertAsync(_mapper.Map<Exchange>(entity))));
+            return Ok(_mapper.Map<AssetDTO>(await _repository.InsertAsync(_mapper.Map<Asset>(entity))));
         }
 
         /// <summary>
-        /// update an exchange in database
+        /// update an Asset in database
         /// </summary>
-        /// <param name="entity">exchange to update</param>
+        /// <param name="entity">Asset to update</param>
         /// <response code="200">if success</response>
         [HttpPut]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> Put([FromBody]ExchangeDTO entity)
+        public async Task<IActionResult> Put([FromBody]AssetDTO entity)
         {
-            await _repository.UpdateAsync(_mapper.Map<Exchange>(entity));
+            await _repository.UpdateAsync(_mapper.Map<Asset>(entity));
             return Ok();
         }
 
         /// <summary>
-        /// delete an exchange from database
+        /// delete an Asset from database
         /// </summary>
-        /// <param name="id">id of an exchange to delete</param>
-        /// <response code="404">if parameter don't match with an exchange</response>
+        /// <param name="id">id of an Asset to delete</param>
+        /// <response code="404">if parameter don't match with an Asset</response>
         /// <response code="200">if success</response>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ObjectResult), 400)]

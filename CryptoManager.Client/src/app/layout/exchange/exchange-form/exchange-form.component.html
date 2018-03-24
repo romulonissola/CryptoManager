@@ -31,7 +31,7 @@
                       </div>
                     </div>
                   </fieldset>
-                  <fieldset class="form-group" *ngIf="formState == 'Edit'">
+                  <fieldset class="form-group" [hidden]="formState == 'Edit'">
                     <input type="checkbox" [(ngModel)]="exchange.isEnabled" name="isEnabled">
                     <label>{{ 'Enabled' | translate }}</label>
                   </fieldset>
