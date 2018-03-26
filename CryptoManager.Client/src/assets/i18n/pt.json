@@ -40,5 +40,9 @@
     "DeleteMessage": "Deseja realmente deletar este registro?",
     "Back" : "Voltar",
     "Field required" : "Campo Obrigatório",
-    "Enabled" : "Habilitado"
+    "Enabled" : "Habilitado",
+    "Assets Register" : "Cadastro de Ativos",
+    "Assets": "Ativos",
+    "Symbol" : "Símbolo",
+    "Description" : "Descrição"
 }

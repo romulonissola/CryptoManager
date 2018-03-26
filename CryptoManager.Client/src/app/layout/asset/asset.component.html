@@ -1,0 +1,39 @@
+<div class="row" [@routerTransition]>
+  <div class="col-sm-12">
+    <div class="card mb-3">
+      <div class="card-header">{{ 'Assets' | translate }}</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+              <thead>
+                <tr>
+                  <th data-field="name">{{ 'Symbol' | translate }}</th>
+                  <th data-field="name">{{ 'Name' | translate }}</th>
+                  <th data-field="name">{{ 'Description' | translate }}</th>                  
+                  <th data-field="name">{{ 'Enabled' | translate }}</th>
+                  <th data-field="name">{{ 'Edit' | translate }}</th>
+                  <th data-field="name">{{ 'Delete' | translate }}</th>
+                </tr>
+              </thead>
+            
+              <tbody>
+                <tr *ngFor="let asset of assets">
+                  <td>{{ asset.symbol }}</td>
+                  <td>{{ asset.name }}</td>
+                  <td>{{ asset.description }}</td>
+                  <td><input type="checkbox" [(ngModel)]="asset.isEnabled" name="isEnabled" disabled></td>
+                  <td>
+                    <i [routerLink]="['/asset', asset.id]" class="fa fa-fw fa-pencil-square-o"></i>
+                  </td>
+                  <td>
+                    <i (click)="delete(asset)" class="fa fa-fw fa-times"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button routerLink="/asset/new" class="btn btn-secondary">{{ 'Add' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

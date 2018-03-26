@@ -14,10 +14,12 @@ export class ApiService {
     private jwtService: JwtService
   ) {}
   
-  private httpHeaders = new HttpHeaders({
+  private GetHttpHeaders(): HttpHeaders{
+    return new HttpHeaders({
       'Content-Type':  'application/json',
       'Authorization': `Bearer ${this.jwtService.getToken()}`
     });
+  }
   
 
   private formatErrors(error: any) {
@@ -27,7 +29,7 @@ export class ApiService {
   get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
     return this.http.get(
       `${environment.api.baseUrl}${path}`,
-      {headers: this.httpHeaders, params}
+      {headers: this.GetHttpHeaders(), params}
     ).pipe(catchError(this.formatErrors));
   }
 
@@ -35,7 +37,7 @@ export class ApiService {
     return this.http.put(
       `${environment.api.baseUrl}${path}`,
       JSON.stringify(body),
-      {headers: this.httpHeaders}
+      {headers: this.GetHttpHeaders()}
     ).pipe(catchError(this.formatErrors));
   }
 
@@ -43,14 +45,14 @@ export class ApiService {
     return this.http.post(
       `${environment.api.baseUrl}${path}`,
       JSON.stringify(body),
-      {headers: this.httpHeaders, params: params}
+      {headers: this.GetHttpHeaders(), params: params}
     ).pipe(catchError(this.formatErrors));
   }
 
   delete(path): Observable<any> {
     return this.http.delete(
       `${environment.api.baseUrl}${path}`,
-      {headers: this.httpHeaders}
+      {headers: this.GetHttpHeaders()}
     ).pipe(catchError(this.formatErrors));
   }
 }

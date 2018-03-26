@@ -40,5 +40,9 @@
     "DeleteMessage": "Are you sure you want to delete?",
     "Back" : "Back",
     "Field required" : "Field required",
-    "Enabled" : "Enabled"
+    "Enabled" : "Enabled",
+    "Assets Register" : "Assets Register",
+    "Assets" : "Assets",
+    "Symbol" : "Symbol",
+    "Description" : "Description"
 }

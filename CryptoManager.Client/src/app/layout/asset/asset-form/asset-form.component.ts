@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, ExchangeService } from '../../../shared'
+import { Asset, AssetService } from '../../../shared'
 
 @Component({
-  selector: 'app-exchange-form  ',
-  templateUrl: './exchange-form.component.html',
-  styleUrls: ['./exchange-form.component.scss'],
+  selector: 'app-asset-form  ',
+  templateUrl: './asset-form.component.html',
+  styleUrls: ['./asset-form.component.scss'],
   animations: [routerTransition()]
 })
-export class ExchangeFormComponent implements OnInit {
+export class AssetFormComponent implements OnInit {
   title: string;
-  exchange: Exchange = new Exchange();
+  asset: Asset = new Asset();
   formState: string;
   constructor(private translate:TranslateService,
-              private exchangeService: ExchangeService,
+              private assetService: AssetService,
               private router: Router,
               private route: ActivatedRoute) { }
 
@@ -25,13 +25,13 @@ export class ExchangeFormComponent implements OnInit {
 
       this.formState = id ? "Edit" : "Add";
       this.title = this.translate.instant(this.formState);
-      debugger;
+
       if (!id)
         return;
 
-      this.exchangeService.get(id)
+      this.assetService.get(id)
          .subscribe(
-           exchange => this.exchange = exchange,
+           asset => this.asset = asset,
            response => {
              if (response.status == 404) {
                this.router.navigate(['NotFound']);
@@ -42,13 +42,13 @@ export class ExchangeFormComponent implements OnInit {
 
   save() {
     var result;
-    if (this.exchange.id){
-      result = this.exchangeService.update(this.exchange);
+    if (this.asset.id){
+      result = this.assetService.update(this.asset);
     } else {
-      result = this.exchangeService.add(this.exchange);
+      result = this.assetService.add(this.asset);
     }
 
-    result.subscribe(data => this.router.navigate(['exchange']));
+    result.subscribe(data => this.router.navigate(['asset']));
   }
 
 }

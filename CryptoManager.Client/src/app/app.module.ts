@@ -14,6 +14,7 @@ import { ApiService,
          JwtService,
          AccountService,
          ExchangeService,
+         AssetService,
          JwtHelper,
          HttpErrorInterceptor } from './shared';
 
@@ -46,6 +47,7 @@ export function createTranslateLoader(http: HttpClient) {
                 JwtService,
                 AccountService,
                 ExchangeService,
+                AssetService,
                 JwtHelper,
                 { 
                     provide: HTTP_INTERCEPTORS, 
