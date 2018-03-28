@@ -83,7 +83,7 @@ namespace CryptoManager.WebApi.Controllers
         /// <response code="404">if parameter don't match with an Asset</response>
         /// <response code="200">if success</response>
         [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(ObjectResult), 400)]
+        [ProducesResponseType(typeof(ObjectResult), 404)]
         [ProducesResponseType(typeof(ObjectResult), 200)]
         public async Task<IActionResult> Delete(Guid id)
         {
