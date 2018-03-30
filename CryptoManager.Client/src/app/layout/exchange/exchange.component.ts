@@ -9,7 +9,7 @@ import { Exchange, ExchangeService } from '../../shared'
   animations: [routerTransition()]
 })
 export class ExchangeComponent implements OnInit {
-  private exchanges: Exchange[] = [];
+  exchanges: Exchange[] = [];
 
   constructor(private translate: TranslateService, private exchangeService: ExchangeService) {}
 

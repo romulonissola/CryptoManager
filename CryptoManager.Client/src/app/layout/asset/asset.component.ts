@@ -9,7 +9,7 @@ import { Asset, AssetService } from '../../shared'
   animations: [routerTransition()]
 })
 export class AssetComponent implements OnInit {
-  private assets: Asset[] = [];
+  assets: Asset[] = [];
 
   constructor(private translate: TranslateService, private assetService: AssetService) {}
 
