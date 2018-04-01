@@ -1,5 +1,4 @@
 const express = require('express');
-
 const publicweb = process.env.PUBLICWEB || './dist/publicweb';
 const app = express();
 

@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --ec true",
+    "start-ng": "ng serve --ec true",
+    "start": "node src/server/index.js",
     "build": "ng build --prod",
-    "stop": "pkill --signal SIGINT crypto-manager.client",
     "gitbuild": "ng build --prod --base /romulonissola/CryptoManager/master/CryptoManager.Client/dist/",
     "test": "ng test",
     "lint": "ng lint",
