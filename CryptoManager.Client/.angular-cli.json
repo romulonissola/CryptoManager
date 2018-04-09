@@ -12,8 +12,9 @@
         "favicon.ico",
         {
           "glob": "**/*.*",
-          "input": "./src/server/",
-          "output": "./"
+          "input": "./server/",
+          "output": "../",
+          "allowOutsideOutDir": true
         }
       ],
       "index": "index.html",
