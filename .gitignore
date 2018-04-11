@@ -20,3 +20,7 @@
 /CryptoManager.Server/CryptoManager.Repository.Test/bin/Debug/netcoreapp2.0
 /CryptoManager.Server/CryptoManager.Repository.Test/obj
 /CryptoManager.Server/CryptoManager.Repository/bin/Debug/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Domain/bin/Release/netstandard2.0
+/CryptoManager.Server/CryptoManager.Repository/bin/Release/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.WebApi/bin/Release/netcoreapp2.0
+/CryptoManager.Server/Publish/
