@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using CryptoManager.Domain.Mapper;
+using Microsoft.Extensions.Logging;
 
 namespace CryptoManager.WebApi
 {
@@ -115,8 +116,12 @@ namespace CryptoManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+            loggerFactory.AddFile($"../Logs/log-{DateTime.Now.TimeOfDay.ToString()}.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

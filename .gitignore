@@ -23,4 +23,5 @@
 /CryptoManager.Server/CryptoManager.Domain/bin/Release/netstandard2.0
 /CryptoManager.Server/CryptoManager.Repository/bin/Release/netcoreapp2.0
 /CryptoManager.Server/CryptoManager.WebApi/bin/Release/netcoreapp2.0
-/CryptoManager.Server/Publish/
+/CryptoManager.Server/Publish
+/CryptoManager.Server/Logs
