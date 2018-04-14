@@ -1,6 +1,6 @@
 export const environment = {
   api: {
-    baseUrl: "https://localhost:44392/api",
+    baseUrl: "https://cryptomanagerserver.azurewebsites.net/api",
     version: "1.0.0"
   },
   login: {
