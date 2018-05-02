@@ -3,16 +3,19 @@
     <div class="card mb-3">
       <div class="card-header">{{ 'Assets' | translate }}</div>
       <div class="card-body">
+        <button routerLink="/asset/new" class="btn btn-secondary">{{ 'Add' | translate }}</button>
+        <br/>
+        <br/>
         <div class="table-responsive">
           <table class="table">
               <thead>
                 <tr>
-                  <th data-field="name">{{ 'Symbol' | translate }}</th>
+                  <th data-field="symbol">{{ 'Symbol' | translate }}</th>
                   <th data-field="name">{{ 'Name' | translate }}</th>
-                  <th data-field="name">{{ 'Description' | translate }}</th>                  
-                  <th data-field="name">{{ 'Enabled' | translate }}</th>
-                  <th data-field="name">{{ 'Edit' | translate }}</th>
-                  <th data-field="name">{{ 'Delete' | translate }}</th>
+                  <th data-field="description">{{ 'Description' | translate }}</th>                  
+                  <th data-field="isEnabled">{{ 'Enabled' | translate }}</th>
+                  <th>{{ 'Edit' | translate }}</th>
+                  <th>{{ 'Delete' | translate }}</th>
                 </tr>
               </thead>
             

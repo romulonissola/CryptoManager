@@ -11,6 +11,7 @@ const routes: Routes = [
             { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
             { path: 'exchange', loadChildren: './exchange/exchange.module#ExchangeModule' },
             { path: 'asset', loadChildren: './asset/asset.module#AssetModule' },
+            { path: 'order', loadChildren: './order/order.module#OrderModule' },
             { path: 'charts', loadChildren: './charts/charts.module#ChartsModule' },
             { path: 'tables', loadChildren: './tables/tables.module#TablesModule' },
             { path: 'forms', loadChildren: './form/form.module#FormModule' },

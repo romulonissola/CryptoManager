@@ -2,7 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { Errors, AccountService } from '../shared/';
-
+declare var particlesJS: any;
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/']);
         }
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        particlesJS.load('particles-js', 'assets/particle.json');
     }
 
     onFacebookLogin(){

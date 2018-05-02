@@ -3,16 +3,19 @@
     <div class="card mb-3">
       <div class="card-header">{{ 'Exchanges' | translate }}</div>
       <div class="card-body">
+        <button routerLink="/exchange/new" class="btn btn-secondary">{{ 'Add' | translate }}</button>
+        <br/>
+        <br/>
         <div class="table-responsive">
           <table class="table">
               <thead>
                 <tr>
                   <th data-field="name">{{ 'Name' | translate }}</th>
-                  <th data-field="name">{{ 'Website' | translate }}</th>
-                  <th data-field="name">{{ 'Api URL' | translate }}</th>
-                  <th data-field="name">{{ 'Enabled' | translate }}</th>
-                  <th data-field="name">{{ 'Edit' | translate }}</th>
-                  <th data-field="name">{{ 'Delete' | translate }}</th>
+                  <th data-field="website">{{ 'Website' | translate }}</th>
+                  <th data-field="apiUrl">{{ 'Api URL' | translate }}</th>
+                  <th data-field="isEnabled">{{ 'Enabled' | translate }}</th>
+                  <th>{{ 'Edit' | translate }}</th>
+                  <th>{{ 'Delete' | translate }}</th>
                 </tr>
               </thead>
             

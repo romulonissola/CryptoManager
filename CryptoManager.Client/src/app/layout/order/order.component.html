@@ -1,0 +1,43 @@
+<div class="row" [@routerTransition]>
+    <div class="col-sm-12">
+      <div class="card mb-3">
+        <div class="card-header">{{ 'My Investments' | translate }}</div>
+        <div class="card-body">
+          <button routerLink="/order/new" class="btn btn-secondary">{{ 'Add' | translate }}</button>
+          <br/>
+          <br/>
+          <div class="table-responsive">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th data-field="exchange">{{ 'Exchange' | translate }}</th>
+                    <th data-field="pair">{{ 'Pair' | translate }}</th>
+                    <th data-field="avgPrice">{{ 'Avg Price' | translate }}</th>
+                    <th data-field="quantity">{{ 'Quantity' | translate }}</th>                  
+                    <th data-field="valuePaidWithFees">{{ 'Value Paid With Fees' | translate }}</th>
+                    <th data-field="currentPrice">{{ 'Current Price' | translate }}</th>
+                    <th data-field="valueSoldWithFees">{{ 'Value Sold With Fees' | translate }}</th>
+                    <th data-field="profit">{{ 'Profit' | translate }}</th>
+                  </tr>
+                </thead>
+              
+                <tbody>
+                  <tr *ngFor="let order of orders">
+                    <td>{{ order.exchangeName }}</td>
+                    <td>{{ order.baseAssetSymbol}}/{{order.quoteAssetSymbol }}</td>
+                    <td>{{ order.avgPrice }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.valuePaidWithFees }}</td>
+                    <td>{{ order.currentPrice }}</td>
+                    <td>{{ order.valueSoldWithFees }}</td>
+                    <td>{{ order.profit }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button routerLink="/order/new" class="btn btn-secondary">{{ 'Add' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
