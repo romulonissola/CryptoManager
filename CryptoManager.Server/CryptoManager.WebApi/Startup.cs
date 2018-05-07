@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using CryptoManager.Repository;
+using CryptoManager.Business;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +46,8 @@ namespace CryptoManager.WebApi
             services.AddDbContexts(_configuration.GetConnectionString("DefaultConnection"));
             services.AddORM();
             services.AddRepositories();
-            
+            services.AddBusiness();
+
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {

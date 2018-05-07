@@ -8,10 +8,10 @@ namespace CryptoManager.Repository.Test.Mocks.Entities
 {
     public class MockOrder
     {
-        public static OrderRepository GetDBTestRepository()
+        public static OrderRepository GetDBTestRepository(OrderItemRepository repository = null)
         {
             var entityORM = MockEntityRepository<Order>.GetRepoTestInMemory();
-            return new OrderRepository(entityORM);
+            return new OrderRepository(entityORM, repository ?? MockOrderItem.GetDBTestRepository());
         }
 
         public static Order GetEntityFake()

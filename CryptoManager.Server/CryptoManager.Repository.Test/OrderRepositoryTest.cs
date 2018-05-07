@@ -1,4 +1,5 @@
-﻿using CryptoManager.Repository.Test.Mocks.Entities;
+﻿using CryptoManager.Domain.Entities;
+using CryptoManager.Repository.Test.Mocks.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,22 @@ namespace CryptoManager.Repository.Test
     public class OrderRepositoryTest
     {
         [Fact]
-        public async Task Should_Insert_And_Get_Async()
+        public async Task Should_Insert_And_GetOrder_And_GetOrderItem_Async()
         {
-            var repository = MockOrder.GetDBTestRepository();
-            var result = await repository.InsertAsync(MockOrder.GetEntityFake());
+            var itemRepository = MockOrderItem.GetDBTestRepository();
+            var repository = MockOrder.GetDBTestRepository(itemRepository);
+            var order = MockOrder.GetEntityFake();
+            var orderItem = MockOrderItem.GetEntityFake();
+            order.OrderItems = new List<OrderItem>
+            {
+                orderItem
+            };
+            var result = await repository.InsertAsync(order);
             Assert.NotNull(result);
             result = await repository.GetAsync(result.Id);
             Assert.NotNull(result);
+            var orderItems = await itemRepository.GetAll();
+            Assert.Single(orderItems);
         }
 
         [Fact]

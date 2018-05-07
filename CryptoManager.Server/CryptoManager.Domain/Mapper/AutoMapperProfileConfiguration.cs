@@ -22,6 +22,10 @@ namespace CryptoManager.Domain.Mapper
             CreateMap<ExchangeDTO, Exchange>();
             CreateMap<Asset, AssetDTO>();
             CreateMap<AssetDTO, Asset>();
+            CreateMap<Order, OrderDTO>();
+            CreateMap<OrderDTO, Order>();
+            CreateMap<OrderItem, OrderItemDTO>();
+            CreateMap<OrderItemDTO, OrderItem>();
             //CreateMap<ProductViewModel, SimpleKeyValueViewModel>().ForMember(dest => dest.Name,
             //                                                                    opt => opt.MapFrom(src => src.UnitofMeasureName))
             //                                                                    .ForMember(dest => dest.Id,

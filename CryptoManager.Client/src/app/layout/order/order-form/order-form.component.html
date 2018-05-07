@@ -9,11 +9,7 @@
                         <fieldset class="form-group">
                             <label>{{ 'Transaction Date' | translate }}</label>
                             <div class="input-group datepicker-input">
-                                <input class="form-control" placeholder="yyyy-mm-dd"
-                                formControlName="date" [(ngModel)]="order.date" ngbDatepicker #d="ngbDatepicker">
-                                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                                    <span class="fa fa-calendar"></span>
-                                </button>
+                                <input class="form-control" formControlName="date" [(ngModel)]="order.date" type="date">
                             </div>
                             <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">                 
                                 <div *ngIf="date.errors.required || date.errors.ngbDate">

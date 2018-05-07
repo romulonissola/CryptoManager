@@ -14,6 +14,7 @@ using CryptoManager.Repository.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using CryptoManager.Domain.Mapper;
+using CryptoManager.Business;
 
 namespace CryptoManager.WebApi.Test.Mocks
 {
@@ -82,7 +83,8 @@ namespace CryptoManager.WebApi.Test.Mocks
 
             services.AddORM();
             services.AddRepositories();
-           
+            services.AddBusiness();
+
             services.AddSingleton(typeof(JwtFactory));
 
             var config = new AutoMapper.MapperConfiguration(cfg =>

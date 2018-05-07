@@ -47,7 +47,7 @@ namespace CryptoManager.WebApi.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return new ObjectResult(await _userManager.FindByIdAsync(User.FindFirstValue("Id")));
+                return new ObjectResult(await _userManager.FindByIdAsync(GetUserId().ToString()));
             }
             return BadRequest();
         }

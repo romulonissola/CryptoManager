@@ -37,12 +37,12 @@ namespace CryptoManager.Repository.Infrastructure
             return _ORM.GetAll();
         }
 
-        public Task<T> InsertAsync(T entity)
+        public virtual Task<T> InsertAsync(T entity)
         {
             return _ORM.InsertAsync(entity);
         }
 
-        public Task UpdateAsync(T entity)
+        public virtual Task UpdateAsync(T entity)
         {
             return _ORM.UpdateAsync(entity);
         }

@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, Order, ExchangeService, AssetService, Asset, OrderItem} from '../../../shared'
+import { Exchange, Order, ExchangeService, AssetService, Asset, OrderItem, OrderService} from '../../../shared'
 import { Observable } from 'rxjs/Observable';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 const numberMask = createNumberMask({
   prefix: '',
-  thousandsSeparatorSymbol: '.',
+  thousandsSeparatorSymbol: ',',
   allowDecimal: true,
-  decimalSymbol: ',',
+  decimalSymbol: '.',
   decimalLimit: 8
 })
 
@@ -35,6 +35,7 @@ export class OrderFormComponent implements OnInit {
   constructor(private translate: TranslateService,
               private exchangeService: ExchangeService,
               private assetService: AssetService,
+              private orderService: OrderService,
               private router: Router,
               private route: ActivatedRoute,
               private frmBuilder: FormBuilder) { }
@@ -87,6 +88,9 @@ export class OrderFormComponent implements OnInit {
   }
 
   save(){
+    this.order.orderItems = this.orderItems;
+    let result = this.orderService.add(this.order);
 
+    result.subscribe(data => this.router.navigate(['order']));
   }
 }

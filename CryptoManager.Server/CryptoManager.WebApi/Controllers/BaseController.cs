@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
 
 namespace CryptoManager.WebApi.Controllers
 {
@@ -9,6 +11,11 @@ namespace CryptoManager.WebApi.Controllers
         public BaseController(IMapper mapper)
         {
             _mapper = mapper;
+        }
+
+        protected Guid GetUserId()
+        {
+            return Guid.Parse(User.FindFirstValue("Id"));
         }
     }
 }

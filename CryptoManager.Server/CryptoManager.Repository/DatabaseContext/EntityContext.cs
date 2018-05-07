@@ -1,5 +1,6 @@
 ﻿using CryptoManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CryptoManager.Repository.DatabaseContext
 {
@@ -17,9 +18,12 @@ namespace CryptoManager.Repository.DatabaseContext
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+            foreach (var property in builder.Model.GetEntityTypes()
+                                        .SelectMany(t => t.GetProperties())
+                                        .Where(p => p.ClrType == typeof(decimal)))
+            {
+                property.Relational().ColumnType = "decimal(18, 8)";
+            }
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
