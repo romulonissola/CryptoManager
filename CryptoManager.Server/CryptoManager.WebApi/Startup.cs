@@ -43,7 +43,15 @@ namespace CryptoManager.WebApi
             WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
             WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
 
-            services.AddDbContexts(_configuration.GetConnectionString("DefaultConnection"));
+            if(_configuration["DatabaseProvider"] == "SQLite")
+            {
+                services.AddSQLiteDbContexts(_configuration.GetConnectionString("DefaultConnection"));
+            }
+            else
+            {
+                services.AddSQLServerDbContexts(_configuration.GetConnectionString("DefaultConnection"));
+            }
+            
             services.AddORM();
             services.AddRepositories();
             services.AddBusiness();
@@ -145,6 +153,8 @@ namespace CryptoManager.WebApi
             
             app.UseAuthentication();
             app.UseMvc();
+
+            app.EnsureCreateDatabase();
         }
     }
 }

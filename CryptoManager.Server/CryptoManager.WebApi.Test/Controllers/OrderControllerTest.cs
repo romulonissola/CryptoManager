@@ -46,30 +46,30 @@ namespace CryptoManager.WebApi.Test
         //    Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
         //}
 
-        [Fact]
-        public async Task Should_Return_OK_When_PostAsync()
-        {
-            HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            var entity = new OrderDTO()
-            {
-                Date = DateTime.Now,
-                ExchangeId = Guid.NewGuid(),
-                BaseAssetId = Guid.NewGuid(),
-                QuoteAssetId = Guid.NewGuid(),
-                OrderItems = new List<OrderItemDTO>()
-                {
-                    new OrderItemDTO()
-                    {
-                        Price = 1,
-                        Quantity = 1,
-                        Fee = 1,
-                        FeeAssetId = Guid.NewGuid()
-                    }
-                }
-            };
-            var result = await client.PostAsync($"{ROUTE_PATH}", entity);
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        }
+        //[Fact]
+        //public async Task Should_Return_OK_When_PostAsync()
+        //{
+        //    HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
+        //    var entity = new OrderDTO()
+        //    {
+        //        Date = DateTime.Now,
+        //        ExchangeId = Guid.NewGuid(),
+        //        BaseAssetId = Guid.NewGuid(),
+        //        QuoteAssetId = Guid.NewGuid(),
+        //        OrderItems = new List<OrderItemDTO>()
+        //        {
+        //            new OrderItemDTO()
+        //            {
+        //                Price = 1,
+        //                Quantity = 1,
+        //                Fee = 1,
+        //                FeeAssetId = Guid.NewGuid()
+        //            }
+        //        }
+        //    };
+        //    var result = await client.PostAsync($"{ROUTE_PATH}", entity);
+        //    Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+        //}
 
         //[Fact]
         //public async Task Should_Return_OK_When_PutAsync()
