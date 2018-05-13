@@ -58,10 +58,12 @@ namespace CryptoManager.WebApi.Controllers
         /// <param name="accessToken">token that identify user in facebook</param>
         /// <returns>JWToken if User is successfully authenticated</returns>
         /// <response code="400">If the user not authenticated in facebook or if occurred other error</response>
+        /// <response code="200">If success</response>
         [HttpPost]
         [AllowAnonymous]
         [Route("ExternalLoginFacebook")]
         [ProducesResponseType(typeof(ObjectResult), 400)]
+        [ProducesResponseType(typeof(ObjectResult), 200)]
         public async Task<IActionResult> ExternalLoginFacebook(string accessToken)
         {
             try
@@ -100,6 +102,22 @@ namespace CryptoManager.WebApi.Controllers
                     };
 
                     var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));
+
+                    if (!result.Succeeded)
+                        return new BadRequestObjectResult(result);
+                }
+                else
+                {
+                    user.FirstName = userInfo.FirstName;
+                    user.LastName = userInfo.LastName;
+                    user.FacebookId = userInfo.Id;
+                    user.Email = userInfo.Email;
+                    user.UserName = userInfo.Email;
+                    user.Gender = userInfo.Gender;
+                    user.Locale = userInfo.Locale;
+                    user.PictureUrl = userInfo.Picture.Data.Url;
+
+                    var result = await _userManager.UpdateAsync(user);
 
                     if (!result.Succeeded)
                         return new BadRequestObjectResult(result);

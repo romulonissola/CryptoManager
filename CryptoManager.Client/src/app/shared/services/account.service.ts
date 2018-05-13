@@ -38,7 +38,7 @@ export class AccountService {
 
   populate() {
     if (this.jwtService.getToken()) {
-      if(this.currentUserSubject.value.toString() == {}){
+      if(this.currentUserSubject.value.toString() == "[object Object]"){
         let tokenDecoded = this.jwtHelper.decodeToken(this.jwtService.getToken());
         let user: User = new User();
         user.id = tokenDecoded.Id;

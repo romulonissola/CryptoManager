@@ -2,9 +2,6 @@
   "name": "crypto-manager.client",
   "version": "1.0.0",
   "license": "MIT",
-  "engines": {
-    "node": "6.9.1 || 6.11.0"
-  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ec true",
@@ -43,7 +40,8 @@
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
-    "@angular/cli": "1.7.0",
+    "@angular-devkit/build-angular": "~0.6.1",
+    "@angular/cli": "^6.0.1",
     "@angular/compiler-cli": "^5.2.5",
     "@angular/language-service": "^5.2.5",
     "@types/jasmine": "~2.8.6",
@@ -61,6 +59,6 @@
     "protractor": "~5.3.0",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
-    "typescript": "~2.6.2"
+    "typescript": "^2.7.2"
   }
 }
