@@ -1,8 +1,10 @@
 ﻿using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Repository.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,6 +34,15 @@ namespace CryptoManager.Repository.Repositories
             }
 
             return entity;
+        }
+
+        public Task<List<Order>> GetAllByApplicationUserAsync(Guid applicationUserId)
+        {
+             return _ORM.GetManyWithoutDisable(a => a.ApplicationUserId.Equals(applicationUserId))
+                .Include(order => order.BaseAsset)
+                .Include(order => order.QuoteAsset)
+                .Include(order => order.Exchange)
+                .Include(order => order.OrderItems).ToListAsync();
         }
     }
 }

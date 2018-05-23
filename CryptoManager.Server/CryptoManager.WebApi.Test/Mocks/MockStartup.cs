@@ -15,6 +15,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using CryptoManager.Domain.Mapper;
 using CryptoManager.Business;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoManager.WebApi.Test.Mocks
 {
@@ -64,9 +69,9 @@ namespace CryptoManager.WebApi.Test.Mocks
 
         public void ConfigureServices(IServiceCollection services)
         {
-            TestWebUtil.JwtKeyName = _configuration["JwtKeyName"];
-            TestWebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
-            TestWebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
+            WebUtil.JwtKeyName = TestWebUtil.JwtKeyName = _configuration["JwtKeyName"];
+            WebUtil.FacebookAppId = TestWebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
+            WebUtil.FacebookAppSecret = TestWebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
             TestWebUtil.FacebookAccessToken = _configuration["Authentication:Facebook:AccessToken"];
 
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
@@ -85,6 +90,12 @@ namespace CryptoManager.WebApi.Test.Mocks
             services.AddRepositories();
             services.AddBusiness();
 
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = WebUtil.FacebookAppId;
+                facebookOptions.AppSecret = WebUtil.FacebookAppSecret;
+            });
+
             services.AddSingleton(typeof(JwtFactory));
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
@@ -96,7 +107,39 @@ namespace CryptoManager.WebApi.Test.Mocks
 
 
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter("Bearer"));
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    //ValidAudience = "the audience you want to validate",
+                    ValidateIssuer = false,
+                    //ValidIssuer = "the isser you want to validate",
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebUtil.JwtKeyName)),
+
+                    ValidateLifetime = true, //validate the expiration and not before values in the token
+
+                    ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+                };
+            });
+
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
+                    .RequireAuthenticatedUser().Build());
+            });
         }
 
 
@@ -107,6 +150,7 @@ namespace CryptoManager.WebApi.Test.Mocks
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
 
+            app.UseAuthentication();
             app.UseMvc();
         }
         /// <summary>

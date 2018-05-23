@@ -1,4 +1,5 @@
-﻿using CryptoManager.Domain.Entities;
+﻿using CryptoManager.Domain.DTOs;
+using CryptoManager.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ namespace CryptoManager.Domain.Contracts.Business
 {
     public interface IOrderBusiness
     {
-        Task<Order> CreateOrder(Order order);
+        Task<Order> CreateOrderAsync(Order order);
+        Task<List<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId);
     }
 }

@@ -14,12 +14,8 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_Error_400_When_AccessToken_Is_InValid()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            string path = $"{ROUTE_PATH}/ExternalLoginFacebook";
-            var list = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("accessToken", "")
-            };
-            var result = await client.PostAsync(path, list);
+            string path = $"{ROUTE_PATH}/ExternalLoginFacebook?accessToken=invalid";
+            var result = await client.PostAsync(path);
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
@@ -27,22 +23,26 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_AccessToken_Is_Valid()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            string path = $"{ROUTE_PATH}/ExternalLoginFacebook";
-            var list = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("accessToken", TestWebUtil.FacebookAccessToken)
-            };
-            var result = await client.PostAsync(path, list);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            string path = $"{ROUTE_PATH}/ExternalLoginFacebook?accessToken={TestWebUtil.FacebookAccessToken}";
+            var result = await client.PostAsync(path);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
 
-
         [Fact]
-        public async Task Should_Return_BadRequest_When_Not_Using_Token()
+        public async Task Should_Return_Unauthorized_When_Not_Using_Token()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());            
             var result = await client.GetAsync(ROUTE_PATH);
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task Should_Return_User_Info()
+        {
+            HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
+            await client.AddAuthorization();
+            var result = await client.GetAsync(ROUTE_PATH);
+            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
     }
 }

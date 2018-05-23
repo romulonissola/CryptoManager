@@ -28,15 +28,15 @@ namespace CryptoManager.WebApi.Test.Mocks
         {
             return await _client.GetAsync(path);
         }
-        
-        public async Task<HttpResponseMessage> PostAsync<T>(string path, T viewModel) where T : class
+
+        public async Task<HttpResponseMessage> PostAsync(string path, object viewModel = null)
         {
             var json = JsonConvert.SerializeObject(viewModel);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             return await _client.PostAsync(path, content);
         }
 
-        public async Task<HttpResponseMessage> PutAsync<T>(string path, T viewModel) where T : class
+        public async Task<HttpResponseMessage> PutAsync(string path, object viewModel)
         {
             var json = JsonConvert.SerializeObject(viewModel);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -46,6 +46,13 @@ namespace CryptoManager.WebApi.Test.Mocks
         public async Task<HttpResponseMessage> DeleteAsync(string path)
         {
             return await _client.DeleteAsync(path);
+        }
+
+        public async Task AddAuthorization()
+        {
+            var auth = new MockAuthorization();
+            var token = await auth.GetValidToken();
+            AddHeader("Authorization", $"Bearer {token}");
         }
     }
 }

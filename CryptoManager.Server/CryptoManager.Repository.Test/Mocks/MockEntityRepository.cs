@@ -1,4 +1,5 @@
 ﻿using CryptoManager.Domain.Contracts.Entities;
+using CryptoManager.Repository.DatabaseContext;
 using CryptoManager.Repository.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ namespace CryptoManager.Repository.Test.Mocks
 {
     public class MockEntityRepository<T> where T : class, IEntity
     {
-        public static EntityRepository<T> GetRepoTestInMemory()
+        public static EntityRepository<T> GetRepoTestInMemory(EntityContext context = null)
         {
-            return new EntityRepository<T>(MockDbContext.CreateDBInMemoryContext());
+            return new EntityRepository<T>(context ?? MockDbContext.CreateDBInMemoryContext());
         }
     }
 }

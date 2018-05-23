@@ -1,4 +1,6 @@
-﻿using CryptoManager.Domain.Entities;
+﻿using CryptoManager.Domain.Contracts.Repositories;
+using CryptoManager.Domain.Entities;
+using CryptoManager.Repository.DatabaseContext;
 using CryptoManager.Repository.Repositories;
 using System;
 using System.Collections.Generic;
@@ -8,9 +10,9 @@ namespace CryptoManager.Repository.Test.Mocks.Entities
 {
     public class MockOrderItem
     {
-        public static OrderItemRepository GetDBTestRepository()
+        public static OrderItemRepository GetDBTestRepository(EntityContext context = null)
         {
-            var entityORM = MockEntityRepository<OrderItem>.GetRepoTestInMemory();
+            var entityORM = MockEntityRepository<OrderItem>.GetRepoTestInMemory(context);
             return new OrderItemRepository(entityORM);
         }
 
