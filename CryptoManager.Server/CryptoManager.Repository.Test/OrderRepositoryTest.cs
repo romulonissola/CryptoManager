@@ -105,7 +105,8 @@ namespace CryptoManager.Repository.Test
                 {
                     Quantity = 100,
                     Price = 1,
-                    Fee = 10
+                    Fee = 10,
+                    FeeAsset = new Asset()
                 }
             };
             order.BaseAsset = new Asset();
@@ -133,7 +134,8 @@ namespace CryptoManager.Repository.Test
                 {
                     Quantity = 100,
                     Price = 1,
-                    Fee = 10
+                    Fee = 10,
+                    FeeAsset = new Asset()
                 }
             };
             order.BaseAsset = new Asset();

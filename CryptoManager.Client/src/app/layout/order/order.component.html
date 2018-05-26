@@ -12,25 +12,25 @@
                   <tr>
                     <th data-field="exchange">{{ 'Exchange' | translate }}</th>
                     <th data-field="pair">{{ 'Pair' | translate }}</th>
-                    <th data-field="avgPrice">{{ 'Avg Price' | translate }}</th>
-                    <th data-field="quantity">{{ 'Quantity' | translate }}</th>                  
-                    <th data-field="valuePaidWithFees">{{ 'Value Paid With Fees' | translate }}</th>
-                    <th data-field="currentPrice">{{ 'Current Price' | translate }}</th>
-                    <th data-field="valueSoldWithFees">{{ 'Value Sold With Fees' | translate }}</th>
-                    <th data-field="profit">{{ 'Profit' | translate }}</th>
+                    <th data-field="avgPrice" class="price">{{ 'Avg Price' | translate }}</th>
+                    <th data-field="quantity" class="price">{{ 'Quantity' | translate }}</th>                  
+                    <th data-field="valuePaidWithFees" class="price">{{ 'Value Paid With Fees' | translate }}</th>
+                    <th data-field="currentPrice" class="price">{{ 'Current Price' | translate }}</th>
+                    <th data-field="valueSoldWithFees" class="price">{{ 'Value Sold With Fees' | translate }}</th>
+                    <th data-field="profit" class="price">{{ 'Profit' | translate }}</th>
                   </tr>
                 </thead>
               
                 <tbody>
                   <tr *ngFor="let order of orders">
                     <td>{{ order.exchangeName }}</td>
-                    <td>{{ order.baseAssetSymbol}}/{{order.quoteAssetSymbol }}</td>
-                    <td>{{ order.avgPrice }}</td>
-                    <td>{{ order.quantity }}</td>
-                    <td>{{ order.valuePaidWithFees }}</td>
-                    <td>{{ order.currentPrice }}</td>
-                    <td>{{ order.valueSoldWithFees }}</td>
-                    <td>{{ order.profit }}</td>
+                    <td>{{ order.baseAssetSymbol}}/{{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.avgPrice }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.quantity }} {{ order.baseAssetSymbol }}</td>
+                    <td class="price">{{ order.valuePaidWithFees }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.currentPrice }}</td>
+                    <td class="price">{{ order.valueSoldWithFees }}</td>
+                    <td class="price">{{ order.profit }}</td>
                   </tr>
                 </tbody>
               </table>

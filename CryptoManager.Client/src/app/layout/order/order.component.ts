@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Order } from '../../shared/models';
 import { routerTransition } from '../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
+import { OrderService } from '../../shared';
+import { OrderDetail } from '../../shared/models/orderDetail.model';
 
 @Component({
   selector: 'app-order',
@@ -10,10 +11,12 @@ import { TranslateService } from '@ngx-translate/core';
   animations: [routerTransition()]
 })
 export class OrderComponent implements OnInit {
-  orders: Order[] = [];
-  constructor() { }
+  orders: OrderDetail[] = [];
+  constructor(private translate: TranslateService, private orderService: OrderService) { }
 
   ngOnInit() {
+    this.orderService.getAllByLoggedUser()
+      .subscribe(data => this.orders = data);
   }
 
 }

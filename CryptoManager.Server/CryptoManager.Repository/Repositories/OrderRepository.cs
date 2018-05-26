@@ -38,11 +38,12 @@ namespace CryptoManager.Repository.Repositories
 
         public Task<List<Order>> GetAllByApplicationUserAsync(Guid applicationUserId)
         {
-             return _ORM.GetManyWithoutDisable(a => a.ApplicationUserId.Equals(applicationUserId))
-                .Include(order => order.BaseAsset)
-                .Include(order => order.QuoteAsset)
-                .Include(order => order.Exchange)
-                .Include(order => order.OrderItems).ToListAsync();
+            return _ORM.GetManyWithoutDisable(a => a.ApplicationUserId.Equals(applicationUserId))
+               .Include(order => order.BaseAsset)
+               .Include(order => order.QuoteAsset)
+               .Include(order => order.Exchange)
+               .Include(order => order.OrderItems)
+               .ThenInclude(orderItems => orderItems.FeeAsset).ToListAsync();
         }
     }
 }

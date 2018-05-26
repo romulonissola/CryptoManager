@@ -27,3 +27,8 @@
 /CryptoManager.Server/Logs
 /CryptoManager.Server/CryptoManager.Business/bin/Release/netstandard2.0
 /CryptoManager.Server/CryptoManager.WebApi/CryptoDBLite.sqlite
+/CryptoManager.Server/CryptoManager.Business.Test/bin/Release/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Repository.Test/bin/Release/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.WebApi.Test/bin/Release/netcoreapp2.0
+/CryptoManager.Server/CryptoManager.Integration/obj/Debug/netstandard2.0
+/CryptoManager.Server/CryptoManager.Integration/obj

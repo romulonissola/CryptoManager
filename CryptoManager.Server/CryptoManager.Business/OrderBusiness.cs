@@ -43,7 +43,8 @@ namespace CryptoManager.Business
                     BaseAssetSymbol = order.BaseAsset.Symbol,
                     QuoteAssetSymbol = order.QuoteAsset.Symbol,
                     Quantity = orderQuantity,
-                    AvgPrice = orderPrice                    
+                    AvgPrice = orderPrice,
+                    ValuePaidWithFees = orderPrice * orderQuantity
                 };
             }).ToList();
         }
