@@ -13,6 +13,7 @@
                   <th data-field="name">{{ 'Name' | translate }}</th>
                   <th data-field="website">{{ 'Website' | translate }}</th>
                   <th data-field="apiUrl">{{ 'Api URL' | translate }}</th>
+                  <th data-field="exchangeType">{{ 'Exchange Type' | translate }}</th>
                   <th data-field="isEnabled">{{ 'Enabled' | translate }}</th>
                   <th>{{ 'Edit' | translate }}</th>
                   <th>{{ 'Delete' | translate }}</th>
@@ -24,6 +25,7 @@
                   <td>{{ exchange.name }}</td>
                   <td>{{ exchange.website }}</td>
                   <td>{{ exchange.apiUrl }}</td>
+                  <td>{{ getExchangeType(exchange.exchangeType) }}</td>
                   <td><input type="checkbox" [(ngModel)]="exchange.isEnabled" name="isEnabled" disabled></td>
                   <td>
                     <i [routerLink]="['/exchange', exchange.id]" class="fa fa-fw fa-pencil-square-o"></i>

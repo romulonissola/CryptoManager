@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
-    <ProjectReference Include="..\CryptoManager.Integration\CryptoManager.Integration.csproj" />
   </ItemGroup>
 
 </Project>

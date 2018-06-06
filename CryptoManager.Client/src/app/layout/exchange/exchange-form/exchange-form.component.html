@@ -31,6 +31,21 @@
                       </div>
                     </div>
                   </fieldset>
+                  <fieldset class="form-group">
+                    <label>{{ 'Exchange Type' | translate }}</label>
+                    <ng-select [items]="exchangesType"
+                            bindLabel="name"
+                            bindValue="id"
+                            [(ngModel)]="exchange.exchangeType"
+                            #exchangeType="ngModel"
+                            name="exchangeType" required>
+                    </ng-select>
+                    <div *ngIf="exchangeType.invalid && (exchangeType.dirty || exchangeType.touched)" class="alert alert-danger">                 
+                      <div *ngIf="exchangeType.errors.required">
+                        {{ "Field required" | translate }}
+                      </div>
+                    </div>
+                  </fieldset>
                   <fieldset class="form-group" [hidden]="formState == 'Add'">
                     <input type="checkbox" [(ngModel)]="exchange.isEnabled" name="isEnabled">
                     <label>{{ 'Enabled' | translate }}</label>

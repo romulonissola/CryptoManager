@@ -1,6 +1,8 @@
 ﻿using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
+using CryptoManager.Integration.Utils;
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -14,11 +16,13 @@ namespace CryptoManager.Business.Test
     {
         private Mock<IOrderRepository> _repositoryMock;
         private OrderBusiness _orderBusiness;
+        private Mock<ExchangeIntegrationCache> _cacheMock;
 
         public OrderBusinessTest()
         {
             _repositoryMock = new Mock<IOrderRepository>(MockBehavior.Strict);
-            _orderBusiness = new OrderBusiness(_repositoryMock.Object);
+            _cacheMock = new Mock<ExchangeIntegrationCache>(MockBehavior.Strict);
+            _orderBusiness = new OrderBusiness(_repositoryMock.Object, _cacheMock.Object);
         }
 
         [Fact]

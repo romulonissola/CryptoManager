@@ -15,7 +15,8 @@ namespace CryptoManager.WebApi.Controllers
     {
         private readonly IExchangeRepository _repository;
 
-        public ExchangeController(IExchangeRepository repository, IMapper mapper) : base(mapper)
+        public ExchangeController(IExchangeRepository repository, 
+                                  IMapper mapper) : base(mapper)
         {
             _repository = repository;
         }

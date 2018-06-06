@@ -64,5 +64,6 @@
     "Fee": "Taxa",
     "Price": "Preço",
     "Fee Asset": "Ativo da Taxa",
-    "Create Order": "Criar Ordem"
+    "Create Order": "Criar Ordem",
+    "Exchange Type": "Tipo de Exchange"
 }

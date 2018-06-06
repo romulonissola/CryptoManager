@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, ExchangeService } from '../../shared'
+import { Exchange, ExchangeService, ExchangeType } from '../../shared'
 @Component({
   selector: 'app-exchange',
   templateUrl: './exchange.component.html',
@@ -30,6 +30,9 @@ export class ExchangeComponent implements OnInit {
             this.exchanges.splice(index, 0, exchange);
           });
     }
+  }
+  getExchangeType(exchangeType){
+    return ExchangeType[exchangeType];
   }
 
 }

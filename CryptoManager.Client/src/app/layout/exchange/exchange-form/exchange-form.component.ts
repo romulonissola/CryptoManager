@@ -13,6 +13,9 @@ import { Exchange, ExchangeService } from '../../../shared'
 export class ExchangeFormComponent implements OnInit {
   title: string;
   exchange: Exchange = new Exchange();
+  exchangesType= [
+    { id: 0, name: 'Binance' }
+  ];
   formState: string;
   constructor(private translate:TranslateService,
               private exchangeService: ExchangeService,
@@ -25,7 +28,6 @@ export class ExchangeFormComponent implements OnInit {
 
       this.formState = id ? "Edit" : "Add";
       this.title = this.translate.instant(this.formState);
-      debugger;
       if (!id)
         return;
 

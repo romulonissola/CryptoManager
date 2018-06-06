@@ -8,9 +8,10 @@ import { ExchangeFormComponent } from './exchange-form/exchange-form.component';
 import { ErrorsModule } from '../../shared'
 import { PageHeaderModule } from '../../shared';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
-    imports: [CommonModule, ExchangeRoutingModule, ErrorsModule, PageHeaderModule, TranslateModule, FormsModule],
+    imports: [CommonModule, ExchangeRoutingModule, ErrorsModule, NgSelectModule, PageHeaderModule, TranslateModule, FormsModule],
     declarations: [ExchangeComponent, ExchangeFormComponent]
 })
 export class ExchangeModule {}

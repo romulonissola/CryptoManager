@@ -28,9 +28,9 @@
                     <td class="price">{{ order.avgPrice }} {{ order.quoteAssetSymbol }}</td>
                     <td class="price">{{ order.quantity }} {{ order.baseAssetSymbol }}</td>
                     <td class="price">{{ order.valuePaidWithFees }} {{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.currentPrice }}</td>
-                    <td class="price">{{ order.valueSoldWithFees }}</td>
-                    <td class="price">{{ order.profit }}</td>
+                    <td class="price">{{ order.currentPrice }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.valueSoldWithFees }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.profit }} {{ order.quoteAssetSymbol }}</td>
                   </tr>
                 </tbody>
               </table>

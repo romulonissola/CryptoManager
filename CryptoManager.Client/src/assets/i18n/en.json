@@ -64,5 +64,6 @@
     "Fee": "Fee",
     "Price": "Price",
     "Fee Asset": "Fee Asset",
-    "Create Order": "Create Order"
+    "Create Order": "Create Order",
+    "Exchange Type": "Exchange Type"
 }

@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using CryptoManager.Domain.Mapper;
 using Microsoft.Extensions.Logging;
+using CryptoManager.Integration;
 
 namespace CryptoManager.WebApi
 {
@@ -55,6 +56,7 @@ namespace CryptoManager.WebApi
             services.AddORM();
             services.AddRepositories();
             services.AddBusiness();
+            services.AddIntegrations();
 
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
@@ -123,6 +125,8 @@ namespace CryptoManager.WebApi
                 var xmlPath = Path.Combine(basePath, "CryptoManager.WebApi.xml");
                 setup.IncludeXmlComments(xmlPath);
             });
+
+            services.AddDistributedMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
