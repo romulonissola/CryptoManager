@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CryptoManager.Integration.Utils
 {
-    public class ExchangeIntegrationCache
+    public class ExchangeIntegrationCache : IExchangeIntegrationCache
     {
         private readonly DistributedCacheEntryOptions _cacheoptions;
         private readonly IDistributedCache _cache;

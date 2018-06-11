@@ -10,7 +10,7 @@ namespace CryptoManager.Integration
     {
         public static IServiceCollection AddIntegrations(this IServiceCollection services)
         {
-            services.AddScoped<ExchangeIntegrationCache>();
+            services.AddScoped<IExchangeIntegrationCache, ExchangeIntegrationCache>();
 
             return services;
         }

@@ -14,9 +14,9 @@ namespace CryptoManager.Business
     public class OrderBusiness : IOrderBusiness
     {
         private readonly IOrderRepository _repository;
-        private readonly ExchangeIntegrationCache _cache;
+        private readonly IExchangeIntegrationCache _cache;
 
-        public OrderBusiness(IOrderRepository repository, ExchangeIntegrationCache cache)
+        public OrderBusiness(IOrderRepository repository, IExchangeIntegrationCache cache)
         {
             _repository = repository;
             _cache = cache;

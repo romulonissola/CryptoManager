@@ -14,7 +14,12 @@ export class ExchangeFormComponent implements OnInit {
   title: string;
   exchange: Exchange = new Exchange();
   exchangesType= [
-    { id: 0, name: 'Binance' }
+    { 
+      id: 0, name: 'Binance'
+    },
+    {
+      id: 1, name: 'HitBTC'
+    }
   ];
   formState: string;
   constructor(private translate:TranslateService,

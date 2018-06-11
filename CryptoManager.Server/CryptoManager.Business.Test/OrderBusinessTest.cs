@@ -1,8 +1,10 @@
 ﻿using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
+using CryptoManager.Domain.IntegrationEntities.Exchanges;
+using Binance = CryptoManager.Domain.IntegrationEntities.Exchanges.Binance;
+using HitBTC = CryptoManager.Domain.IntegrationEntities.Exchanges.HitBTC;
 using CryptoManager.Integration.Utils;
-using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,26 @@ namespace CryptoManager.Business.Test
     {
         private Mock<IOrderRepository> _repositoryMock;
         private OrderBusiness _orderBusiness;
-        private Mock<ExchangeIntegrationCache> _cacheMock;
+        private Mock<IExchangeIntegrationCache> _cacheMock;
 
         public OrderBusinessTest()
         {
             _repositoryMock = new Mock<IOrderRepository>(MockBehavior.Strict);
-            _cacheMock = new Mock<ExchangeIntegrationCache>(MockBehavior.Strict);
+
+
+            _cacheMock = new Mock<IExchangeIntegrationCache>(MockBehavior.Strict);
+            _cacheMock.Setup(repo => repo.GetAsync<Binance.TickerPrice>(It.IsAny<ExchangesIntegratedType>(), It.IsAny<string>()))
+                .ReturnsAsync((Binance.TickerPrice)null);
+
+            _cacheMock.Setup(repo => repo.GetAsync<HitBTC.TickerPrice>(It.IsAny<ExchangesIntegratedType>(), It.IsAny<string>()))
+                .ReturnsAsync((HitBTC.TickerPrice)null);
+
+            _cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<Binance.TickerPrice>>(), It.IsAny<ExchangesIntegratedType>(), It.IsAny<Func<Binance.TickerPrice, string>>()))
+                .Returns(Task.CompletedTask);
+
+            _cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<HitBTC.TickerPrice>>(), It.IsAny<ExchangesIntegratedType>(), It.IsAny<Func<HitBTC.TickerPrice, string>>()))
+                .Returns(Task.CompletedTask);
+
             _orderBusiness = new OrderBusiness(_repositoryMock.Object, _cacheMock.Object);
         }
 
@@ -91,7 +107,9 @@ namespace CryptoManager.Business.Test
                     BaseAssetId = Guid.NewGuid(),
                     Exchange = new Exchange()
                     {
-                        Name = "Binance"
+                        Name = "Binance",
+                        APIUrl = "https://api.binance.com/api/",
+                        ExchangeType = ExchangesIntegratedType.Binance
                     },
                     ExchangeId = Guid.NewGuid(),
                     QuoteAsset = new Asset()
@@ -121,7 +139,9 @@ namespace CryptoManager.Business.Test
                     BaseAssetId = Guid.NewGuid(),
                     Exchange = new Exchange()
                     {
-                        Name = "Binance"
+                        Name = "Binance",
+                        APIUrl = "https://api.binance.com/api/",
+                        ExchangeType = ExchangesIntegratedType.Binance
                     },
                     ExchangeId = Guid.NewGuid(),
                     QuoteAsset = new Asset()

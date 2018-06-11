@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using CryptoManager.Integration;
 
 namespace CryptoManager.WebApi.Test.Mocks
 {
@@ -89,6 +90,7 @@ namespace CryptoManager.WebApi.Test.Mocks
             services.AddORM();
             services.AddRepositories();
             services.AddBusiness();
+            services.AddIntegrations();
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {

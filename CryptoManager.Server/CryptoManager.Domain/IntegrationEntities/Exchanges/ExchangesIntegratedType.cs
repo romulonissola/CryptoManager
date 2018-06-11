@@ -6,6 +6,7 @@ namespace CryptoManager.Domain.IntegrationEntities.Exchanges
 {
     public enum ExchangesIntegratedType
     {
-        Binance = 0
+        Binance = 0,
+        HitBTC = 1
     }
 }
