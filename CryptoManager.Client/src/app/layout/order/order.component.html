@@ -18,11 +18,12 @@
                     <th data-field="currentPrice" class="price">{{ 'Current Price' | translate }}</th>
                     <th data-field="valueSoldWithFees" class="price">{{ 'Value Sold With Fees' | translate }}</th>
                     <th data-field="profit" class="price">{{ 'Profit' | translate }}</th>
+                    <th></th>
                   </tr>
                 </thead>
               
                 <tbody>
-                  <tr *ngFor="let order of orders">
+                  <tr *ngFor="let order of orders" [style.color]="getProfitColor(order.profit)">
                     <td>{{ order.exchangeName }}</td>
                     <td>{{ order.baseAssetSymbol}}/{{ order.quoteAssetSymbol }}</td>
                     <td class="price">{{ order.avgPrice }} {{ order.quoteAssetSymbol }}</td>
@@ -31,6 +32,9 @@
                     <td class="price">{{ order.currentPrice }} {{ order.quoteAssetSymbol }}</td>
                     <td class="price">{{ order.valueSoldWithFees }} {{ order.quoteAssetSymbol }}</td>
                     <td class="price">{{ order.profit }} {{ order.quoteAssetSymbol }}</td>
+                    <td>
+                      <i (click)="delete(order)" class="fa fa-fw fa-times"></i>
+                    </td>
                   </tr>
                 </tbody>
               </table>

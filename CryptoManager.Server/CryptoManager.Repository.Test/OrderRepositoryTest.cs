@@ -59,6 +59,38 @@ namespace CryptoManager.Repository.Test
         }
 
         [Fact]
+        public async Task Should_Delete_With_OrderItens_Async()
+        {
+            var context = MockDbContext.CreateDBInMemoryContext();
+            var applicationUserId = Guid.NewGuid();
+            var repository = MockOrder.GetDBTestRepository(context);
+            var orderItemRepository = MockOrderItem.GetDBTestRepository(context);
+            var order = MockOrder.GetEntityFake();
+            order.ApplicationUserId = applicationUserId;
+            order.OrderItems = new List<OrderItem>()
+            {
+                new OrderItem()
+                {
+                    Quantity = 100,
+                    Price = 1,
+                    Fee = 10,
+                    FeeAsset = new Asset()
+                }
+            };
+            order = await repository.InsertAsync(order);
+            Assert.NotNull(order);
+            Assert.True(!order.IsExcluded);
+            Assert.True(!order.OrderItems.First().IsExcluded);
+            var orderItems = await orderItemRepository.GetAllByOrderIdAsync(order.Id);
+            Assert.True(orderItems.Any());
+            await repository.DeleteAsync(order);
+            order = await repository.GetAsync(order.Id);
+            Assert.True(order.IsExcluded);
+            orderItems = await orderItemRepository.GetAllByOrderIdAsync(order.Id);
+            Assert.True(!orderItems.Any());
+        }
+
+        [Fact]
         public async Task Should_Return_All_Async()
         {
             var repository = MockOrder.GetDBTestRepository();

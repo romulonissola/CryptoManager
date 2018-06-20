@@ -17,14 +17,14 @@ namespace CryptoManager.Repository.Infrastructure
             _ORM = orm;
         }
 
-        public Task DeleteAsync(T entity)
+        public virtual Task DeleteAsync(T entity)
         {
             return _ORM.DeleteAsync(entity);
         }
 
-        public Task<T> GetAsync(Guid id)
+        public Task<T> GetAsync(Guid id, bool loadFull = false)
         {
-            return _ORM.GetAsync(id);
+            return _ORM.GetAsync(id, loadFull);
         }
 
         public Task<List<T>> GetAllWithoutDisable()

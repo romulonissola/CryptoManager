@@ -79,5 +79,17 @@ namespace CryptoManager.Repository.Test
             var result = await repository.GetAllWithoutDisable();
             Assert.Single(result.ToList());
         }
+
+        [Fact]
+        public async Task Should_Return_All_by_OrderId_Async()
+        {
+            var repository = MockOrderItem.GetDBTestRepository();
+            var item = MockOrderItem.GetEntityFake();
+            await repository.InsertAsync(item);
+            item.OrderId = Guid.NewGuid();
+            await repository.InsertAsync(item);
+            var result = await repository.GetAllByOrderIdAsync(item.OrderId);
+            Assert.Single(result.ToList());
+        }
     }
 }

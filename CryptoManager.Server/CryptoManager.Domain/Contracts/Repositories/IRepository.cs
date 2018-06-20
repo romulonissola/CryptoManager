@@ -11,7 +11,7 @@ namespace CryptoManager.Domain.Contracts.Repositories
     public interface IRepository<T> where T : IEntity
     {
         Task DeleteAsync(T entity);
-        Task<T> GetAsync(Guid id);
+        Task<T> GetAsync(Guid id, bool loadFull = false);
         Task<List<T>> GetAllWithoutDisable();
         Task<List<T>> GetAll();
         Task<T> InsertAsync(T entity);

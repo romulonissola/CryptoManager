@@ -4,8 +4,6 @@ using CryptoManager.Repository.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Repository.Repositories
@@ -34,6 +32,16 @@ namespace CryptoManager.Repository.Repositories
             }
 
             return entity;
+        }
+
+        public override async Task DeleteAsync(Order entity)
+        {
+            var orderItems = await _orderItemRepository.GetAllByOrderIdAsync(entity.Id);
+            foreach (var orderItem in orderItems)
+            {
+                await _orderItemRepository.DeleteAsync(orderItem);
+            }
+            await base.DeleteAsync(entity);
         }
 
         public Task<List<Order>> GetAllByApplicationUserAsync(Guid applicationUserId)

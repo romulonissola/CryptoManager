@@ -32,7 +32,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                     throw new System.InvalidOperationException($"symbol {symbol} not exists in HitBTC");
                 }
             }
-            return price.Last;
+            return price.Last ?? decimal.Zero;
         }
     }
 }

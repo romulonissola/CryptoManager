@@ -51,5 +51,25 @@ namespace CryptoManager.WebApi.Controllers
             order.ApplicationUserId = GetUserId();
             return Ok(_mapper.Map<OrderDTO>(await _repository.InsertAsync(order)));
         }
+
+        /// <summary>
+        /// delete an order from database
+        /// </summary>
+        /// <param name="id">id of an order to delete</param>
+        /// <response code="404">if parameter don't match with an order</response>
+        /// <response code="200">if success</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ObjectResult), 404)]
+        [ProducesResponseType(typeof(ObjectResult), 200)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var entity = await _repository.GetAsync(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            await _repository.DeleteAsync(entity);
+            return Ok();
+        }
     }
 }

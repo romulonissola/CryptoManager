@@ -23,4 +23,12 @@ export class OrderService {
   getAllByLoggedUser(): Observable<any>{
     return this.apiService.get(`${this.serviceURL}/GetOrderDetailsByApplicationUser`);
   }
+
+  delete(id:string){
+    return this.apiService.delete(this.getUrl(id));
+  }
+  
+  private getUrl(id){
+    return this.serviceURL + "/" + id;
+  }
 }
