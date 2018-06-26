@@ -8,9 +8,4 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <_PublishTargetUrl>D:\Repos\CryptoManager\CryptoManager.Server\Publish</_PublishTargetUrl>
   </PropertyGroup>
-  <ItemGroup>
-    <DestinationConnectionStrings Include="DefaultConnection">
-      <Value>Data Source=(LocalDB)\mssqllocaldb;Initial Catalog=CryptoManagerDB;Integrated Security=True;</Value>
-    </DestinationConnectionStrings>
-  </ItemGroup>
 </Project>

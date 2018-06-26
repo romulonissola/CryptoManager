@@ -87,7 +87,7 @@ namespace CryptoManager.Business.Test
                 .ReturnsAsync(order);
 
             await _orderBusiness.CreateOrderAsync(order);
-            
+
             _repositoryMock.Verify(repo => repo.InsertAsync(order), Times.Once);
         }
 
@@ -171,6 +171,36 @@ namespace CryptoManager.Business.Test
             _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(applicationUserId), Times.Once);
             Assert.IsType<List<OrderDetailDTO>>(ordersDetails);
             Assert.Equal(2, ordersDetails.Count);
+        }
+
+        [Fact]
+        public void Should_Calculate_Average_Price()
+        {
+            var orderItems = new List<OrderItem>()
+            {
+                new OrderItem()
+                {
+                    Price = 1,
+                    Quantity = 1000
+                },
+                new OrderItem()
+                {
+                    Price = 2,
+                    Quantity = 2000
+                },
+                new OrderItem()
+                {
+                    Price = 3,
+                    Quantity = 1000
+                },
+                new OrderItem()
+                {
+                    Price = 4,
+                    Quantity = 1000
+                }
+            };
+            var result = _orderBusiness.CalculateAveragePrice(orderItems);
+            Assert.Equal(2.4M, result);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace CryptoManager.Business
             {
                 var exchangeStrategy = new ExchangeIntegrationStrategy(order.Exchange, _cache);
                 var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
-                var orderPrice = order.OrderItems.Sum(a => a.Price) / order.OrderItems.Count;
+                var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
                 var currentPrice = exchangeStrategy.GetCurrentPrice($"{order.BaseAsset.Symbol}{order.QuoteAsset.Symbol}").Result;
                 var valuePaidWithFees = orderPrice * orderQuantity;
                 var valueSoldWithFees = currentPrice * orderQuantity;
@@ -57,6 +57,11 @@ namespace CryptoManager.Business
                     Profit = valueSoldWithFees - valuePaidWithFees
                 };
             }).ToList();
+        }
+
+        public decimal CalculateAveragePrice(List<OrderItem> orderItems)
+        {
+            return orderItems.Sum(order => order.Price * order.Quantity) / orderItems.Sum(order => order.Quantity);
         }
     }
 }
