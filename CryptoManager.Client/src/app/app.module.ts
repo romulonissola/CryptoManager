@@ -6,19 +6,22 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { FormsModule } from '@angular/forms';
+import { LoaderComponent } from './components/loader/loader.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ApiService,
-         AuthGuard,
-         JwtService,
-         AccountService,
-         ExchangeService,
-         AssetService,
-         OrderService,
-         JwtHelper,
-         HttpErrorInterceptor } from './shared';
+        AuthGuard,
+        JwtService,
+        AccountService,
+        ExchangeService,
+        AssetService,
+        OrderService,
+        JwtHelper,
+        HttpErrorInterceptor,
+        HTTPStatus  } from './shared';
 
+const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
     // for development
@@ -42,7 +45,7 @@ export function createTranslateLoader(http: HttpClient) {
         AppRoutingModule,
         FormsModule
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, LoaderComponent],
     providers: [ApiService,
                 AuthGuard,
                 JwtService,
@@ -51,11 +54,12 @@ export function createTranslateLoader(http: HttpClient) {
                 AssetService,
                 OrderService,
                 JwtHelper,
-                { 
-                    provide: HTTP_INTERCEPTORS, 
-                    useClass: HttpErrorInterceptor, 
-                    multi: true 
-                } 
+                Interceptors_Services,
+                {
+                    provide: HTTP_INTERCEPTORS,
+                    useClass: HttpErrorInterceptor,
+                    multi: true
+                }
             ],
     bootstrap: [AppComponent]
 })

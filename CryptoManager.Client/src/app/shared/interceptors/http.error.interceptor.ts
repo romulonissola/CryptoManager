@@ -5,15 +5,39 @@ import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/catch';
 import { AccountService } from '../services/index';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { catchError, finalize, map } from 'rxjs/operators';
+
+@Injectable()
+export class HTTPStatus {
+    private requestInFlight$: BehaviorSubject<boolean>;
+    constructor() {
+        this.requestInFlight$ = new BehaviorSubject(false);
+    }
+
+    setHttpStatus(inFlight: boolean) {
+        this.requestInFlight$.next(inFlight);
+    }
+
+    getHttpStatus(): Observable<boolean> {
+        return this.requestInFlight$.asObservable();
+    }
+}
 
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-    constructor(private accountService: AccountService, private router: Router) { }
+    constructor(private accountService: AccountService,
+                private router: Router,
+                private status: HTTPStatus) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(req)
-            .catch((error, caught) => {
+        this.status.setHttpStatus(true);
+        return next.handle(req).pipe(
+            map(event => {
+                return event;
+            }),
+            catchError(error => {
                 //intercept the respons error and displace it to the console
                 console.log("Error Occurred");
                 console.log(error);
@@ -23,6 +47,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 }
                 //return the error to the method that called it
                 return Observable.throw(error);
-            }) as any;
+            }),
+            finalize(() => {
+                this.status.setHttpStatus(false);
+            }));
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountService } from './shared';
+import { AccountService, HTTPStatus } from './shared';
 
 @Component({
     selector: 'app-root',
@@ -7,9 +7,14 @@ import { AccountService } from './shared';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    constructor (
-        private accountService: AccountService
-    ) {}
+    showLoader:boolean;
+    constructor (private accountService: AccountService,
+                private httpStatus: HTTPStatus) {
+        this.httpStatus.getHttpStatus()
+                .subscribe((status: boolean) => {
+                        this.showLoader = status;
+                });
+    }
 
     ngOnInit() {
         this.accountService.populate();

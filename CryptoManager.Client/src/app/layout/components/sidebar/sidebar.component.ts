@@ -30,7 +30,7 @@ export class SidebarComponent {
             }
         });
     }
-    
+
     ngOnInit() {
         this.accountService.currentUser.subscribe(
             (userData) => {
