@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
@@ -101,9 +102,12 @@ namespace CryptoManager.WebApi.Controllers
                         PictureUrl = userInfo.Picture.Data.Url
                     };
 
-                    var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));
-
+                    var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));                    
                     if (!result.Succeeded)
+                        return new BadRequestObjectResult(result);
+
+                    result = await AddSuperUserInRoleAdmin(appUser);
+                    if (result != null && !result.Succeeded)
                         return new BadRequestObjectResult(result);
                 }
                 else
@@ -118,8 +122,11 @@ namespace CryptoManager.WebApi.Controllers
                     user.PictureUrl = userInfo.Picture.Data.Url;
 
                     var result = await _userManager.UpdateAsync(user);
-
                     if (!result.Succeeded)
+                        return new BadRequestObjectResult(result);
+
+                    result = await AddSuperUserInRoleAdmin(user);
+                    if (result != null && !result.Succeeded)
                         return new BadRequestObjectResult(result);
                 }
 
@@ -130,7 +137,7 @@ namespace CryptoManager.WebApi.Controllers
                     return new BadRequestObjectResult("login_failure - message:Failed to create local user account.");
                 }
                 await _signInManager.SignInAsync(localUser, true, "Bearer");
-                return new OkObjectResult(GenerateToken(localUser));
+                return new OkObjectResult(await GenerateToken(localUser));
             }
             catch (Exception ex)
             {
@@ -138,9 +145,21 @@ namespace CryptoManager.WebApi.Controllers
             }
         }
 
-        private string GenerateToken(ApplicationUser user)
+        private async Task<IdentityResult> AddSuperUserInRoleAdmin(ApplicationUser user)
         {
-            var claims = new Claim[]
+            if (user.Email.Equals(WebUtil.SuperUserEmail))
+            {
+                if (!await _userManager.IsInRoleAsync(user, WebUtil.ADMINISTRATOR_ROLE_NAME))
+                {
+                    return await _userManager.AddToRoleAsync(user, WebUtil.ADMINISTRATOR_ROLE_NAME);
+                }
+            }
+            return null;
+        }
+
+        private async Task<string> GenerateToken(ApplicationUser user)
+        {
+            var claims = new List<Claim>()
             {
                 new Claim("Id", user.Id.ToString()),
                 new Claim("Name", $"{user.FirstName} {user.LastName}"),
@@ -149,6 +168,13 @@ namespace CryptoManager.WebApi.Controllers
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
+
+            var roleNames = await _userManager.GetRolesAsync(user);
+            foreach (var roleName in roleNames)
+            {
+                var roleClaim = new Claim(ClaimTypes.Role, roleName);
+                claims.Add(roleClaim);
+            }
 
             return _jwtFactory.GenerateToken(claims);
         }

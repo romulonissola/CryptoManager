@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, ExchangeService, ExchangeType } from '../../shared'
+import { Exchange, ExchangeService, ExchangeType, AccountService, User } from '../../shared'
 @Component({
   selector: 'app-exchange',
   templateUrl: './exchange.component.html',
@@ -10,10 +10,12 @@ import { Exchange, ExchangeService, ExchangeType } from '../../shared'
 })
 export class ExchangeComponent implements OnInit {
   exchanges: Exchange[] = [];
+  user: User;
 
-  constructor(private translate: TranslateService, private exchangeService: ExchangeService) {}
+  constructor(private translate: TranslateService, private exchangeService: ExchangeService, private accountService: AccountService) {}
 
-   ngOnInit() {
+  ngOnInit() {
+    this.user = this.accountService.getCurrentUser();
     this.exchangeService.getAll()
       .subscribe(data => this.exchanges = data);
   }

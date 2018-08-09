@@ -39,13 +39,7 @@ export class AccountService {
   populate() {
     if (this.jwtService.getToken()) {
       if(this.currentUserSubject.value.toString() == "[object Object]"){
-        let tokenDecoded = this.jwtHelper.decodeToken(this.jwtService.getToken());
-        let user: User = new User();
-        user.id = tokenDecoded.Id;
-        user.email = tokenDecoded.Email;
-        user.imageURL = tokenDecoded.PictureURL;
-        user.username = tokenDecoded.Name;
-        user.token = this.jwtService.getToken();
+        let user = this.createUserModel(this.jwtService.getToken());
         this.setAuth(user);
       }
     } else {
@@ -109,13 +103,7 @@ export class AccountService {
     .append("accessToken", accessToken);
     return this.apiService.post(this.serviceURL + '/ExternalLoginFacebook', null, httpParams)
         .pipe(map(data => {
-          let tokenDecoded = this.jwtHelper.decodeToken(data);
-          let user: User = new User();
-          user.id = tokenDecoded.Id;
-          user.email = tokenDecoded.Email;
-          user.imageURL = tokenDecoded.PictureURL;
-          user.username = tokenDecoded.Name;
-          user.token = data;
+          let user = this.createUserModel(data);
           this.setAuth(user);
           return true;
         }));
@@ -123,5 +111,18 @@ export class AccountService {
 
   getCurrentUser(): User {
     return this.currentUserSubject.value;
+  }
+
+  createUserModel(data: string): User{
+    let tokenDecoded = this.jwtHelper.decodeToken(data);
+    let user: User = new User();
+    user.id = tokenDecoded.Id;
+    user.email = tokenDecoded.Email;
+    user.imageURL = tokenDecoded.PictureURL;
+    user.username = tokenDecoded.Name;
+    user.role = tokenDecoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    user.token = data;
+    user.isAdmin = user.role != undefined ? user.role.indexOf("Administrator") > - 1 : false;
+    return user;
   }
 }

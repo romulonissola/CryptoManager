@@ -16,6 +16,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using CryptoManager.Domain.Mapper;
 using Microsoft.Extensions.Logging;
 using CryptoManager.Integration;
+using CryptoManager.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using CryptoManager.Repository.DatabaseContext;
+using System.Threading.Tasks;
 
 namespace CryptoManager.WebApi
 {
@@ -43,8 +48,9 @@ namespace CryptoManager.WebApi
             WebUtil.JwtKeyName = _configuration["JwtKeyName"];
             WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
             WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
+            WebUtil.SuperUserEmail = _configuration["Authentication:SuperUserEmail"];
 
-            if(_configuration["DatabaseProvider"] == "SQLite")
+            if (_configuration["DatabaseProvider"] == "SQLite")
             {
                 services.AddSQLiteDbContexts(_configuration.GetConnectionString("DefaultConnection"));
             }
@@ -130,7 +136,7 @@ namespace CryptoManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(_configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -159,6 +165,8 @@ namespace CryptoManager.WebApi
             app.UseMvc();
 
             app.EnsureCreateDatabase();
+
+            app.AddRole(WebUtil.ADMINISTRATOR_ROLE_NAME).Wait();
         }
     }
 }

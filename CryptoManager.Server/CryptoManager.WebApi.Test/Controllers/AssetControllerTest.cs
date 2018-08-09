@@ -16,7 +16,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_GetAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var result = await client.GetAsync(ROUTE_PATH);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
@@ -25,7 +25,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_GetByIdAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var entity = new AssetDTO()
             {
                 Name = "Teste",
@@ -43,7 +43,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_NotFound_When_GetByIdAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var id = Guid.NewGuid();
             var result = await client.GetAsync($"{ROUTE_PATH}/{id}");
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
@@ -53,7 +53,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_PostAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var entity = new AssetDTO()
             {
                 Name = "Teste",
@@ -68,7 +68,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_PutAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var entity = new AssetDTO()
             {
                 Name = "Teste",
@@ -87,7 +87,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var entity = new AssetDTO()
             {
                 Name = "Teste",
@@ -105,7 +105,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_NotFound_When_Not_Exist_Asset_In_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var id = new Guid();
             var result = await client.DeleteAsync($"{ROUTE_PATH}/{id}");
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);

@@ -40,7 +40,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_User_Info()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            await client.AddAuthorization();
+            client.AddAuthorization();
             var result = await client.GetAsync(ROUTE_PATH);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }

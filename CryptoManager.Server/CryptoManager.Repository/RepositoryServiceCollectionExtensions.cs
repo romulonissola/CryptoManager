@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace CryptoManager.Repository
 {
@@ -83,6 +84,23 @@ namespace CryptoManager.Repository
             }
 
             return app;
+        }
+
+        public static async Task AddRole(this IApplicationBuilder app, string roleName)
+        {
+            var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            using (var serviceScope = serviceScopeFactory.CreateScope())
+            {
+                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<ApplicationRole>>();
+                
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    var roleresult = await roleManager.CreateAsync(new ApplicationRole()
+                    {
+                        Name = roleName
+                    });
+                }
+            }     
         }
     }
 }

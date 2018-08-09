@@ -5,6 +5,8 @@ using AutoMapper;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
+using CryptoManager.WebApi.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoManager.WebApi.Controllers
@@ -59,6 +61,7 @@ namespace CryptoManager.WebApi.Controllers
         /// <response code="200">if success</response>
         [HttpPost]
         [ProducesResponseType(typeof(ObjectResult), 200)]
+        [Authorize(Roles = WebUtil.ADMINISTRATOR_ROLE_NAME)]
         public async Task<IActionResult> Post([FromBody]ExchangeDTO entity)
         {
             return Ok(_mapper.Map<ExchangeDTO>(await _repository.InsertAsync(_mapper.Map<Exchange>(entity))));
@@ -71,6 +74,7 @@ namespace CryptoManager.WebApi.Controllers
         /// <response code="200">if success</response>
         [HttpPut]
         [ProducesResponseType(typeof(ObjectResult), 200)]
+        [Authorize(Roles = WebUtil.ADMINISTRATOR_ROLE_NAME)]
         public async Task<IActionResult> Put([FromBody]ExchangeDTO entity)
         {
             await _repository.UpdateAsync(_mapper.Map<Exchange>(entity));
@@ -86,6 +90,7 @@ namespace CryptoManager.WebApi.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ObjectResult), 404)]
         [ProducesResponseType(typeof(ObjectResult), 200)]
+        [Authorize(Roles = WebUtil.ADMINISTRATOR_ROLE_NAME)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var entity = await _repository.GetAsync(id);

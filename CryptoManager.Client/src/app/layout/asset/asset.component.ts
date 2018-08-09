@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Asset, AssetService } from '../../shared'
+import { Asset, AssetService, AccountService, User } from '../../shared'
 @Component({
   selector: 'app-asset',
   templateUrl: './asset.component.html',
@@ -10,10 +10,12 @@ import { Asset, AssetService } from '../../shared'
 })
 export class AssetComponent implements OnInit {
   assets: Asset[] = [];
+  user: User;
 
-  constructor(private translate: TranslateService, private assetService: AssetService) {}
+  constructor(private translate: TranslateService, private assetService: AssetService, private accountService: AccountService) {}
 
-   ngOnInit() {
+  ngOnInit() {
+    this.user = this.accountService.getCurrentUser();
     this.assetService.getAll()
       .subscribe(data => this.assets = data);
   }

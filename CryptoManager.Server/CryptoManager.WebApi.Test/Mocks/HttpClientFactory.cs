@@ -48,11 +48,13 @@ namespace CryptoManager.WebApi.Test.Mocks
             return await _client.DeleteAsync(path);
         }
 
-        public async Task AddAuthorization()
+        public void AddAuthorization()
         {
-            var auth = new MockAuthorization();
-            var token = await auth.GetValidToken();
-            AddHeader("Authorization", $"Bearer {token}");
+            if (!_client.DefaultRequestHeaders.Contains("Authorization"))
+            {
+                var token = MockAuthorization.GetValidToken();
+                AddHeader("Authorization", $"Bearer {token}");
+            }
         }
     }
 }

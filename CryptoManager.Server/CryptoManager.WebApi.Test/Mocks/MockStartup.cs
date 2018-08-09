@@ -74,6 +74,7 @@ namespace CryptoManager.WebApi.Test.Mocks
             WebUtil.FacebookAppId = TestWebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
             WebUtil.FacebookAppSecret = TestWebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
             TestWebUtil.FacebookAccessToken = _configuration["Authentication:Facebook:AccessToken"];
+            WebUtil.SuperUserEmail = TestWebUtil.SuperUserEmail = _configuration["Authentication:SuperUserEmail"];
 
             services.AddDbContext<ApplicationIdentityDbContext>(options =>
             {
@@ -154,6 +155,8 @@ namespace CryptoManager.WebApi.Test.Mocks
 
             app.UseAuthentication();
             app.UseMvc();
+
+            app.AddRole(WebUtil.ADMINISTRATOR_ROLE_NAME).Wait();
         }
         /// <summary>
         /// Gets the full path to the target project path that we wish to test

@@ -4,4 +4,6 @@ export class User {
     token: string;
     username: string;
     imageURL: string;
+    role: string[];
+    isAdmin: boolean;
 }
