@@ -16,8 +16,9 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             _httpClientFactory = new HttpClientFactory(apiURL);
         }
 
-        public async Task<decimal> GetCurrentPrice(string symbol)
+        public async Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol)
         {
+            var symbol = $"{baseAssetSymbol}{quoteAssetSymbol}";
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.Binance, symbol);
             if (price == null)
             {

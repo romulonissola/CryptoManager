@@ -17,7 +17,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_PostAsync()
         {
             var client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
             var entity = new OrderDTO()
             {
                 Date = DateTime.Now,
@@ -43,7 +43,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_Get_By_User_Async()
         {
             var client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
             var entity = new OrderDTO()
             {
                 Date = DateTime.Now,
@@ -65,7 +65,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 
             client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
 
             result = await client.GetAsync($"{ROUTE_PATH}/GetOrderDetailsByApplicationUser");
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
@@ -75,7 +75,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_OK_When_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
             var entity = new OrderDTO()
             {
                 Date = DateTime.Now,
@@ -104,7 +104,7 @@ namespace CryptoManager.WebApi.Test
         public async Task Should_Return_NotFound_When_Not_Exist_In_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
             var id = new Guid();
             var result = await client.DeleteAsync($"{ROUTE_PATH}/{id}");
             Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);

@@ -4,6 +4,6 @@ namespace CryptoManager.Integration
 {
     public interface IExchangeIntegrationStrategy
     {
-        Task<decimal> GetCurrentPrice(string symbol);
+        Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol);
     }
 }

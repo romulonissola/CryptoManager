@@ -27,7 +27,7 @@ namespace CryptoManager.Integration.Test
                 .Returns(Task.CompletedTask);
 
             var strategy = new HitBTCIntegrationStrategy(HITBTC_API, cacheMock.Object);
-            var price = await strategy.GetCurrentPrice(symbol);
+            var price = await strategy.GetCurrentPrice("LTC", "BTC");
             Assert.True(price > 0);
         }
 
@@ -47,8 +47,7 @@ namespace CryptoManager.Integration.Test
                 .Returns(Task.CompletedTask);
 
             var strategy = new HitBTCIntegrationStrategy(HITBTC_API, cacheMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice(symbol));
-            Assert.Equal($"symbol {symbol} not exists in HitBTC", ex.Message);
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh"));            Assert.Equal($"symbol {symbol} not exists in HitBTC", ex.Message);
         }
     }
 }

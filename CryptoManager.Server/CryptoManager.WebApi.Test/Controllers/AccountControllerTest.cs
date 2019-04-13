@@ -1,5 +1,7 @@
 using CryptoManager.WebApi.Test.Mocks;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -20,15 +22,6 @@ namespace CryptoManager.WebApi.Test
         }
 
         [Fact]
-        public async Task Should_Return_OK_When_AccessToken_Is_Valid()
-        {
-            HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            string path = $"{ROUTE_PATH}/ExternalLoginFacebook?accessToken={TestWebUtil.FacebookAccessToken}";
-            var result = await client.PostAsync(path);
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        }
-
-        [Fact]
         public async Task Should_Return_Unauthorized_When_Not_Using_Token()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());            
@@ -37,10 +30,10 @@ namespace CryptoManager.WebApi.Test
         }
 
         [Fact]
-        public async Task Should_Return_User_Info()
+        public async Task Should_Return_User_Info_When_AccessToken_IsValid()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
-            client.AddAuthorization();
+            await client.AddAuthorizationAsync();
             var result = await client.GetAsync(ROUTE_PATH);
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }

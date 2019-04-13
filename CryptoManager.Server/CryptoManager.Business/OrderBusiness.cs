@@ -24,7 +24,7 @@ namespace CryptoManager.Business
 
         public Task<Order> CreateOrderAsync(Order order)
         {
-            if(order.OrderItems == null || !order.OrderItems.Any())
+            if (order.OrderItems == null || !order.OrderItems.Any())
             {
                 throw new InvalidOperationException("Order Item Must be Informed");
             }
@@ -33,30 +33,38 @@ namespace CryptoManager.Business
 
         public async Task<List<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId)
         {
+            List<Task<OrderDetailDTO>> list = new List<Task<OrderDetailDTO>>();
             var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId);
-            return orders.Select(order =>
+            orders.ForEach(order =>
             {
-                var exchangeStrategy = new ExchangeIntegrationStrategy(order.Exchange, _cache);
-                var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
-                var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
-                var currentPrice = exchangeStrategy.GetCurrentPrice($"{order.BaseAsset.Symbol}{order.QuoteAsset.Symbol}").Result;
-                var valuePaidWithFees = orderPrice * orderQuantity;
-                var valueSoldWithFees = currentPrice * orderQuantity;
-                return new OrderDetailDTO()
-                {
-                    Id = order.Id,
-                    Date = order.Date,
-                    ExchangeName = order.Exchange.Name,
-                    BaseAssetSymbol = order.BaseAsset.Symbol,
-                    QuoteAssetSymbol = order.QuoteAsset.Symbol,
-                    Quantity = orderQuantity,
-                    AvgPrice = orderPrice,
-                    ValuePaidWithFees = valuePaidWithFees,
-                    ValueSoldWithFees = valueSoldWithFees,
-                    CurrentPrice = currentPrice,
-                    Profit = valueSoldWithFees - valuePaidWithFees
-                };
-            }).ToList();
+                list.Add(BuildOrderDetailAsync(order));
+            });
+            await Task.WhenAll(list.ToArray());
+            return list.Select(a=> a.Result).ToList();
+        }
+
+        private async Task<OrderDetailDTO> BuildOrderDetailAsync(Order order)
+        {
+            var exchangeStrategy = new ExchangeIntegrationStrategy(order.Exchange, _cache);
+            var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
+            var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
+            var currentPrice = await exchangeStrategy.GetCurrentPrice(order.BaseAsset.Symbol, order.QuoteAsset.Symbol);
+            var valuePaidWithFees = orderPrice * orderQuantity;
+            var valueSoldWithFees = currentPrice * orderQuantity;
+            return new OrderDetailDTO()
+            {
+                Id = order.Id,
+                Date = order.Date,
+                ExchangeName = order.Exchange.Name,
+                BaseAssetSymbol = order.BaseAsset.Symbol,
+                QuoteAssetSymbol = order.QuoteAsset.Symbol,
+                Quantity = orderQuantity,
+                AvgPrice = orderPrice,
+                ValuePaidWithFees = valuePaidWithFees,
+                ValueSoldWithFees = valueSoldWithFees,
+                CurrentPrice = currentPrice,
+                Profit = valueSoldWithFees - valuePaidWithFees
+            };
         }
 
         public decimal CalculateAveragePrice(List<OrderItem> orderItems)

@@ -16,8 +16,9 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             _httpClientFactory = new HttpClientFactory(apiURL);
         }
 
-        public async Task<decimal> GetCurrentPrice(string symbol)
+        public async Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol)
         {
+            var symbol = $"{baseAssetSymbol}{quoteAssetSymbol}";
             //Workaround because HitBTC uses USDT like USD in your api 
             symbol = symbol.Replace("USDT", "USD");
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.HitBTC, symbol);

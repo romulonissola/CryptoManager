@@ -21,13 +21,16 @@ namespace CryptoManager.Integration
                 case ExchangesIntegratedType.HitBTC:
                     _strategy = new HitBTCIntegrationStrategy(exchange.APIUrl, cache);
                     break;
+                case ExchangesIntegratedType.Coinbase:
+                    _strategy = new CoinbaseIntegrationStrategy(exchange.APIUrl, cache);
+                    break;
                 default:
                     throw new InvalidOperationException($"Invalid IntegrationType, invalidType={exchange.ExchangeType.ToString()}");
             }
         }
-        public Task<decimal> GetCurrentPrice(string symbol)
+        public Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol)
         {
-            return _strategy.GetCurrentPrice(symbol);
+            return _strategy.GetCurrentPrice(baseAssetSymbol, quoteAssetSymbol);
         }
     }
 }

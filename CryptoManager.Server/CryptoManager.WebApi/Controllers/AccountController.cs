@@ -22,7 +22,6 @@ namespace CryptoManager.WebApi.Controllers
     [Route("api/Account")]
     public class AccountController : BaseController
     {
-        private const string FACEBOOK_PROVIDER_NAME = "Facebook";
         private readonly JwtFactory _jwtFactory;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -60,9 +59,8 @@ namespace CryptoManager.WebApi.Controllers
         /// <returns>JWToken if User is successfully authenticated</returns>
         /// <response code="400">If the user not authenticated in facebook or if occurred other error</response>
         /// <response code="200">If success</response>
-        [HttpPost]
+        [HttpPost("ExternalLoginFacebook")]
         [AllowAnonymous]
-        [Route("ExternalLoginFacebook")]
         [ProducesResponseType(typeof(ObjectResult), 400)]
         [ProducesResponseType(typeof(ObjectResult), 200)]
         public async Task<IActionResult> ExternalLoginFacebook(string accessToken)
