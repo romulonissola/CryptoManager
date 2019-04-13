@@ -5,8 +5,9 @@ Binance (https://www.binance.com)
 
 HitBtc (https://hitbtc.com)
 
+Coinbase (https://coinbase.com)
 
-Would like other exchange integration? Open an issue (https://github.com/romulonissola/CryptoManager/issues/new)
+Would you like other exchange integration? Open an issue on (https://github.com/romulonissola/CryptoManager/issues/new)
 
 ### Server Build Status
 [![Build status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/CryptoManagerServer-CI-CD)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=5)
