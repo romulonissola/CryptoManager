@@ -26,12 +26,12 @@
                   <tr *ngFor="let order of orders" [style.color]="getProfitColor(order.profit)">
                     <td>{{ order.exchangeName }}</td>
                     <td>{{ order.baseAssetSymbol}}/{{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.avgPrice }} {{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.quantity }} {{ order.baseAssetSymbol }}</td>
-                    <td class="price">{{ order.valuePaidWithFees }} {{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.currentPrice }} {{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.valueSoldWithFees }} {{ order.quoteAssetSymbol }}</td>
-                    <td class="price">{{ order.profit }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.avgPrice | number : '1.2-8' }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.quantity | number : '1.2-8' }} {{ order.baseAssetSymbol }}</td>
+                    <td class="price">{{ order.valuePaidWithFees | number : '1.2-8' }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.currentPrice | number : '1.2-8' }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.valueSoldWithFees | number : '1.2-8' }} {{ order.quoteAssetSymbol }}</td>
+                    <td class="price">{{ order.profit | number : '1.2-8' }} {{ order.quoteAssetSymbol }}</td>
                     <td>
                       <i (click)="delete(order)" class="fa fa-fw fa-times"></i>
                     </td>
