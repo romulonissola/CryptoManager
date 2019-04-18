@@ -13,6 +13,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
         {
             _cache = cache;
             _httpClientFactory = new HttpClientFactory(apiURL);
+            _httpClientFactory.AddHeader("User-Agent", "gdax-node-client");
         }
 
         public async Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol)
@@ -21,15 +22,15 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.Coinbase, symbol);
             if (price == null)
             {
-                var apiPath = $"v2/prices/{symbol}/sell";
+                var apiPath = $"products/{symbol}/ticker";
                 price = await _httpClientFactory.GetAsync<TickerPrice>(apiPath);
                 await _cache.AddAsync(price, ExchangesIntegratedType.Coinbase, symbol);
-                if(price.Data == null)
+                if(price == null)
                 {
                     throw new System.InvalidOperationException($"symbol {symbol} not exists in Coinbase");
                 }
             }
-            return price.Data.Amount;
+            return price.Price;
         }
     }
 }

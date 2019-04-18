@@ -6,6 +6,6 @@ namespace CryptoManager.Domain.IntegrationEntities.Exchanges.Coinbase
 {
     public class TickerPrice
     {
-        public Data Data { get; set; }
+        public decimal Price { get; set; }
     }
 }

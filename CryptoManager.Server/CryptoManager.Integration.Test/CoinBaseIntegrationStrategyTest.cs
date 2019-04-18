@@ -12,7 +12,7 @@ namespace CryptoManager.Integration.Test
 {
     public class CoinbaseIntegrationStrategyTest
     {
-        private const string COINBASE_API = "https://api.coinbase.com/";
+        private const string COINBASE_API = "https://api.pro.coinbase.com/";
 
         [Fact]
         public async Task Should_Return_Price_Async()
@@ -49,8 +49,8 @@ namespace CryptoManager.Integration.Test
                 .Returns(Task.CompletedTask);
 
             var strategy = new CoinbaseIntegrationStrategy(COINBASE_API, cacheMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh"));
-            Assert.Equal($"symbol {symbol} not exists in Coinbase", ex.Message);
+            var price = await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh");
+            Assert.Equal(0, price);
         }
     }
 }
