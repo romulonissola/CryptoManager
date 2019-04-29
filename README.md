@@ -7,6 +7,8 @@ HitBtc (https://hitbtc.com)
 
 Coinbase (https://coinbase.com)
 
+BitcoinTrade (https://bitcointrade.com.br)
+
 Would you like other exchange integration? Open an issue on (https://github.com/romulonissola/CryptoManager/issues/new)
 
 ### Server Build Status

@@ -24,11 +24,11 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             {
                 var apiPath = $"products/{symbol}/ticker";
                 price = await _httpClientFactory.GetAsync<TickerPrice>(apiPath);
-                await _cache.AddAsync(price, ExchangesIntegratedType.Coinbase, symbol);
                 if(price == null)
                 {
                     throw new System.InvalidOperationException($"symbol {symbol} not exists in Coinbase");
                 }
+                await _cache.AddAsync(price, ExchangesIntegratedType.Coinbase, symbol);
             }
             return price.Price;
         }

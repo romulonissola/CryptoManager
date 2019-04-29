@@ -24,6 +24,9 @@ namespace CryptoManager.Integration
                 case ExchangesIntegratedType.Coinbase:
                     _strategy = new CoinbaseIntegrationStrategy(exchange.APIUrl, cache);
                     break;
+                case ExchangesIntegratedType.BitcoinTrade:
+                    _strategy = new BitcoinTradeIntegrationStrategy(exchange.APIUrl, cache);
+                    break;
                 default:
                     throw new InvalidOperationException($"Invalid IntegrationType, invalidType={exchange.ExchangeType.ToString()}");
             }
