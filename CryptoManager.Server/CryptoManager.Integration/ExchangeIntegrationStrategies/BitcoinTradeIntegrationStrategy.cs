@@ -22,7 +22,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.BitcoinTrade, symbol);
             if (price == null)
             {
-                var apiPath = $"/v2/public/{symbol}/ticker";
+                var apiPath = $"/v3/public/{symbol}/ticker";
                 var response = await _httpClientFactory.GetAsync<ResponseData<TickerPrice>>(apiPath);
                 if(response.Data == null)
                 {
