@@ -22,7 +22,7 @@ namespace CryptoManager.Repository.DatabaseContext
                                         .SelectMany(t => t.GetProperties())
                                         .Where(p => p.ClrType == typeof(decimal)))
             {
-                property.Relational().ColumnType = "decimal(18, 8)";
+                property.SetColumnType("decimal(18, 8)");
             }
         }
 

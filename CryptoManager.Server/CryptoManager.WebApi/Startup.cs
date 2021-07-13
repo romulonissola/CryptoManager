@@ -1,33 +1,28 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using CryptoManager.Business;
+using CryptoManager.Domain.Mapper;
+using CryptoManager.Integration;
+using CryptoManager.Repository;
 using CryptoManager.WebApi.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using CryptoManager.Repository;
-using CryptoManager.Business;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using CryptoManager.Domain.Mapper;
-using Microsoft.Extensions.Logging;
-using CryptoManager.Integration;
-using CryptoManager.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using CryptoManager.Repository.DatabaseContext;
-using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 
 namespace CryptoManager.WebApi
 {
     public class Startup
     {
         public IConfiguration _configuration { get; }
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -74,7 +69,8 @@ namespace CryptoManager.WebApi
             services.AddSingleton<JwtFactory>();
 
             services.AddCors();
-            services.AddMvc(options =>
+
+            services.AddControllers(options =>
             {
                 options.Filters.Add(new AuthorizeFilter("Bearer"));
             });
@@ -118,30 +114,31 @@ namespace CryptoManager.WebApi
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(setup =>
             {
-                setup.SwaggerDoc("v1", new Info
+                setup.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "CryptoManager API",
                     Version = "v1",
                     Description = "API to Manage Crypto Currencies using Exchanges APIs",
-                    Contact = new Contact { Name = "Rômulo Nissóla Rocha", Email = "romulonissola@gmail.com", Url = "https://github.com/romulonissola/CryptoManager" },
-                    License = new License { Name = "GNU General Public License v2.0", Url = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" }
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Rômulo Nissóla Rocha",
+                        Email = "romulonissola@gmail.com",
+                        Url = new Uri("https://github.com/romulonissola/CryptoManager")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "GNU General Public License v2.0",
+                        Url = new Uri("https://www.gnu.org/licenses/old-licenses/gpl-2.0.html")
+                    }
                 });
-
-                var basePath = AppContext.BaseDirectory;
-                var xmlPath = Path.Combine(basePath, "CryptoManager.WebApi.xml");
-                setup.IncludeXmlComments(xmlPath);
             });
 
             services.AddDistributedMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
-            loggerFactory.AddConsole(_configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddFile($"../Logs/log-{DateTime.Now.TimeOfDay.ToString()}.txt");
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -162,7 +159,6 @@ namespace CryptoManager.WebApi
             });
             
             app.UseAuthentication();
-            app.UseMvc();
 
             app.EnsureCreateDatabase();
 
