@@ -13,6 +13,7 @@ namespace CryptoManager.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/Exchange")]
+    [ApiController]
     public class ExchangeController : BaseController
     {
         private readonly IExchangeRepository _repository;

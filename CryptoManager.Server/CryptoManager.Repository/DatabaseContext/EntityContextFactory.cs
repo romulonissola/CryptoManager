@@ -8,7 +8,8 @@ namespace CryptoManager.Repository.DatabaseContext
         public EntityContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<EntityContext>();
-            builder.UseSqlServer("Data Source=(LocalDB)\\mssqllocaldb;Initial Catalog=CryptoManagerDB;Integrated Security=True;");
+            //builder.UseSqlServer("Data Source=(LocalDB)\\mssqllocaldb;Initial Catalog=CryptoManagerDB;Integrated Security=True;");
+            builder.UseSqlite("Filename=.\\CryptoDBLite.sqlite");
 
             return new EntityContext(builder.Options);
         }

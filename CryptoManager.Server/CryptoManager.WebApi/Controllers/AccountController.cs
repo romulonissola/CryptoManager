@@ -20,6 +20,7 @@ namespace CryptoManager.WebApi.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/Account")]
+    [ApiController]
     public class AccountController : BaseController
     {
         private readonly JwtFactory _jwtFactory;

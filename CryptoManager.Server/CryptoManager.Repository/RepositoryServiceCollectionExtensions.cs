@@ -15,12 +15,12 @@ namespace CryptoManager.Repository
     {
         public static IServiceCollection AddSQLiteDbContexts(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            services.AddDbContextPool<ApplicationIdentityDbContext>(options =>
             {
                 options.UseSqlite(connectionString);
             });
 
-            services.AddDbContext<EntityContext>(options =>
+            services.AddDbContextPool<EntityContext>(options =>
             {
                 options.UseSqlite(connectionString);
             });
@@ -30,12 +30,12 @@ namespace CryptoManager.Repository
 
         public static IServiceCollection AddSQLServerDbContexts(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            services.AddDbContextPool<ApplicationIdentityDbContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             });
 
-            services.AddDbContext<EntityContext>(options =>
+            services.AddDbContextPool<EntityContext>(options =>
             {
                 options.UseSqlServer(connectionString);
             });

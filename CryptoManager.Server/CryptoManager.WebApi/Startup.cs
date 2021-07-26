@@ -151,7 +151,6 @@ namespace CryptoManager.WebApi
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
-
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
@@ -159,9 +158,15 @@ namespace CryptoManager.WebApi
             });
             
             app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.EnsureCreateDatabase();
-
             app.AddRole(WebUtil.ADMINISTRATOR_ROLE_NAME).Wait();
         }
     }

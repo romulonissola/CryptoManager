@@ -13,6 +13,7 @@ namespace CryptoManager.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/Asset")]
+    [ApiController]
     public class AssetController : BaseController
     {
         private readonly IAssetRepository _repository;

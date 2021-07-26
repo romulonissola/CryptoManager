@@ -12,6 +12,7 @@ namespace CryptoManager.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/order")]
+    [ApiController]
     public class OrderController : BaseController
     {
         private readonly IOrderRepository _repository;

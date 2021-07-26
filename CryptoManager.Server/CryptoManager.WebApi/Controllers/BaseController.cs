@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace CryptoManager.WebApi.Controllers
 {
-    public class BaseController : Controller
+    public class BaseController : ControllerBase
     {
         protected readonly IMapper _mapper;
         public BaseController(IMapper mapper)
