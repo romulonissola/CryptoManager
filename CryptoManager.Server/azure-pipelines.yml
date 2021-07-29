@@ -1,0 +1,88 @@
+﻿trigger:
+-   master
+
+variables:
+    azureSubscription: 'Pago pelo Uso (5c65a8f1-1d3e-4d83-a214-7c4b6dfc9179)'
+
+stages:
+-   stage: Build
+    displayName: Build stage
+
+    jobs:
+    -   job: Build
+        displayName: Build
+        pool:
+            name: Hosted Windows 2019 with VS2019
+            demands: java
+
+        steps:
+
+        -   task: mattlabrum.build-task.custom-build-task.downloadsSecureFile@0
+            displayName: 'Download appsettings from library file secrets'
+            inputs:
+                fileInput: secrets.json
+                targetPath: CryptoManager.Server/CryptoManager.WebApi/
+                targetName: appsettings.json
+
+        -   task: DotNetCoreCLI@2
+            displayName: Restore
+            inputs:
+                command: restore
+                projects: '**/*.csproj'
+
+        -   task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+                projects: '**/*.csproj'
+                arguments: '--configuration $(BuildConfiguration)'
+
+        -   task: DotNetCoreCLI@2
+            displayName: 'dotnet test'
+            inputs:
+                command: test
+                projects: '**/*Test/*.csproj'
+                arguments: '--collect "Code coverage"'
+
+        -   task: DotNetCoreCLI@2
+            displayName: Publish
+            inputs:
+                command: publish
+                arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+        -   task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact: drop'
+            inputs:
+                PathtoPublish: '$(build.artifactstagingdirectory)'
+
+-   stage: Test_deployment
+    displayName: Test deployment
+    jobs:
+
+    -   job: waitForValidation
+        displayName: Review to continue
+        pool: server
+        timeoutInMinutes: 120
+        steps:
+            -   task: ManualValidation@0
+                timeoutInMinutes: 60
+                instructions: 'Please validate the build configuration and reject'
+                onTimeout: 'reject'
+
+    -   job: DeployTest
+        dependsOn: waitForValidation
+        displayName: 'Deploy Code'
+        timeoutInMinutes: 60
+        cancelTimeoutInMinutes: 1
+        continueOnError: false
+        pool: server
+
+        steps:
+            -   checkout: self
+                clean: true
+
+            -   task: DownloadBuildArtifacts@0
+                inputs:
+                    buildType: 'current'
+                    artifactName: 'drop'
+                    itemPattern: 'drop/**'
+                    downloadPath: '$(build.artifactstagingdirectory)' 

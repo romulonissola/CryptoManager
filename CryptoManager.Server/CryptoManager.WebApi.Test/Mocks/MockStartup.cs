@@ -1,26 +1,26 @@
-﻿using CryptoManager.WebApi.Utils;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
+using CryptoManager.Business;
+using CryptoManager.Domain.Mapper;
+using CryptoManager.Integration;
 using CryptoManager.Repository;
 using CryptoManager.Repository.DatabaseContext;
+using CryptoManager.WebApi.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using CryptoManager.Domain.Mapper;
-using CryptoManager.Business;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using CryptoManager.Integration;
 
 namespace CryptoManager.WebApi.Test.Mocks
 {
@@ -76,13 +76,13 @@ namespace CryptoManager.WebApi.Test.Mocks
             TestWebUtil.FacebookAccessToken = _configuration["Authentication:Facebook:AccessToken"];
             WebUtil.SuperUserEmail = TestWebUtil.SuperUserEmail = _configuration["Authentication:SuperUserEmail"];
 
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            services.AddDbContextPool<ApplicationIdentityDbContext>(options =>
             {
                 options.UseInMemoryDatabase("DBINTEGRATIONTEST")
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             });
 
-            services.AddDbContext<EntityContext>(options =>
+            services.AddDbContextPool<EntityContext>(options =>
             {
                 options.UseInMemoryDatabase("DBINTEGRATIONTEST")
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
@@ -99,18 +99,11 @@ namespace CryptoManager.WebApi.Test.Mocks
                 facebookOptions.AppSecret = WebUtil.FacebookAppSecret;
             });
 
-            services.AddSingleton(typeof(JwtFactory));
-
-            var config = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfileConfiguration());
-            });
-            var mapper = config.CreateMapper();
-            services.AddSingleton(mapper);
-
+            services.AddSingleton<JwtFactory>();
 
             services.AddCors();
-            services.AddMvc(options =>
+
+            services.AddControllers(options =>
             {
                 options.Filters.Add(new AuthorizeFilter("Bearer"));
             });
@@ -137,12 +130,21 @@ namespace CryptoManager.WebApi.Test.Mocks
                 };
             });
 
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
                     .RequireAuthenticatedUser().Build());
             });
+
+            services.AddDistributedMemoryCache();
         }
 
 
@@ -154,8 +156,15 @@ namespace CryptoManager.WebApi.Test.Mocks
             });
 
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
+            app.EnsureCreateDatabase();
             app.AddRole(WebUtil.ADMINISTRATOR_ROLE_NAME).Wait();
         }
         /// <summary>
