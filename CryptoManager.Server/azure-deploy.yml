@@ -22,7 +22,7 @@ jobs:
         timeoutInMinutes: 60
         cancelTimeoutInMinutes: 1
         continueOnError: false
-        pool: server
+        pool: 'Azure Pipelines'
 
         steps:
             -   checkout: self
