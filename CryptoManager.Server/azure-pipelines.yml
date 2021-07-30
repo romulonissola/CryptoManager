@@ -13,8 +13,7 @@ stages:
     -   job: Build
         displayName: Build
         pool:
-            name: Hosted Windows 2019 with VS2019
-            demands: java
+            vmImage: 'windows-latest'
 
         steps:
 

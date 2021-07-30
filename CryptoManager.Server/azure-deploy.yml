@@ -7,7 +7,8 @@ jobs:
 
     -   job: waitForValidation
         displayName: Review to continue
-        pool: server
+        pool:
+            vmImage: 'windows-latest'
         timeoutInMinutes: 120
         steps:
             -   task: ManualValidation@0
@@ -22,7 +23,8 @@ jobs:
         timeoutInMinutes: 60
         cancelTimeoutInMinutes: 1
         continueOnError: false
-        pool: 'Azure Pipelines'
+        pool:
+            vmImage: 'windows-latest'
 
         steps:
             -   checkout: self
