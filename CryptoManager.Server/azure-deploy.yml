@@ -42,7 +42,7 @@ jobs:
                     azureSubscription: ${{ parameters.azureSubscription }}
                     appType: webAppLinux
                     WebAppName: 'app-${{ parameters.webAppName }}-${{ parameters.environment }}'
-                    packageForLinux: '$(Build.ArtifactStagingDirectory)/CryptoManager.WebApi.zip'
+                    packageForLinux: '$(build.artifactstagingdirectory)/drop/CryptoManager.WebApi.zip'
                     enableCustomDeployment: true
                     ExcludeFilesFromAppDataFlag: false
                     RenameFilesFlag: false
