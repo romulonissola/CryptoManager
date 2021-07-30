@@ -1,0 +1,49 @@
+﻿parameters:
+    environment: ''
+    azureSubscription: ''
+    webAppName: ''
+
+jobs:
+
+    -   job: waitForValidation
+        displayName: Review to continue
+        pool: server
+        timeoutInMinutes: 120
+        steps:
+            -   task: ManualValidation@0
+                timeoutInMinutes: 60
+                inputs:
+                    instructions: 'Please validate the build configuration and reject'
+                    onTimeout: 'reject'
+
+    -   job: DeployTest
+        dependsOn: waitForValidation
+        displayName: 'Deploy Code'
+        timeoutInMinutes: 60
+        cancelTimeoutInMinutes: 1
+        continueOnError: false
+        pool:
+            vmImage: 'windows-latest'
+
+        steps:
+            -   checkout: self
+                clean: true
+
+            -   task: DownloadBuildArtifacts@0
+                inputs:
+                    buildType: 'current'
+                    artifactName: 'drop'
+                    itemPattern: 'drop/**'
+                    downloadPath: '$(build.artifactstagingdirectory)'
+ 
+            -   task: AzureRmWebAppDeployment@4
+                displayName: 'Azure App Service Deploy'
+                inputs:
+                    azureSubscription: ${{ parameters.azureSubscription }}
+                    appType: webAppLinux
+                    WebAppName: 'app-${{ parameters.webAppName }}-${{ parameters.environment }}'
+                    packageForLinux: '$(Build.ArtifactStagingDirectory)/CryptoManager.WebApi.zip'
+                    enableCustomDeployment: true
+                    ExcludeFilesFromAppDataFlag: false
+                    RenameFilesFlag: false
+                enabled: false

@@ -12,7 +12,7 @@ namespace CryptoManager.WebApi.Test
     {
         private const string ROUTE_PATH = "/api/account";
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_Error_400_When_AccessToken_Is_InValid()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
@@ -21,7 +21,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_Unauthorized_When_Not_Using_Token()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());            
@@ -29,7 +29,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_User_Info_When_AccessToken_IsValid()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
