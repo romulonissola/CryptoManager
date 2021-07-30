@@ -13,7 +13,7 @@ stages:
     -   job: Build
         displayName: Build
         pool:
-            name: Azure Pipelines
+            vmImage: windows-2019
 
         steps:
 

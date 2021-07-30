@@ -23,7 +23,7 @@ jobs:
         cancelTimeoutInMinutes: 1
         continueOnError: false
         pool:
-            name: Azure Pipelines
+            name: windows-2019
 
         steps:
             -   checkout: self
