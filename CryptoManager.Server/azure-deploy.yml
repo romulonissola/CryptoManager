@@ -35,9 +35,6 @@ jobs:
                     artifactName: 'drop'
                     itemPattern: 'drop/**'
                     downloadPath: '$(build.artifactstagingdirectory)'
- 
-            - script: echo ${{ parameters.azureSubscription }}
-            - script: echo "before"
 
             -   task: AzureRmWebAppDeployment@4
                 displayName: 'Azure App Service Deploy'
@@ -49,6 +46,3 @@ jobs:
                     enableCustomDeployment: true
                     ExcludeFilesFromAppDataFlag: false
                     RenameFilesFlag: false
-                enabled: false
-
-            - script: echo "after"
