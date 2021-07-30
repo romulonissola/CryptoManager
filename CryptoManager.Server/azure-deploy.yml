@@ -23,7 +23,7 @@ jobs:
         cancelTimeoutInMinutes: 1
         continueOnError: false
         pool:
-            name: windows-2019
+            vmImage: windows-2019
 
         steps:
             -   checkout: self
