@@ -3,6 +3,7 @@
 
 variables:
     azureSubscription: 'Pago pelo Uso (5c65a8f1-1d3e-4d83-a214-7c4b6dfc9179)'
+    webAppName: 'cryptomanager-server'
 
 stages:
 -   stage: Build
@@ -58,31 +59,18 @@ stages:
     displayName: Test deployment
     jobs:
 
-    -   job: waitForValidation
-        displayName: Review to continue
-        pool: server
-        timeoutInMinutes: 120
-        steps:
-            -   task: ManualValidation@0
-                timeoutInMinutes: 60
-                instructions: 'Please validate the build configuration and reject'
-                onTimeout: 'reject'
+    -   template: azure-deploy.yml
+        parameters:
+            environmemnt: 'test'
+            azureSubscription: $(azureSubscription)
+            webAppName: $(webAppName)
 
-    -   job: DeployTest
-        dependsOn: waitForValidation
-        displayName: 'Deploy Code'
-        timeoutInMinutes: 60
-        cancelTimeoutInMinutes: 1
-        continueOnError: false
-        pool: server
+-   stage: Prod_deployment
+    displayName: Prod deployment
+    jobs:
 
-        steps:
-            -   checkout: self
-                clean: true
-
-            -   task: DownloadBuildArtifacts@0
-                inputs:
-                    buildType: 'current'
-                    artifactName: 'drop'
-                    itemPattern: 'drop/**'
-                    downloadPath: '$(build.artifactstagingdirectory)' 
+    -   template: azure-deploy.yml
+        parameters:
+            environmemnt: 'prod'
+            azureSubscription: $(azureSubscription)
+            webAppName: $(webAppName)
