@@ -23,7 +23,7 @@ jobs:
         cancelTimeoutInMinutes: 1
         continueOnError: false
         pool:
-            vmImage: 'windows-latest'
+            vmImage: windows-2019
 
         steps:
             -   checkout: self
@@ -35,15 +35,14 @@ jobs:
                     artifactName: 'drop'
                     itemPattern: 'drop/**'
                     downloadPath: '$(build.artifactstagingdirectory)'
- 
+
             -   task: AzureRmWebAppDeployment@4
                 displayName: 'Azure App Service Deploy'
                 inputs:
                     azureSubscription: ${{ parameters.azureSubscription }}
                     appType: webAppLinux
                     WebAppName: 'app-${{ parameters.webAppName }}-${{ parameters.environment }}'
-                    packageForLinux: '$(Build.ArtifactStagingDirectory)/CryptoManager.WebApi.zip'
+                    packageForLinux: '$(build.artifactstagingdirectory)/drop/CryptoManager.WebApi.zip'
                     enableCustomDeployment: true
                     ExcludeFilesFromAppDataFlag: false
                     RenameFilesFlag: false
-                enabled: false
