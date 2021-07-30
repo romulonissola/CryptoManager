@@ -60,7 +60,7 @@ stages:
 
     -   template: azure-deploy.yml
         parameters:
-            environmemnt: 'test'
+            environment: 'test'
             azureSubscription: $(azureSubscription)
             webAppName: $(webAppName)
 
@@ -70,6 +70,6 @@ stages:
 
     -   template: azure-deploy.yml
         parameters:
-            environmemnt: 'prod'
+            environment: 'prod'
             azureSubscription: $(azureSubscription)
             webAppName: $(webAppName)
