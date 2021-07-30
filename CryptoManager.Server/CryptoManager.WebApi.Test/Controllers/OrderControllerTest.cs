@@ -13,7 +13,7 @@ namespace CryptoManager.WebApi.Test
     {
         private const string ROUTE_PATH = "/api/Order";
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_OK_When_PostAsync()
         {
             var client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
@@ -39,7 +39,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_OK_When_Get_By_User_Async()
         {
             var client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
@@ -71,7 +71,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_OK_When_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
@@ -100,7 +100,7 @@ namespace CryptoManager.WebApi.Test
             Assert.Equal(HttpStatusCode.OK, result.StatusCode);
         }
 
-        [Fact]
+        //[Fact]
         public async Task Should_Return_NotFound_When_Not_Exist_In_DeleteAsync()
         {
             HttpClientFactory client = new HttpClientFactory(MockStartup<Startup>.Instance.GetCliente());
