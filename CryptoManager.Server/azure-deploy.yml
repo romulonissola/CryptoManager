@@ -7,8 +7,7 @@ jobs:
 
     -   job: waitForValidation
         displayName: Review to continue
-        pool:
-            vmImage: 'windows-latest'
+        pool: server
         timeoutInMinutes: 120
         steps:
             -   task: ManualValidation@0
