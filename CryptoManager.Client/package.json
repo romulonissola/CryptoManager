@@ -18,6 +18,7 @@
     "@angular/core": "^9.1.13",
     "@angular/forms": "^9.1.13",
     "@angular/http": "^7.2.12",
+    "@angular/localize": "^9.1.13",
     "@angular/platform-browser": "^9.1.13",
     "@angular/platform-browser-dynamic": "^9.1.13",
     "@angular/router": "^9.1.13",
@@ -39,6 +40,7 @@
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.0.0-rc.0",
     "text-mask-addons": "^3.8.0",
+    "tslib": "^2.3.0",
     "yarn": "^1.15.2",
     "zone.js": "0.10.3"
   },
@@ -62,6 +64,6 @@
     "protractor": "^7.0.0",
     "ts-node": "~8.0.3",
     "tslint": "~5.15.0",
-    "typescript": "3.4.1"
+    "typescript": "^3.8.2"
   }
 }
