@@ -1,11 +1,11 @@
+
+import {throwError as observableThrowError,  Observable ,  BehaviorSubject } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/observable/throw'
-import 'rxjs/add/operator/catch';
+
+
 import { AccountService } from '../services/index';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { catchError, finalize, map } from 'rxjs/operators';
 
 @Injectable()
@@ -46,7 +46,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     this.accountService.purgeAuth();
                 }
                 //return the error to the method that called it
-                return Observable.throw(error);
+                return observableThrowError(error);
             }),
             finalize(() => {
                 this.status.setHttpStatus(false);

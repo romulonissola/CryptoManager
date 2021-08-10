@@ -7,18 +7,65 @@ const routes: Routes = [
         path: '',
         component: LayoutComponent,
         children: [
-            { path: '', redirectTo: 'dashboard' },
-            { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-            { path: 'exchange', loadChildren: './exchange/exchange.module#ExchangeModule' },
-            { path: 'asset', loadChildren: './asset/asset.module#AssetModule' },
-            { path: 'order', loadChildren: './order/order.module#OrderModule' },
-            { path: 'charts', loadChildren: './charts/charts.module#ChartsModule' },
-            { path: 'tables', loadChildren: './tables/tables.module#TablesModule' },
-            { path: 'forms', loadChildren: './form/form.module#FormModule' },
-            { path: 'bs-element', loadChildren: './bs-element/bs-element.module#BsElementModule' },
-            { path: 'grid', loadChildren: './grid/grid.module#GridModule' },
-            { path: 'components', loadChildren: './bs-component/bs-component.module#BsComponentModule' },
-            { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' }
+            { 
+                path: '', 
+                redirectTo: 'dashboard' 
+            },
+            { 
+                path: 'dashboard', 
+                loadChildren: () => import('./dashboard/dashboard.module')
+                                    .then(m => m.DashboardModule) 
+            },
+            { 
+                path: 'exchange', 
+                loadChildren: () => import('./exchange/exchange.module')
+                                    .then(m => m.ExchangeModule)
+            },
+            { 
+                path: 'asset', 
+                loadChildren: () => import('./asset/asset.module')
+                                    .then(m => m.AssetModule)
+            },
+            { 
+                path: 'order', 
+                loadChildren: () => import('./order/order.module')
+                                    .then(m => m.OrderModule)
+            },
+            { 
+                path: 'charts', 
+                loadChildren: () => import('./charts/charts.module')
+                                    .then(m => m.ChartsModule)
+            },
+            { 
+                path: 'tables', 
+                loadChildren: () => import('./tables/tables.module') 
+                                    .then(m => m.TablesModule)
+            },
+            { 
+                path: 'forms', 
+                loadChildren: () => import('./form/form.module') 
+                                    .then(m => m.FormModule)
+            },
+            { 
+                path: 'bs-element', 
+                loadChildren: () => import('./bs-element/bs-element.module') 
+                                    .then(m => m.BsElementModule)
+            },
+            { 
+                path: 'grid', 
+                loadChildren: () => import('./grid/grid.module') 
+                                    .then(m => m.GridModule)
+            },
+            { 
+                path: 'components', 
+                loadChildren: () => import('./bs-component/bs-component.module') 
+                                    .then(m => m.BsComponentModule)
+            },
+            { 
+                path: 'blank-page', 
+                loadChildren: () => import('./blank-page/blank-page.module')
+                                    .then(m => m.BlankPageModule)
+            }
         ]
     }
 ];
