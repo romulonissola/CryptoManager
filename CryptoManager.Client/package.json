@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl --ssl-key /Users/romulonissola/certificates/localhost2.key  --ssl-cert /Users/romulonissola/certificates/localhost2.crt",
-    "build": "ng build --prod",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
