@@ -13,17 +13,10 @@ stages:
   - job: BuildJob
     displayName: Build
     pool:
-      vmImage: 'ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
 
     steps:
-
-      - task: mattlabrum.build-task.custom-build-task.downloadsSecureFile@0
-        displayName: 'Download secret.ts'
-        inputs:
-          fileInput: secrets.ts
-          targetPath: 'D:\'
-          targetName: secrets.ts
-
+    
       - task: NodeTool@0
         inputs:
           versionSpec: '14.x'

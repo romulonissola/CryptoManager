@@ -3,6 +3,9 @@ parameters:
     azureSubscription: ''
     webAppName: ''
 
+variables:
+  - group: ${{ parameters.environment }}
+
 jobs:
 - job: waitForValidation
   displayName: Review to continue
@@ -27,6 +30,20 @@ jobs:
   steps:
     - checkout: self
       clean: true
+
+    - task: replacetokens@3
+      displayName: 'Replacing environment variables for env: ${{ parameters.environment }}'
+      inputs:
+        targetFiles: '$(Pipeline.Workspace)/dist/**/main*.js'
+        encoding: 'auto'
+        writeBOM: true
+        verbosity: 'detailed'
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTelemetry: true
 
     - task: AzureRmWebAppDeployment@4
       displayName: 'Azure App Service Deploy app-${{ parameters.webAppName }}-${{ parameters.environment }}'

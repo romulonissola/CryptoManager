@@ -10,7 +10,10 @@ export const environment = {
   },
   login: {
     path: 'login',
-    defaultRedirectTo: 'dash'
+    defaultRedirectTo: 'dash',
+    facebook:{
+      appId: ''
+    }
   },
   production: false
 };
