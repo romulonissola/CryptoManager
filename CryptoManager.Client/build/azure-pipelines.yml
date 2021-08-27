@@ -23,7 +23,7 @@ stages:
         displayName: 'Install Node.js'
       - script: |
           cd '$(System.DefaultWorkingDirectory)/CryptoManager.Client'
-          npm install -g @angular/cli
+          npm install -g @angular/cli@12.1.3
           npm install
           ng build --prod
         displayName: 'npm install and build'
