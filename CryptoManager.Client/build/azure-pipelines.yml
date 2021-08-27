@@ -24,6 +24,7 @@ stages:
       - script: |
           cd '$(System.DefaultWorkingDirectory)/CryptoManager.Client'
           npm install -g @angular/cli@12.2.0
+          npm install -g typescript@4.3.5
           npm install
           ng build --configuration production
         displayName: 'npm install and build'
