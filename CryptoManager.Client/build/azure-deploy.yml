@@ -3,9 +3,6 @@ parameters:
     azureSubscription: ''
     webAppName: ''
 
-variables:
-  - group: ${{ parameters.environment }}
-
 jobs:
 - job: waitForValidation
   displayName: Review to continue
@@ -26,7 +23,9 @@ jobs:
   continueOnError: false
   pool:
     vmImage: windows-2019  
-  
+  variables:
+    - group: ${{ parameters.environment }}
+
   steps:
     - checkout: self
       clean: true
