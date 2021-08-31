@@ -39,10 +39,9 @@ stages:
           replaceExistingArchive: true
 
       - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact: drop'
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
     
 - stage: Test_deployment
   displayName: Test deployment

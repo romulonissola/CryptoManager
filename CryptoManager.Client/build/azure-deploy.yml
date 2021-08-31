@@ -30,10 +30,17 @@ jobs:
     - checkout: self
       clean: true
 
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        itemPattern: 'drop/**'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+
     - task: ExtractFiles@1
       displayName: 'Extract files'
       inputs:
-        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/**.zip'
         destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
 
     - task: replacetokens@3
