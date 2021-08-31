@@ -12,7 +12,7 @@ jobs:
   - task: ManualValidation@0
     timeoutInMinutes: 60
     inputs:
-      instructions: 'Please validate the build configuration and reject'
+      instructions: 'Please validate the build configuration and confirm'
       onTimeout: 'reject'
 
 - job: DeployTest
