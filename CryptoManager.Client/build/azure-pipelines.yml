@@ -19,14 +19,14 @@ stages:
 
       - task: NodeTool@0
         inputs:
-          versionSpec: '14.15.x'
+          versionSpec: '14.17.x'
         displayName: 'Install Node.js'
       - script: |
           cd '$(System.DefaultWorkingDirectory)/CryptoManager.Client'
-          npm install -g @angular/cli@12.2.0
-          npm install -g typescript@4.3.5
+          npm install -g @angular/cli
           npm install
-          ng build --configuration production
+          npm install -D typescript@4.3.5          
+          npm run build
         displayName: 'npm install and build'
 
       - task: ArchiveFiles@2
