@@ -33,6 +33,7 @@ jobs:
     - task: ExtractFiles@1
       displayName: 'Extract files'
       inputs:
+        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
         destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
 
     - task: replacetokens@3
