@@ -38,3 +38,16 @@
 /CryptoManager.Server/CryptoManager.Integration.Test/bin/Debug/netcoreapp2.0
 /CryptoManager.Server/CryptoManager.Integration/bin/Debug/netstandard2.0
 /CryptoManager.Server/CryptoManager.Integration/bin/Release/netstandard2.0
+.DS_Store
+*.sqlite
+CryptoManager.Server/CryptoManager.Business/bin
+CryptoManager.Server/CryptoManager.Business.Test/bin
+CryptoManager.Server/CryptoManager.Domain/bin
+CryptoManager.Server/CryptoManager.Integration/bin
+CryptoManager.Server/CryptoManager.Integration.Test/bin
+CryptoManager.Server/CryptoManager.Repository/bin
+CryptoManager.Server/CryptoManager.Repository.Test/bin
+CryptoManager.Server/CryptoManager.WebApi/bin
+CryptoManager.Server/CryptoManager.WebApi.Test/bin
+*.sqlite-shm
+*.sqlite-wal

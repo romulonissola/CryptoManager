@@ -1,0 +1,74 @@
+parameters:
+    environment: ''
+    azureSubscription: ''
+    webAppName: ''
+
+jobs:
+- job: waitForValidation
+  displayName: Review to continue
+  pool: server
+  timeoutInMinutes: 120
+  steps:
+  - task: ManualValidation@0
+    timeoutInMinutes: 60
+    inputs:
+      instructions: 'Please validate the build configuration and confirm'
+      onTimeout: 'reject'
+
+- job: DeployTest
+  dependsOn: waitForValidation
+  displayName: 'Deploy Code'
+  timeoutInMinutes: 60
+  cancelTimeoutInMinutes: 1
+  continueOnError: false
+  pool:
+    vmImage: windows-2019  
+  variables:
+    - group: ${{ parameters.environment }}
+
+  steps:
+    - checkout: self
+      clean: true
+
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        itemPattern: 'drop/**'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
+
+    - task: ExtractFiles@1
+      displayName: 'Extract files'
+      inputs:
+        archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/drop/**.zip'
+        destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
+
+    - task: replacetokens@3
+      displayName: 'Replacing environment variables for env: ${{ parameters.environment }}'
+      inputs:
+        targetFiles: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public/main*.js'
+        encoding: 'auto'
+        writeBOM: true
+        verbosity: 'detailed'
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTelemetry: true
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy app-${{ parameters.webAppName }}-${{ parameters.environment }}'
+      inputs:
+        azureSubscription: ${{ parameters.azureSubscription }}
+        appType: webAppLinux
+        WebAppName: 'app-${{ parameters.webAppName }}-${{ parameters.environment }}'
+        packageForLinux: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        enableCustomDeployment: true
+        ExcludeFilesFromAppDataFlag: false
+        RenameFilesFlag: false

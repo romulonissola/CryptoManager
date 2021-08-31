@@ -5,12 +5,15 @@
 
 export const environment = {
   api: {
-    baseUrl: "https://localhost:44392/api",
+    baseUrl: "https://localhost:62329/api",
     version: "1.0.0"
   },
   login: {
     path: 'login',
-    defaultRedirectTo: 'dash'
+    defaultRedirectTo: 'dash',
+    facebook:{
+      appId: ''
+    }
   },
   production: false
 };

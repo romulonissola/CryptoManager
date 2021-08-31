@@ -3,13 +3,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
 import { Exchange, Order, ExchangeService, AssetService, Asset, OrderItem, OrderService} from '../../../shared'
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 const numberMask = createNumberMask({
   prefix: '',
-  thousandsSeparatorSymbol: ',',
+  thousandsSeparatorSymbol: '',
   allowDecimal: true,
   decimalSymbol: '.',
   decimalLimit: 8
@@ -70,9 +70,11 @@ export class OrderFormComponent implements OnInit {
   get feeAsset() { return this.orderItemGroup.get('feeAsset'); }
 
   addItem() {
+    console.log(this.orderItem);
     this.orderItems.splice(this.orderItems.length, 0, Object.assign({}, this.orderItem));
     this.orderItem = new OrderItem();
     this.select = null;
+    console.log(this.orderItems);
   }
 
   deleteItem(orderItem){
@@ -88,6 +90,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   save(){
+    console.log(this.orderItems);
     this.order.orderItems = this.orderItems;
     let result = this.orderService.add(this.order);
 

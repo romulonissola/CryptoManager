@@ -1,8 +1,8 @@
-import secrets  from 'D:/secrets';
+import { environment } from './environments/environment';
 declare const FB: any;
 (<any>window).fbAsyncInit = ()=> {
     FB.init({
-      appId            : secrets.facebookAppId,
+      appId            : environment.login.facebook.appId,
       xfbml            : false,
       version          : 'v2.12'
     });
