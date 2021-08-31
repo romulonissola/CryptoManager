@@ -41,12 +41,12 @@ jobs:
       displayName: 'Extract files'
       inputs:
         archiveFilePatterns: '$(Build.ArtifactStagingDirectory)/drop/**.zip'
-        destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+        destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
 
     - task: replacetokens@3
       displayName: 'Replacing environment variables for env: ${{ parameters.environment }}'
       inputs:
-        targetFiles: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped/main*.js'
+        targetFiles: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public/main*.js'
         encoding: 'auto'
         writeBOM: true
         verbosity: 'detailed'
@@ -58,9 +58,9 @@ jobs:
         enableTelemetry: true
 
     - task: ArchiveFiles@2
-      displayName: 'Archive $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+      displayName: 'Archive $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
       inputs:
-        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/public'
 
     - task: AzureRmWebAppDeployment@4
       displayName: 'Azure App Service Deploy app-${{ parameters.webAppName }}-${{ parameters.environment }}'
