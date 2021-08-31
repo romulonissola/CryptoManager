@@ -30,10 +30,15 @@ jobs:
     - checkout: self
       clean: true
 
+    - task: ExtractFiles@1
+      displayName: 'Extract files'
+      inputs:
+        destinationFolder: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+
     - task: replacetokens@3
       displayName: 'Replacing environment variables for env: ${{ parameters.environment }}'
       inputs:
-        targetFiles: '$(Pipeline.Workspace)/dist/**/main*.js'
+        targetFiles: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped/main*.js'
         encoding: 'auto'
         writeBOM: true
         verbosity: 'detailed'
@@ -44,13 +49,18 @@ jobs:
         useLegacyPattern: false
         enableTelemetry: true
 
+    - task: ArchiveFiles@2
+      displayName: 'Archive $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)/unziped'
+
     - task: AzureRmWebAppDeployment@4
       displayName: 'Azure App Service Deploy app-${{ parameters.webAppName }}-${{ parameters.environment }}'
       inputs:
         azureSubscription: ${{ parameters.azureSubscription }}
         appType: webAppLinux
         WebAppName: 'app-${{ parameters.webAppName }}-${{ parameters.environment }}'
-        packageForLinux: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+        packageForLinux: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         enableCustomDeployment: true
         ExcludeFilesFromAppDataFlag: false
         RenameFilesFlag: false
