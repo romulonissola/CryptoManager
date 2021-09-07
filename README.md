@@ -12,10 +12,10 @@ BitcoinTrade (https://bitcointrade.com.br)
 Would you like other exchange integration? Open an issue on (https://github.com/romulonissola/CryptoManager/issues/new)
 
 ### Server Build Status
-[![Build status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/CryptoManagerServer-CI-CD)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=5)
+[![Build Status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/cryptomanager-server-CI-CD?branchName=master)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=8&branchName=master)
 
 ### Client Buil Status
-[![Build status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/CryptoManagerUI-CI-CD)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=4)
+[![Build Status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/cryptomanager-client-CI-CD?branchName=master)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=9&branchName=master)
 
 # Production Environment
-https://cryptomanagerclient.azurewebsites.net
+https://app-cryptomanager-client-prod.azurewebsites.net/
