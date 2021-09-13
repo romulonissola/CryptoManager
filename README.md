@@ -15,7 +15,7 @@ Would you like other exchange integration? Open an issue on (https://github.com/
 [![Build Status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/cryptomanager-server-CI-CD?branchName=master)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=8&branchName=master)
 
 ### Client Buil Status
-[![Build Status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/cryptomanager-client-CI-CD?branchName=master)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=9&branchName=master)
+[![Build Status](https://romulorocha.visualstudio.com/CryptoManager/_apis/build/status/cryptomanager-client-CI-CD?branchName=master)](https://romulorocha.visualstudio.com/CryptoManager/_build/latest?definitionId=10&branchName=master)
 
 # Production Environment
 https://app-cryptomanager-client-prod.azurewebsites.net/
