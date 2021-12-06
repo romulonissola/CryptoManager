@@ -8,4 +8,16 @@
     <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Refit" />
+    <None Remove="Clients\" />
+    <None Remove="Refit.HttpClientFactory" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="6.0.94" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.0.94" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Clients\" />
+  </ItemGroup>
 </Project>

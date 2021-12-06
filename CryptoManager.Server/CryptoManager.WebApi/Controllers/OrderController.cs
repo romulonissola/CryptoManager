@@ -16,10 +16,10 @@ namespace CryptoManager.WebApi.Controllers
     public class OrderController : BaseController
     {
         private readonly IOrderRepository _repository;
-        private readonly IOrderBusiness _business;
+        private readonly IOrderService _business;
 
         public OrderController(IOrderRepository repository,
-                               IOrderBusiness business,
+                               IOrderService business,
                                IMapper mapper) : base(mapper)
         {
             _repository = repository;

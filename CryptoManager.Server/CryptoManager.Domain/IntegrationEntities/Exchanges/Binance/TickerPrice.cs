@@ -7,6 +7,6 @@ namespace CryptoManager.Domain.IntegrationEntities.Exchanges.Binance
     public class TickerPrice
     {
         public string Symbol { get; set; }
-        public decimal Price { get; set; }
+        public string Price { get; set; }
     }
 }

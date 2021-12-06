@@ -15,6 +15,11 @@ namespace CryptoManager.WebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).UseDefaultServiceProvider((context, options) =>
+                {
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                    // Validate DI on build
+                    options.ValidateOnBuild = true;
                 });
     }
 }

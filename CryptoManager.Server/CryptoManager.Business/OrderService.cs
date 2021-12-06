@@ -1,9 +1,8 @@
 ﻿using CryptoManager.Domain.Contracts.Business;
+using CryptoManager.Domain.Contracts.Integration;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
-using CryptoManager.Integration;
-using CryptoManager.Integration.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace CryptoManager.Business
 {
-    public class OrderBusiness : IOrderBusiness
+    public class OrderService : IOrderService
     {
         private readonly IOrderRepository _repository;
-        private readonly IExchangeIntegrationCache _cache;
+        private readonly IExchangeIntegrationStrategyContext _exchangeIntegrationStrategyContext;
 
-        public OrderBusiness(IOrderRepository repository, IExchangeIntegrationCache cache)
+        public OrderService(IOrderRepository repository, IExchangeIntegrationStrategyContext exchangeIntegrationStrategyContext)
         {
             _repository = repository;
-            _cache = cache;
+            _exchangeIntegrationStrategyContext = exchangeIntegrationStrategyContext;
         }
 
         public Task<Order> CreateOrderAsync(Order order)
@@ -31,24 +30,27 @@ namespace CryptoManager.Business
             return _repository.InsertAsync(order);
         }
 
-        public async Task<List<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId)
+        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId)
         {
-            List<Task<OrderDetailDTO>> list = new List<Task<OrderDetailDTO>>();
+            var orderTaskList = new List<Task<OrderDetailDTO>>();
             var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId);
             orders.ForEach(order =>
             {
-                list.Add(BuildOrderDetailAsync(order));
+                orderTaskList.Add(BuildOrderDetailAsync(order));
             });
-            await Task.WhenAll(list.ToArray());
-            return list.Select(a=> a.Result).ToList();
+            await Task.WhenAll(orderTaskList.ToArray());
+            return orderTaskList.Select(a=> a.Result);
         }
 
         private async Task<OrderDetailDTO> BuildOrderDetailAsync(Order order)
         {
-            var exchangeStrategy = new ExchangeIntegrationStrategy(order.Exchange, _cache);
             var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
             var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
-            var currentPrice = await exchangeStrategy.GetCurrentPrice(order.BaseAsset.Symbol, order.QuoteAsset.Symbol);
+            var currentPrice = await _exchangeIntegrationStrategyContext.GetCurrentPriceAsync(
+                order.BaseAsset.Symbol,
+                order.QuoteAsset.Symbol,
+                order.Exchange.ExchangeType);
+
             var valuePaidWithFees = orderPrice * orderQuantity;
             var valueSoldWithFees = currentPrice * orderQuantity;
             return new OrderDetailDTO()
