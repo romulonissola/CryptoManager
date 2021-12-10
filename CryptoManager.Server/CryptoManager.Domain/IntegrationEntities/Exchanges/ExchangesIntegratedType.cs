@@ -9,6 +9,7 @@ namespace CryptoManager.Domain.IntegrationEntities.Exchanges
         Binance = 0,
         HitBTC = 1,
         Coinbase = 2,
-        BitcoinTrade = 3
+        BitcoinTrade = 3,
+        KuCoin = 4
     }
 }

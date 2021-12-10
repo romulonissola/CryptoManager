@@ -1,22 +1,27 @@
-﻿using CryptoManager.Domain.IntegrationEntities.Exchanges;
+﻿using CryptoManager.Domain.Contracts.Integration;
+using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.HitBTC;
+using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.Utils;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Integration.ExchangeIntegrationStrategies
 {
     public class HitBTCIntegrationStrategy : IExchangeIntegrationStrategy
     {
-        private HttpClientFactory _httpClientFactory;
+        private readonly IHitBTCIntegrationClient _hitBTCIntegrationClient;
         private readonly IExchangeIntegrationCache _cache;
-        public HitBTCIntegrationStrategy(string apiURL, IExchangeIntegrationCache cache)
+
+        public ExchangesIntegratedType ExchangesIntegratedType => ExchangesIntegratedType.HitBTC;
+
+        public HitBTCIntegrationStrategy(IExchangeIntegrationCache cache, IHitBTCIntegrationClient hitBTCIntegrationClient)
         {
             _cache = cache;
-            _httpClientFactory = new HttpClientFactory(apiURL);
+            _hitBTCIntegrationClient = hitBTCIntegrationClient;
         }
 
-        public async Task<decimal> GetCurrentPrice(string baseAssetSymbol, string quoteAssetSymbol)
+        public async Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
         {
             var symbol = $"{baseAssetSymbol}{quoteAssetSymbol}";
             //Workaround because HitBTC uses USDT like USD in your api 
@@ -24,16 +29,15 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.HitBTC, symbol);
             if (price == null)
             {
-                var apiPath = "2/public/ticker";
-                var listPrices = await _httpClientFactory.GetAsync<List<TickerPrice>>(apiPath);
-                price = listPrices.Find(a => a.Symbol.Equals(symbol));
+                var listPrices = await _hitBTCIntegrationClient.GetTickerPricesAsync();
+                price = listPrices.FirstOrDefault(a => a.Symbol.Equals(symbol));
                 await _cache.AddAsync(listPrices, ExchangesIntegratedType.HitBTC, a => a.Symbol);
                 if (price == null)
                 {
                     throw new System.InvalidOperationException($"symbol {symbol} not exists in HitBTC");
                 }
             }
-            return price.Last ?? decimal.Zero;
+            return string.IsNullOrWhiteSpace(price.Last) ? decimal.Zero : decimal.Parse(price.Last);
         }
     }
 }

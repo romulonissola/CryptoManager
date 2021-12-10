@@ -1,5 +1,6 @@
 ﻿using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.Binance;
+using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.ExchangeIntegrationStrategies;
 using CryptoManager.Integration.Utils;
 using Moq;
@@ -12,8 +13,6 @@ namespace CryptoManager.Integration.Test
 {
     public class BinanceIntegrationStrategyTest
     {
-        private const string BINANCE_API = "https://api.binance.com/api/";
-
         [Fact]
         public async Task Should_Return_Price_Async()
         {
@@ -23,13 +22,17 @@ namespace CryptoManager.Integration.Test
             cacheMock.Setup(repo => repo.GetAsync<TickerPrice>(ExchangesIntegratedType.Binance, symbol))
                 .ReturnsAsync(ticker);
 
-            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<List<TickerPrice>>(), 
+            cacheMock.Setup(c => c.AddAsync(It.IsAny<IEnumerable<TickerPrice>>(), 
                                                   ExchangesIntegratedType.Binance, 
                                                   It.IsAny<Func<TickerPrice, string>>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new BinanceIntegrationStrategy(BINANCE_API, cacheMock.Object);
-            var price = await strategy.GetCurrentPrice("LTC","BTC");
+            var clientMock = new Mock<IBinanceIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPricesAsync())
+                .ReturnsAsync(new[] { new TickerPrice { Price = "1", Symbol = symbol } });
+
+            var strategy = new BinanceIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var price = await strategy.GetCurrentPriceAsync("LTC","BTC");
             Assert.True(price > 0);
         }
 
@@ -43,13 +46,17 @@ namespace CryptoManager.Integration.Test
             cacheMock.Setup(repo => repo.GetAsync<TickerPrice>(ExchangesIntegratedType.Binance, symbol))
                 .ReturnsAsync(ticker);
 
-            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<List<TickerPrice>>(),
+            cacheMock.Setup(c => c.AddAsync(It.IsAny<IEnumerable<TickerPrice>>(),
                                                   ExchangesIntegratedType.Binance,
                                                   It.IsAny<Func<TickerPrice, string>>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new BinanceIntegrationStrategy(BINANCE_API, cacheMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh"));
+            var clientMock = new Mock<IBinanceIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPricesAsync())
+                .ReturnsAsync(new[] { new TickerPrice { Price = "1", Symbol = "LTCBTC" } });
+
+            var strategy = new BinanceIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh"));
             Assert.Equal($"symbol {symbol} not exists in Binance", ex.Message);
         }
     }

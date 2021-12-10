@@ -1,5 +1,6 @@
 ﻿using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.HitBTC;
+using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.ExchangeIntegrationStrategies;
 using CryptoManager.Integration.Utils;
 using Moq;
@@ -23,11 +24,15 @@ namespace CryptoManager.Integration.Test
             cacheMock.Setup(repo => repo.GetAsync<TickerPrice>(ExchangesIntegratedType.HitBTC, symbol))
                 .ReturnsAsync(ticker);
 
-            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<List<TickerPrice>>(), ExchangesIntegratedType.HitBTC, It.IsAny<Func<TickerPrice, string>>()))
+            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<TickerPrice>>(), ExchangesIntegratedType.HitBTC, It.IsAny<Func<TickerPrice, string>>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new HitBTCIntegrationStrategy(HITBTC_API, cacheMock.Object);
-            var price = await strategy.GetCurrentPrice("LTC", "BTC");
+            var clientMock = new Mock<IHitBTCIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPricesAsync())
+                .ReturnsAsync(new[] { new TickerPrice { Last = "1", Symbol = symbol } });
+
+            var strategy = new HitBTCIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var price = await strategy.GetCurrentPriceAsync("LTC", "BTC");
             Assert.True(price > 0);
         }
 
@@ -41,13 +46,18 @@ namespace CryptoManager.Integration.Test
             cacheMock.Setup(repo => repo.GetAsync<TickerPrice>(ExchangesIntegratedType.HitBTC, symbol))
                 .ReturnsAsync(ticker);
 
-            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<List<TickerPrice>>(),
+            cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<TickerPrice>>(),
                                                   ExchangesIntegratedType.HitBTC,
                                                   It.IsAny<Func<TickerPrice, string>>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new HitBTCIntegrationStrategy(HITBTC_API, cacheMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh"));            Assert.Equal($"symbol {symbol} not exists in HitBTC", ex.Message);
+            var clientMock = new Mock<IHitBTCIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPricesAsync())
+                .ReturnsAsync(new[] { new TickerPrice { Last = "1", Symbol = "abc" } });
+
+            var strategy = new HitBTCIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh"));
+            Assert.Equal($"symbol {symbol} not exists in HitBTC", ex.Message);
         }
     }
 }

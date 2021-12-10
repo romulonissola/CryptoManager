@@ -12,7 +12,7 @@ export const environment = {
     path: 'login',
     defaultRedirectTo: 'dash',
     facebook:{
-      appId: ''
+      appId: '2839841779639346'
     }
   },
   production: false

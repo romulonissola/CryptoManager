@@ -25,6 +25,9 @@ export class ExchangeFormComponent implements OnInit {
     },
     {
       id: 3, name: 'BitcoinTrade'
+    },
+    {
+      id: 4, name: 'KuCoin'
     }
   ];
   formState: string;

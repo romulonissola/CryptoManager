@@ -1,5 +1,6 @@
 ﻿using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.BitcoinTrade;
+using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.ExchangeIntegrationStrategies;
 using CryptoManager.Integration.Utils;
 using Moq;
@@ -28,8 +29,12 @@ namespace CryptoManager.Integration.Test
                                                   It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new BitcoinTradeIntegrationStrategy(API, cacheMock.Object);
-            var price = await strategy.GetCurrentPrice("BTC", "BRL");
+            var clientMock = new Mock<IBitcoinTradeIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPriceAsync(symbol))
+                .ReturnsAsync(new ResponseData<TickerPrice> { Code = "200", Data = new TickerPrice { Sell = 1 } });
+
+            var strategy = new BitcoinTradeIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var price = await strategy.GetCurrentPriceAsync("BTC", "BRL");
             Assert.True(price > 0);
         }
 
@@ -48,8 +53,12 @@ namespace CryptoManager.Integration.Test
                                                   It.IsAny<string>()))
                 .Returns(Task.CompletedTask);
 
-            var strategy = new BitcoinTradeIntegrationStrategy(API, cacheMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPrice("nuncatera", "jsdhjkdhsajkdh"));
+            var clientMock = new Mock<IBitcoinTradeIntegrationClient>(MockBehavior.Strict);
+            clientMock.Setup(c => c.GetTickerPriceAsync(symbol))
+                .ReturnsAsync(new ResponseData<TickerPrice> { Code = "200", Data = null });
+
+            var strategy = new BitcoinTradeIntegrationStrategy(cacheMock.Object, clientMock.Object);
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh"));
             Assert.Equal($"symbol {symbol} not exists in Bitcointrade", ex.Message);
         }
     }

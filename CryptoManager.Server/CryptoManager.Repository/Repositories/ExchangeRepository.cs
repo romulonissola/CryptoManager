@@ -1,9 +1,9 @@
-﻿using CryptoManager.Domain.Contracts.Repositories;
+﻿using System.Threading.Tasks;
+using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.Entities;
+using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Repository.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace CryptoManager.Repository.Repositories
 {
@@ -11,6 +11,11 @@ namespace CryptoManager.Repository.Repositories
     {
         public ExchangeRepository(IORM<Exchange> orm) : base(orm)
         {
+        }
+
+        public Task<Exchange> GetByExchangeTypeAsync(ExchangesIntegratedType exchangesIntegratedType)
+        {
+            return _ORM.GetMany(a => a.ExchangeType.Equals(exchangesIntegratedType)).FirstOrDefaultAsync();
         }
     }
 }

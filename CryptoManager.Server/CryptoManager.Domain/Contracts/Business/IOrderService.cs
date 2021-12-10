@@ -2,14 +2,13 @@
 using CryptoManager.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Domain.Contracts.Business
 {
-    public interface IOrderBusiness
+    public interface IOrderService
     {
         Task<Order> CreateOrderAsync(Order order);
-        Task<List<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId);
+        Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId);
     }
 }

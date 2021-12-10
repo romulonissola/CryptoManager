@@ -10,7 +10,7 @@ namespace CryptoManager.Business
     {
         public static IServiceCollection AddBusiness(this IServiceCollection services)
         {
-            services.AddScoped<IOrderBusiness, OrderBusiness>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
         }

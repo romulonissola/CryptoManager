@@ -1,44 +1,27 @@
-﻿using CryptoManager.Domain.Contracts.Repositories;
-using CryptoManager.Domain.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CryptoManager.Domain.Contracts.Integration;
+using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
-using Binance = CryptoManager.Domain.IntegrationEntities.Exchanges.Binance;
-using HitBTC = CryptoManager.Domain.IntegrationEntities.Exchanges.HitBTC;
-using CryptoManager.Integration.Utils;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CryptoManager.Business.Test
 {
-    public class OrderBusinessTest
+    public class OrderServiceTest
     {
         private Mock<IOrderRepository> _repositoryMock;
-        private OrderBusiness _orderBusiness;
-        private Mock<IExchangeIntegrationCache> _cacheMock;
+        private OrderService _orderService;
+        private Mock<IExchangeIntegrationStrategyContext> _strategyContext;
 
-        public OrderBusinessTest()
+        public OrderServiceTest()
         {
             _repositoryMock = new Mock<IOrderRepository>(MockBehavior.Strict);
-
-
-            _cacheMock = new Mock<IExchangeIntegrationCache>(MockBehavior.Strict);
-            _cacheMock.Setup(repo => repo.GetAsync<Binance.TickerPrice>(It.IsAny<ExchangesIntegratedType>(), It.IsAny<string>()))
-                .ReturnsAsync((Binance.TickerPrice)null);
-
-            _cacheMock.Setup(repo => repo.GetAsync<HitBTC.TickerPrice>(It.IsAny<ExchangesIntegratedType>(), It.IsAny<string>()))
-                .ReturnsAsync((HitBTC.TickerPrice)null);
-
-            _cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<Binance.TickerPrice>>(), It.IsAny<ExchangesIntegratedType>(), It.IsAny<Func<Binance.TickerPrice, string>>()))
-                .Returns(Task.CompletedTask);
-
-            _cacheMock.Setup(repo => repo.AddAsync(It.IsAny<IEnumerable<HitBTC.TickerPrice>>(), It.IsAny<ExchangesIntegratedType>(), It.IsAny<Func<HitBTC.TickerPrice, string>>()))
-                .Returns(Task.CompletedTask);
-
-            _orderBusiness = new OrderBusiness(_repositoryMock.Object, _cacheMock.Object);
+            _strategyContext = new Mock<IExchangeIntegrationStrategyContext>(MockBehavior.Strict);
+            _orderService = new OrderService(_repositoryMock.Object, _strategyContext.Object);
         }
 
         [Fact]
@@ -56,7 +39,7 @@ namespace CryptoManager.Business.Test
             _repositoryMock.Setup(repo => repo.InsertAsync(order))
                 .ReturnsAsync(order);
 
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await _orderBusiness.CreateOrderAsync(order));
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await _orderService.CreateOrderAsync(order));
             Assert.Equal("Order Item Must be Informed", ex.Message);
             _repositoryMock.Verify(repo => repo.InsertAsync(order), Times.Never);
         }
@@ -86,7 +69,7 @@ namespace CryptoManager.Business.Test
             _repositoryMock.Setup(repo => repo.InsertAsync(order))
                 .ReturnsAsync(order);
 
-            await _orderBusiness.CreateOrderAsync(order);
+            await _orderService.CreateOrderAsync(order);
 
             _repositoryMock.Verify(repo => repo.InsertAsync(order), Times.Once);
         }
@@ -163,14 +146,16 @@ namespace CryptoManager.Business.Test
                 }
             };
 
+            _strategyContext.Setup(strategy => strategy.GetCurrentPriceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ExchangesIntegratedType>()))
+                .ReturnsAsync(10);
+
             _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(applicationUserId))
                 .ReturnsAsync(orderList);
 
-            var ordersDetails = await _orderBusiness.GetOrdersDetailsByApplicationUserAsync(applicationUserId);
+            var ordersDetails = await _orderService.GetOrdersDetailsByApplicationUserAsync(applicationUserId);
 
             _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(applicationUserId), Times.Once);
-            Assert.IsType<List<OrderDetailDTO>>(ordersDetails);
-            Assert.Equal(2, ordersDetails.Count);
+            Assert.Equal(2, ordersDetails.Count());
         }
 
         [Fact]
@@ -199,7 +184,7 @@ namespace CryptoManager.Business.Test
                     Quantity = 1000
                 }
             };
-            var result = _orderBusiness.CalculateAveragePrice(orderItems);
+            var result = _orderService.CalculateAveragePrice(orderItems);
             Assert.Equal(2.4M, result);
         }
     }
