@@ -3,6 +3,18 @@ $topnav-background-color: #222;
     display: block;
 }
 
+.health-degraded{
+    color: yellow;
+}
+
+.health-unhealthy{
+    color: red;
+}
+
+.health-healthy{
+    color: green;
+}
+
 #particles-js {
     background: $topnav-background-color;
     position: absolute;
@@ -10,7 +22,7 @@ $topnav-background-color: #222;
     width: 100%;
     text-align: center;
     color: #fff;
-    overflow: none;
+    overflow: hidden;
     .rounded-btn {
         -webkit-border-radius: 50px;
         border-radius: 50px;

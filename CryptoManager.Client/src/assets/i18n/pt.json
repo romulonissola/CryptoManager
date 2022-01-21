@@ -65,5 +65,10 @@
     "Price": "Preço",
     "Fee Asset": "Ativo da Taxa",
     "Create Order": "Criar Ordem",
-    "Exchange Type": "Tipo de Exchange"
+    "Exchange Type": "Tipo de Exchange",
+    "Health": "Saúde",
+    "Status": "Estatus",
+    "Errors": "Erros",
+    "General Status": "Estatus Geral",
+    "Facebook Login": "Login com Facebook"
 }

@@ -19,7 +19,8 @@ import { ApiService,
         OrderService,
         JwtHelper,
         HttpErrorInterceptor,
-        HTTPStatus  } from './shared';
+        HTTPStatus,  
+        HealthService} from './shared';
 
 const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
 // AoT requires an exported function for factories
@@ -54,6 +55,7 @@ export function createTranslateLoader(http: HttpClient) {
                 AssetService,
                 OrderService,
                 JwtHelper,
+                HealthService,
                 Interceptors_Services,
                 {
                     provide: HTTP_INTERCEPTORS,

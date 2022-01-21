@@ -14,7 +14,7 @@ namespace CryptoManager.WebApi.Controllers
     [Route("api/order")]
     [ApiController]
     public class OrderController : BaseController
-    {
+    {   
         private readonly IOrderRepository _repository;
         private readonly IOrderService _business;
 

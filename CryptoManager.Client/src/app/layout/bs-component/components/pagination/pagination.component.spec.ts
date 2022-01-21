@@ -10,7 +10,7 @@ describe('PaginationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgbModule.forRoot()
+        NgbModule
       ],
       declarations: [ PaginationComponent ]
     })

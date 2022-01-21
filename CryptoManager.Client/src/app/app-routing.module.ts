@@ -36,6 +36,11 @@ const routes: Routes = [
         loadChildren: () => import('./not-found/not-found.module')
                                     .then(m => m.NotFoundModule)
     },
+    { 
+        path: 'health', 
+        loadChildren: () => import('./health/health.module')
+                            .then(m => m.HealthModule)
+    },
     { path: '**', redirectTo: 'not-found' }
 ];
 

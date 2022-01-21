@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="CryptoDBLite.sqlite" />
+    <None Remove="HealthCheck\" />
   </ItemGroup>
 
 
@@ -24,5 +25,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HealthCheck\" />
   </ItemGroup>
 </Project>

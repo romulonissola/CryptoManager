@@ -4,3 +4,4 @@ export * from './jwt.service';
 export * from './exchange.service';
 export * from './asset.service';
 export * from './order.service';
+export * from './health.service';

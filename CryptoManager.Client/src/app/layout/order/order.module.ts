@@ -20,7 +20,7 @@ import { TextMaskModule } from 'angular2-text-mask';
               PageHeaderModule, 
               TranslateModule, 
               FormsModule, 
-              NgbModule.forRoot(),
+              NgbModule,
               TextMaskModule,
               ReactiveFormsModule
             ],
