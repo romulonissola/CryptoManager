@@ -41,7 +41,7 @@ namespace CryptoManager.WebApi.HealthCheck
                     var reply = await ping.SendPingAsync(host);
                     if (reply.Status != IPStatus.Success)
                     {
-                        errorList.Add(exchangeType.ToString(), "Ping failed");
+                        errorList.Add(exchangeType.ToString(), $"Ping not succeded, status {reply.Status} ");
                         continue;
                     }
 
