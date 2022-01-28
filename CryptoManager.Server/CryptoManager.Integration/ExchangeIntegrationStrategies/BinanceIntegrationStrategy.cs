@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoManager.Domain.Contracts.Integration;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.Binance;
 using CryptoManager.Integration.Clients;
@@ -39,6 +40,23 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 }
             }
             return decimal.Parse(price.Price);
+        }
+
+        public async Task<SimpleObjectResult> TestIntegrationUpAsync()
+        {
+            try
+            {
+                var response = await GetCurrentPriceAsync("BTC", "USDT");
+                if (response == decimal.Zero)
+                {
+                    return SimpleObjectResult.Error("BTCUSDT = 0");
+                }
+                return SimpleObjectResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return SimpleObjectResult.Error(ex.Message);
+            }
         }
     }
 }

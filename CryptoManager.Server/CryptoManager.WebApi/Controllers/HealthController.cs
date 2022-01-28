@@ -38,5 +38,16 @@ namespace CryptoManager.WebApi.Controllers
             };
             return report.Status == HealthStatus.Healthy ? Ok(result) : StatusCode((int)HttpStatusCode.ServiceUnavailable, result);
         }
+
+        [HttpGet("ping")]
+        public ActionResult Ping()
+        {   
+            var result = new
+            {
+                Status = HealthStatus.Healthy.ToString(),
+                Description = "Pong"
+            };
+            return Ok(result);
+        }
     }
 }

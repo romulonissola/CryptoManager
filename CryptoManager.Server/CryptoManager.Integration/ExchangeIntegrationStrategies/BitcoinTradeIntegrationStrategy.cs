@@ -1,8 +1,10 @@
 ﻿using CryptoManager.Domain.Contracts.Integration;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.BitcoinTrade;
 using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.Utils;
+using System;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Integration.ExchangeIntegrationStrategies
@@ -36,6 +38,23 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 await _cache.AddAsync(price, ExchangesIntegratedType.BitcoinTrade, symbol);
             }
             return price.Sell;
+        }
+
+        public async Task<SimpleObjectResult> TestIntegrationUpAsync()
+        {
+            try
+            {
+                var response = await _bitcoinTradeIntegrationClient.GetTickerPriceAsync("BRLBTC");
+                if (response.Data == null)
+                {
+                    return SimpleObjectResult.Error(response.Message);
+                }
+                return SimpleObjectResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return SimpleObjectResult.Error(ex.Message);
+            }
         }
     }
 }

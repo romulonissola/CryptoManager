@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
+using CryptoManager.Domain.Contracts.Integration;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace CryptoManager.WebApi.HealthCheck
 {
-    public class ExchangeIntegrationPingHealthCheck : IHealthCheck
+    public class ExchangeIntegrationHealthCheck : IHealthCheck
     {
         private readonly IExchangeRepository _exchangeRepository;
+        private readonly IExchangeIntegrationStrategyContext _exchangeIntegrationStrategyContext;
 
-        public ExchangeIntegrationPingHealthCheck(
-            IExchangeRepository exchangeRepository)
+        public ExchangeIntegrationHealthCheck(
+            IExchangeRepository exchangeRepository,
+            IExchangeIntegrationStrategyContext exchangeIntegrationStrategyContext)
         {
             _exchangeRepository = exchangeRepository;
+            _exchangeIntegrationStrategyContext = exchangeIntegrationStrategyContext;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(
@@ -36,22 +39,13 @@ namespace CryptoManager.WebApi.HealthCheck
                         errorList.Add(exchangeType.ToString() ,"Not configured");
                         continue;
                     }
-                    var host = new Uri(exchange.APIUrl).Host;
-                    using var ping = new Ping();
-                    var reply = await ping.SendPingAsync(host);
-                    if (reply.Status != IPStatus.Success)
+
+                    var result = await _exchangeIntegrationStrategyContext.TestIntegrationUpAsync(exchangeType);
+                    if (!result.HasSucceded)
                     {
-                        errorList.Add(exchangeType.ToString(), $"Ping not succeded, status {reply.Status} ");
+                        errorList.Add(exchangeType.ToString(), $"Test not succeded, errorMessage {result.ErrorMessage} ");
                         continue;
                     }
-
-                    if (reply.RoundtripTime > 100)
-                    {
-                        errorList.Add(exchangeType.ToString(), "Slow response time");
-                        continue;
-                    }
-
-                    
                 }
 
                 if(errorList.Count() == exchangeIntegratedList.Count())

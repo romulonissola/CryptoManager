@@ -68,8 +68,7 @@ namespace CryptoManager.WebApi
             services.AddBusiness();
             services.AddIntegrations();
             services.AddHealthChecks()
-                .AddCheck("Ping", () => new HealthCheckResult(HealthStatus.Healthy, "Pong"), new string[] { "Ping" })
-                .AddCheck<ExchangeIntegrationPingHealthCheck>("ExchangeIntegrationPing");
+                .AddCheck<ExchangeIntegrationHealthCheck>("ExchangeIntegrationPing");
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {

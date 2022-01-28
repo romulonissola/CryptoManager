@@ -1,10 +1,7 @@
-﻿using System;
-namespace CryptoManager.Domain.DTOs
+﻿namespace CryptoManager.Domain.DTOs
 {
-    public class ObjectResult
+    public class ObjectResult<T> : SimpleObjectResult
     {
-        public ObjectResult()
-        {
-        }
+        public T Item { get; set; }
     }
 }
