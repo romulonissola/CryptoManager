@@ -32,7 +32,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 var response = await _bitcoinTradeIntegrationClient.GetTickerPriceAsync(symbol);
                 if(response.Data == null)
                 {
-                    throw new System.InvalidOperationException($"symbol {symbol} not exists in Bitcointrade");
+                    throw new InvalidOperationException($"symbol {symbol} not exists in Bitcointrade");
                 }
                 price = response.Data;
                 await _cache.AddAsync(price, ExchangesIntegratedType.BitcoinTrade, symbol);

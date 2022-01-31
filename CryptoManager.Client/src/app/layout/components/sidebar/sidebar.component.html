@@ -43,6 +43,13 @@
             <li class="nested" [class.expand]="showMenu === 'profile'">
                 <ul class="submenu">
                     <li>
+                        <a [routerLink]="['/health']">
+                            <span>
+                                <i class="fa fa-fw fa-heartbeat"></i> {{ 'Health' | translate }}
+                            </span>
+                        </a>
+                    </li>
+                    <li>
                         <a [routerLink]="['/login']" (click)="onLoggedout()">
                             <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}</span>
                         </a>
