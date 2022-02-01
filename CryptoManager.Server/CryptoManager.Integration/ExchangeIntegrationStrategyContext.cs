@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoManager.Domain.Contracts.Integration;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 
 namespace CryptoManager.Integration
@@ -20,6 +21,12 @@ namespace CryptoManager.Integration
         {
             var strategy = ResolveStrategy(exchangesIntegratedType);
             return strategy.GetCurrentPriceAsync(baseAssetSymbol, quoteAssetSymbol);
+        }
+
+        public Task<SimpleObjectResult> TestIntegrationUpAsync(ExchangesIntegratedType exchangesIntegratedType)
+        {
+            var strategy = ResolveStrategy(exchangesIntegratedType);
+            return strategy.TestIntegrationUpAsync();
         }
 
         private IExchangeIntegrationStrategy ResolveStrategy(ExchangesIntegratedType exchangesIntegratedType)

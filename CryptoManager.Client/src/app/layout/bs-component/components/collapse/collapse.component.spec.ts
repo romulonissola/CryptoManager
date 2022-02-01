@@ -9,7 +9,7 @@ describe('CollapseComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ NgbModule.forRoot() ],
+      imports: [ NgbModule ],
       declarations: [ CollapseComponent ]
     })
     .compileComponents();

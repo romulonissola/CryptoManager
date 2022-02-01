@@ -10,7 +10,7 @@ describe('TabsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgbModule.forRoot()
+        NgbModule
       ],
       declarations: [ TabsComponent ]
     })

@@ -65,5 +65,10 @@
     "Price": "Price",
     "Fee Asset": "Fee Asset",
     "Create Order": "Create Order",
-    "Exchange Type": "Exchange Type"
+    "Exchange Type": "Exchange Type",
+    "Health": "Health",
+    "Status": "Status",
+    "Errors": "Errors",
+    "General Status": "General Status",
+    "Facebook Login": "Facebook Login"
 }

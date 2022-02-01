@@ -1,7 +1,9 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { routerTransition } from '../router.animations';
-import { Errors, AccountService } from '../shared/';
+import { Errors, AccountService, HealthService } from '../shared/';
+import { HealthStatusType } from '../shared/models/health-status-type.enum';
 declare var particlesJS: any;
 @Component({
     selector: 'app-login',
@@ -12,11 +14,13 @@ declare var particlesJS: any;
 export class LoginComponent implements OnInit {
     errors = {};
     returnUrl: string;
+    generalStatus: HealthStatusType;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private accountService: AccountService,
-                private zone: NgZone) {}
+                private zone: NgZone,
+                private healthService: HealthService) {}
     
     ngOnInit() {
         if(localStorage.getItem('isLoggedin') == "true"){
@@ -24,6 +28,12 @@ export class LoginComponent implements OnInit {
         }
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
         particlesJS.load('particles-js', 'assets/particle.json');
+        this.healthService.getAll()
+          .subscribe(
+            data => this.generalStatus = data.generalStatus,
+            error => {
+              this.generalStatus = error.error.generalStatus;
+            });
     }
 
     onFacebookLogin(){
@@ -39,6 +49,19 @@ export class LoginComponent implements OnInit {
             this.errors = err;
           }
         );
+    }
+
+    getColorByStatus(status) {
+      switch(status){
+        case 'Degraded':
+          return 'health-degraded';
+        case 'Unhealthy':
+          return 'health-unhealthy';
+        case 'Healthy':
+          return 'health-healthy';
+        default:
+          return 'health-unhealthy';
+      }
     }
 
     onLoggedin() {

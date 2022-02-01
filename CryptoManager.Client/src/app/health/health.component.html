@@ -1,0 +1,40 @@
+<div class="row" [@routerTransition]>
+    <div class="col-sm-12">
+      <div class="card mb-3">
+        <div class="card-header">{{ 'Health' | translate }}</div>
+        <div class="card-body">
+          <br/>
+          <p>{{ 'General Status' | translate }}: {{ health.generalStatus }} </p>
+          <div class="table-responsive">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th data-field="name">{{ 'Name' | translate }}</th>
+                    <th data-field="status">{{ 'Status' | translate }}</th>
+                    <th data-field="description">{{ 'Description' | translate }}</th>
+                    <th data-field="errors">{{ 'Errors' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let check of health.checks" [ngClass]="getColorByStatus(check.status)">
+                    <td>{{ check.name }}</td>
+                    <td>{{ check.status }}</td>
+                    <td>{{ check.description }}</td>
+                    <td>
+                      <table>
+                        <tbody>
+                          <tr *ngFor="let errors of check.errors | keyvalue">
+                            <td>{{ errors.key }} - {{ errors.value }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 
 namespace CryptoManager.Domain.Contracts.Integration
@@ -7,5 +8,6 @@ namespace CryptoManager.Domain.Contracts.Integration
     {
         ExchangesIntegratedType ExchangesIntegratedType { get; }
         Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol);
+        Task<SimpleObjectResult> TestIntegrationUpAsync();
     }
 }

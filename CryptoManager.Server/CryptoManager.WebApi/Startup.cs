@@ -1,21 +1,30 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using CryptoManager.Business;
+using CryptoManager.Domain.Contracts.Repositories;
+using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.Mapper;
 using CryptoManager.Integration;
 using CryptoManager.Repository;
+using CryptoManager.WebApi.HealthCheck;
 using CryptoManager.WebApi.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace CryptoManager.WebApi
 {
@@ -58,7 +67,8 @@ namespace CryptoManager.WebApi
             services.AddRepositories();
             services.AddBusiness();
             services.AddIntegrations();
-
+            services.AddHealthChecks()
+                .AddCheck<ExchangeIntegrationHealthCheck>("ExchangeIntegrationPing");
 
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
@@ -137,7 +147,7 @@ namespace CryptoManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -148,14 +158,6 @@ namespace CryptoManager.WebApi
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CryptoManager API V1");
-            });
             
             app.UseAuthentication();
             app.UseHttpsRedirection();
@@ -164,6 +166,15 @@ namespace CryptoManager.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
+            });
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CryptoManager API V1");
             });
 
             app.EnsureCreateDatabase();

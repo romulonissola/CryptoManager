@@ -14,8 +14,8 @@ import { HeaderComponent } from './components/header/header.component';
         CommonModule,
         LayoutRoutingModule,
         TranslateModule,
-        NgbDropdownModule.forRoot(),
-        NgbModule.forRoot(),
+        NgbDropdownModule,
+        NgbModule,
     ],
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent]
 })
