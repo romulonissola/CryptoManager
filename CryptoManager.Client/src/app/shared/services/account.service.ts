@@ -7,6 +7,7 @@ import { User } from '../models/user.model';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { JwtHelper } from '../helpers/index';
 import { HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
 declare const FB: any;
 
 @Injectable()
@@ -32,6 +33,7 @@ export class AccountService {
     private apiService: ApiService,
     private jwtService: JwtService,
     private jwtHelper: JwtHelper,
+    private router: Router
   ) {}
 
   populate() {
@@ -57,6 +59,9 @@ export class AccountService {
     this.currentUserSubject.next({} as User);
     this.isAuthenticatedSubject.next(false);
     localStorage.setItem('isLoggedin', 'false');
+    if (this.router.url != '/login') {
+      this.router.navigate(['login']);
+    }
   }
 
   facebookLogin(): Observable<boolean> {

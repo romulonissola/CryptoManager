@@ -25,23 +25,18 @@ export class AppComponent {
                         this.showLoader = status;
                 });
         this.router.events.subscribe(event =>{
-            this.ping(event);
+            this.ping();
         });
     }
 
-    ping(event) {
+    ping() {
         this.healthService.ping()
             .subscribe(_ => {
                 this.accountService.populate();
             },
             error => {
                 alert("API is Offline")
-                console.log(error);
                 this.accountService.purgeAuth();
-                console.log(event.url);
-                if(event && event.url != '/login'){
-                    this.router.navigate(['login']);
-                }
             }
         );
     }

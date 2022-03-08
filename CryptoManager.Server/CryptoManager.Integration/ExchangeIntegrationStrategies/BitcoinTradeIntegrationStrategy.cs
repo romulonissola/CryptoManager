@@ -4,13 +4,17 @@ using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using CryptoManager.Domain.IntegrationEntities.Exchanges.BitcoinTrade;
 using CryptoManager.Integration.Clients;
 using CryptoManager.Integration.Utils;
+using Polly;
+using Refit;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Integration.ExchangeIntegrationStrategies
 {
     public class BitcoinTradeIntegrationStrategy : IExchangeIntegrationStrategy
     {
+        private const int _numberOfRetries = 10;
         private readonly IBitcoinTradeIntegrationClient _bitcoinTradeIntegrationClient;
         private readonly IExchangeIntegrationCache _cache;
 
@@ -29,7 +33,11 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.BitcoinTrade, symbol);
             if (price == null)
             {
-                var response = await _bitcoinTradeIntegrationClient.GetTickerPriceAsync(symbol);
+                var response = await Policy
+                    .Handle<ApiException>(ex => ex.StatusCode == HttpStatusCode.TooManyRequests)
+                    .RetryAsync(_numberOfRetries)
+                    .ExecuteAsync(async () => await _bitcoinTradeIntegrationClient.GetTickerPriceAsync(symbol));
+
                 if(response.Data == null)
                 {
                     throw new InvalidOperationException($"symbol {symbol} not exists in Bitcointrade");
