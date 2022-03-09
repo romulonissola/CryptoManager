@@ -45,8 +45,11 @@ export class LoginComponent implements OnInit {
             this.zone.run(() => this.router.navigateByUrl(this.returnUrl));
           },
           err => {
-            alert(JSON.stringify(err));
-            this.errors = err;
+            const error = JSON.stringify(err);
+            this.healthService.ping().subscribe(
+              _ => alert(JSON.stringify(error)),
+              _ => alert("API is Offline")
+            );
           }
         );
     }

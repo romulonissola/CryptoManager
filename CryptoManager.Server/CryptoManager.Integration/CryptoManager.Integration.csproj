@@ -12,10 +12,12 @@
     <None Remove="Refit" />
     <None Remove="Clients\" />
     <None Remove="Refit.HttpClientFactory" />
+    <None Remove="Polly" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Refit" Version="6.0.94" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.0.94" />
+    <PackageReference Include="Polly" Version="7.2.3" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Clients\" />
