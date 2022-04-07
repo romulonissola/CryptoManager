@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using CryptoManager.Domain.Contracts.Integration;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;

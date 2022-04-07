@@ -1,25 +1,14 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Hosting;
+﻿using CryptoManager.WebApi;
+using Microsoft.AspNetCore.Builder;
 
-namespace CryptoManager.WebApi
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                }).UseDefaultServiceProvider((context, options) =>
-                {
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                    // Validate DI on build
-                    options.ValidateOnBuild = true;
-                });
-    }
-}
+var startup = new Startup(builder.Environment);
+
+startup.ConfigureServices(builder.Services);
+
+var app = builder.Build();
+
+startup.Configure(app, app.Environment);
+
+app.Run();
