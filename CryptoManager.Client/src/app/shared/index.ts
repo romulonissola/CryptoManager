@@ -6,3 +6,4 @@ export * from './models';
 export * from './helpers';
 export * from './error';
 export * from './interceptors';
+export * from './alert';

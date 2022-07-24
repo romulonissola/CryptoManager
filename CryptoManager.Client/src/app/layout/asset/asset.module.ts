@@ -5,8 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AssetRoutingModule } from './asset-routing.module';
 import { AssetComponent } from './asset.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
-import { ErrorsModule } from '../../shared'
-import { PageHeaderModule } from '../../shared';
+import { ErrorsModule, PageHeaderModule } from '../../shared'
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({

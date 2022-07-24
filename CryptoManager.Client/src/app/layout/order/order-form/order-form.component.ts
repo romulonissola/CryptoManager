@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, Order, ExchangeService, AssetService, Asset, OrderItem, OrderService} from '../../../shared'
+import { Exchange, Order, ExchangeService, AssetService, Asset, OrderItem, OrderService, AlertHandlerService, AlertType} from '../../../shared'
 import { Observable } from 'rxjs';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationModalComponent } from '../../../shared/confirmation-modal';
 
 const numberMask = createNumberMask({
   prefix: '',
@@ -32,13 +34,15 @@ export class OrderFormComponent implements OnInit {
   orderGroup: FormGroup;
   orderItemGroup: FormGroup;
   
-  constructor(private translate: TranslateService,
+  constructor(
+              private translate: TranslateService,
               private exchangeService: ExchangeService,
               private assetService: AssetService,
               private orderService: OrderService,
               private router: Router,
-              private route: ActivatedRoute,
-              private frmBuilder: FormBuilder) { }
+              private frmBuilder: FormBuilder,
+              private alertHandlerService: AlertHandlerService,
+              private modalService: NgbModal) { }
 
   ngOnInit() {
     this.exchangeService.getAll().subscribe(items => this.exchanges = items);
@@ -74,14 +78,19 @@ export class OrderFormComponent implements OnInit {
     this.orderItems.splice(this.orderItems.length, 0, Object.assign({}, this.orderItem));
     this.orderItem = new OrderItem();
     this.select = null;
-    console.log(this.orderItems);
   }
 
   deleteItem(orderItem){
-    if (confirm(this.translate.instant("DeleteMessage"))) {
-      var index = this.orderItems.indexOf(orderItem);
+    const modalRef = this.modalService.open(ConfirmationModalComponent);
+    modalRef.componentInstance.confirmationBoxTitle = this.translate.instant('Items');
+    modalRef.componentInstance.confirmationMessage = this.translate.instant('DeleteMessage');
+    
+    modalRef.result.then((userResponse) => {
+      if (userResponse) {
+        var index = this.orderItems.indexOf(orderItem);
       this.orderItems.splice(index, 1);
-    }
+      }
+    }).catch((error)=> (console.log(`User aborted: ${error}`)));
   }
 
   changeFeeAsset(select: Asset){
@@ -90,10 +99,13 @@ export class OrderFormComponent implements OnInit {
   }
 
   save(){
-    console.log(this.orderItems);
     this.order.orderItems = this.orderItems;
     let result = this.orderService.add(this.order);
 
-    result.subscribe(data => this.router.navigate(['order']));
+    result.subscribe(_ => {
+      this.alertHandlerService.createAlert(AlertType.Success, "Order Created");
+      this.router.navigate(['order']);
+    },
+    () => this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess')));
   }
 }

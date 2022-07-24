@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('crypto-manager.client App', () => {
+describe('crypto-manager-client App', () => {
   let page: AppPage;
 
   beforeEach(() => {

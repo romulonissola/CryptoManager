@@ -5,3 +5,4 @@ export * from './exchange.service';
 export * from './asset.service';
 export * from './order.service';
 export * from './health.service';
+export * from './alert-handler.service';
