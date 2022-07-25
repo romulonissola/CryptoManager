@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Asset, AssetService } from '../../../shared'
+import { AlertHandlerService, AlertType, Asset, AssetService } from '../../../shared'
 
 @Component({
   selector: 'app-asset-form  ',
@@ -14,10 +14,12 @@ export class AssetFormComponent implements OnInit {
   title: string;
   asset: Asset = new Asset();
   formState: string;
-  constructor(private translate:TranslateService,
-              private assetService: AssetService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+  constructor(
+    private translate:TranslateService,
+    private assetService: AssetService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private alertHandlerService: AlertHandlerService) { }
 
   ngOnInit() {
     var id = this.route.params.subscribe(params => {
@@ -32,23 +34,32 @@ export class AssetFormComponent implements OnInit {
       this.assetService.get(id)
          .subscribe(
            asset => this.asset = asset,
-           response => {
-             if (response.status == 404) {
+           error => {
+             if (error.status == 404) {
                this.router.navigate(['NotFound']);
+             }else{
+               this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess'));
              }
            });
     });
   }
 
   save() {
-    var result;
+    let result;
+    let operationMessage = '';
     if (this.asset.id){
       result = this.assetService.update(this.asset);
+      operationMessage = 'Asset Updated';
     } else {
       result = this.assetService.add(this.asset);
+      operationMessage = 'Asset Added';
     }
 
-    result.subscribe(data => this.router.navigate(['asset']));
+    result.subscribe(() => { 
+      this.alertHandlerService.createAlert(AlertType.Success, operationMessage);
+      this.router.navigate(['asset']);
+    },
+    () => this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess')));
   }
 
 }

@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsComponentRoutingModule } from './bs-component-routing.module';
 import { BsComponentComponent } from './bs-component.component';
 import {
-    AlertComponent,
     ButtonsComponent,
     ModalComponent,
     CollapseComponent,
@@ -34,7 +33,6 @@ import { PageHeaderModule } from '../../shared';
     declarations: [
         BsComponentComponent,
         ButtonsComponent,
-        AlertComponent,
         ModalComponent,
         CollapseComponent,
         DatePickerComponent,

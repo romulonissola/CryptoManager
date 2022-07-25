@@ -25,7 +25,11 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.currentUser = this.accountService.getCurrentUser();
+        this.accountService.currentUser.subscribe(
+            (userData) => {
+                this.currentUser = userData;
+            }
+        );
     }
 
     isToggled(): boolean {

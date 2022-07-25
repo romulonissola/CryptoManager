@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { OrderRoutingModule } from './order-routing.module';
 import { OrderComponent } from './order.component';
-import { ErrorsModule } from '../../shared'
 import { PageHeaderModule } from '../../shared';
 import { TranslateModule } from '@ngx-translate/core';
 import { OrderFormComponent } from './order-form/order-form.component';
@@ -16,7 +15,6 @@ import { TextMaskModule } from 'angular2-text-mask';
     imports: [CommonModule, 
               OrderRoutingModule, 
               NgSelectModule, 
-              ErrorsModule, 
               PageHeaderModule, 
               TranslateModule, 
               FormsModule, 

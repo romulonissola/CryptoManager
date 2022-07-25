@@ -70,5 +70,8 @@
     "Status": "Status",
     "Errors": "Errors",
     "General Status": "General Status",
-    "Facebook Login": "Facebook Login"
+    "Facebook Login": "Facebook Login",
+    "CouldNotProcess": "Could Not Process Action, Please Try Again.",
+    "Yes": "Yes",
+    "No": "No"
 }

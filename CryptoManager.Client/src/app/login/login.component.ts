@@ -41,14 +41,14 @@ export class LoginComponent implements OnInit {
         this.accountService
         .facebookLogin()
         .subscribe(
-          data => {
+          () => {
             this.zone.run(() => this.router.navigateByUrl(this.returnUrl));
           },
           err => {
             const error = JSON.stringify(err);
             this.healthService.ping().subscribe(
-              _ => alert(JSON.stringify(error)),
-              _ => alert("API is Offline")
+              () => alert(JSON.stringify(error)),
+              () => alert("API is Offline")
             );
           }
         );

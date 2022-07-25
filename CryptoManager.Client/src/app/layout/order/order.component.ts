@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { OrderService } from '../../shared';
+import { AlertHandlerService, AlertType, OrderService } from '../../shared';
 import { OrderDetail } from '../../shared/models/orderDetail.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationModalComponent } from '../../shared/confirmation-modal';
 
 @Component({
   selector: 'app-order',
@@ -12,11 +14,17 @@ import { OrderDetail } from '../../shared/models/orderDetail.model';
 })
 export class OrderComponent implements OnInit {
   orders: OrderDetail[] = [];
-  constructor(private translate: TranslateService, private orderService: OrderService) { }
+  constructor(
+    private translate: TranslateService,
+    private orderService: OrderService,
+    private alertHandlerService: AlertHandlerService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.orderService.getAllByLoggedUser()
-      .subscribe(data => this.orders = data);
+      .subscribe(
+        data => this.orders = data,
+        () => this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess')));
   }
 
   getProfitColor(profit:number){
@@ -27,16 +35,23 @@ export class OrderComponent implements OnInit {
   }
 
   delete(order){
-    if (confirm(this.translate.instant("DeleteMessage"))) {
-      var index = this.orders.indexOf(order);
-      this.orders.splice(index, 1);
-      this.orderService.delete(order.id)
-        .subscribe(null,
-          err => {
-            alert("Could not delete.");
-            // Revert the view back to its original state
-            this.orders.splice(index, 0, order);
-          });
-    }
+    const modalRef = this.modalService.open(ConfirmationModalComponent);
+    modalRef.componentInstance.confirmationBoxTitle = this.translate.instant('My Investments');
+    modalRef.componentInstance.confirmationMessage = this.translate.instant('DeleteMessage');
+    
+    modalRef.result.then((userResponse) => {
+      if (userResponse) {
+        var index = this.orders.indexOf(order);
+        this.orders.splice(index, 1);
+        this.orderService.delete(order.id)
+          .subscribe(
+            () => this.alertHandlerService.createAlert(AlertType.Success, "Order Deleted"),
+            () => {
+              this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant("CouldNotProcess"));
+              // Revert the view back to its original state
+              this.orders.splice(index, 0, order);
+            });
+      }
+    }).catch((error)=> (console.log(`User aborted: ${error}`)));
   }
 }

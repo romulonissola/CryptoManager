@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="col-lg-12">
+        <p *ngFor="let alert of alerts">
+            <ngb-alert [type]="alert.type" [dismissible]="false">{{ alert.message }}
+                <button type="button" class="close" aria-label="Close"
+                (click)="closeAlert(alert)">
+                    <span aria-hidden="true">
+                        <div class="timer" style="--duration: 3;--size: 20;">
+                            <div class="mask"></div>
+                        </div>
+                    </span>
+                </button>    
+                
+            </ngb-alert>
+        </p>
+    </div>
+</div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { routerTransition } from '../../../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Exchange, ExchangeService } from '../../../shared'
+import { AlertHandlerService, AlertType, Exchange, ExchangeService } from '../../../shared'
 
 @Component({
   selector: 'app-exchange-form  ',
@@ -31,13 +31,15 @@ export class ExchangeFormComponent implements OnInit {
     }
   ];
   formState: string;
-  constructor(private translate:TranslateService,
+  constructor(
+              private translate:TranslateService,
               private exchangeService: ExchangeService,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private alertHandlerService: AlertHandlerService) { }
 
   ngOnInit() {
-    var id = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       var id = params['id'];
 
       this.formState = id ? "Edit" : "Add";
@@ -48,9 +50,11 @@ export class ExchangeFormComponent implements OnInit {
       this.exchangeService.get(id)
          .subscribe(
            exchange => this.exchange = exchange,
-           response => {
-             if (response.status == 404) {
+           error => {
+             if (error.status == 404) {
                this.router.navigate(['NotFound']);
+             } else {
+               this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess'));
              }
            });
     });
@@ -58,13 +62,20 @@ export class ExchangeFormComponent implements OnInit {
 
   save() {
     var result;
+    let operationMessage = '';
     if (this.exchange.id){
       result = this.exchangeService.update(this.exchange);
+      operationMessage = 'Exchange Updated';
     } else {
       result = this.exchangeService.add(this.exchange);
+      operationMessage = 'Exchange Added';
     }
 
-    result.subscribe(data => this.router.navigate(['exchange']));
+    result.subscribe(data => {
+      this.alertHandlerService.createAlert(AlertType.Success, operationMessage);
+      this.router.navigate(['exchange']);
+    },
+    () => this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess')));
   }
 
 }

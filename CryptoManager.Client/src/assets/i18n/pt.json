@@ -70,5 +70,8 @@
     "Status": "Estatus",
     "Errors": "Erros",
     "General Status": "Estatus Geral",
-    "Facebook Login": "Login com Facebook"
+    "Facebook Login": "Login com Facebook",
+    "CouldNotProcess": "Não Foi Possivel Completar a Ação, Por Favor Tente Novamente.",
+    "Yes": "Sim",
+    "No": "Não"
 }

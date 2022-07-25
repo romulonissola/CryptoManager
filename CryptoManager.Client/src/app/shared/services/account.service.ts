@@ -102,8 +102,7 @@ export class AccountService {
   }
 
   authFacebookUser(accessToken: string): Observable<boolean> {
-    let httpParams = new HttpParams()
-    .append("accessToken", accessToken);
+    let httpParams = new HttpParams().append("accessToken", accessToken);
     return this.apiService.post(this.serviceURL + '/ExternalLoginFacebook', null, httpParams)
         .pipe(map(data => {
           let user = this.createUserModel(data);
@@ -113,7 +112,11 @@ export class AccountService {
   }
 
   getCurrentUser(): User {
-    return this.currentUserSubject.value;
+    if(this.currentUserSubject.value){
+      return this.currentUserSubject.value;
+    } else {
+      this.purgeAuth();
+    }
   }
 
   createUserModel(data: string): User{
