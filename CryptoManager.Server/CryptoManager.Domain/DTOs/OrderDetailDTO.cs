@@ -17,5 +17,6 @@ namespace CryptoManager.Domain.DTOs
         public decimal ValueSoldWithFees { get; set; }
         public decimal Profit { get; set; }
         public DateTime Date { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace CryptoManager.Domain.Contracts.Business
     public interface IOrderService
     {
         Task<Order> CreateOrderAsync(Order order);
-        Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId);
+        Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId, bool isViaRoboTrader);
     }
 }

@@ -32,6 +32,11 @@ const routes: Routes = [
                                     .then(m => m.OrderModule)
             },
             { 
+                path: 'robo-trader-order', 
+                loadChildren: () => import('./robo-trader-order/robo-trader-order.module')
+                                    .then(m => m.RoboTraderOrderModule)
+            },
+            { 
                 path: 'charts', 
                 loadChildren: () => import('./charts/charts.module')
                                     .then(m => m.ChartsModule)

@@ -19,5 +19,5 @@
   <ItemGroup>
     <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
   </ItemGroup>
-
+  
 </Project>

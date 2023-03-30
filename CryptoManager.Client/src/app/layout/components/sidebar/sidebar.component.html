@@ -12,6 +12,9 @@
         <a routerLink="/order" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-bitcoin"></i>{{ 'My Investments' | translate }}
         </a>
+        <a routerLink="/robo-trader-order" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-android"></i>{{ 'Robo Trader Trades' | translate }}
+        </a>
     </div>
     <div class="header-fields">
         <div class="nested-menu">
@@ -46,6 +49,13 @@
                         <a [routerLink]="['/health']">
                             <span>
                                 <i class="fa fa-fw fa-heartbeat"></i> {{ 'Health' | translate }}
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.freeprivacypolicy.com/live/54e36fab-2fb1-455d-87d5-17242c2784c7">
+                            <span>
+                                <i class="fa fa-fw fa-lock"></i> {{ 'Privacy Policy' | translate }}
                             </span>
                         </a>
                     </li>
