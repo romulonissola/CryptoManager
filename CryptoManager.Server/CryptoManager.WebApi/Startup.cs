@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -37,8 +38,9 @@ namespace CryptoManager.WebApi
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment env)
         {
+            IdentityModelEventSource.ShowPII = env.IsDevelopment();
             //using secret manager to develop with real code
             WebUtil.JwtKeyName = _configuration["JwtKeyName"];
             WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
@@ -82,19 +84,20 @@ namespace CryptoManager.WebApi
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
                 {
+                    options.Authority = _configuration["IdentityUrl"];
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateAudience = false,
                         //ValidAudience = "the audience you want to validate",
                         ValidateIssuer = false,
-                        //ValidIssuer = "the isser you want to validate",
+                        //ValidIssuer = "https://www.facebook.com/",
 
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebUtil.JwtKeyName)),
 
                         ValidateLifetime = true, //validate the expiration and not before values in the token
 
-                        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+                        ClockSkew = TimeSpan.FromMinutes(5), //5 minute tolerance for the expiration date
                     };
             });
 

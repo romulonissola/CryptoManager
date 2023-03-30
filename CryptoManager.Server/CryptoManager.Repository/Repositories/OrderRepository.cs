@@ -44,14 +44,21 @@ namespace CryptoManager.Repository.Repositories
             await base.DeleteAsync(entity);
         }
 
-        public Task<List<Order>> GetAllByApplicationUserAsync(Guid applicationUserId)
+        public Task<List<Order>> GetAllByApplicationUserAsync(
+            Guid applicationUserId,
+            bool isViaRoboTrader,
+            OrderType orderType = OrderType.Buy)
         {
-            return _ORM.GetManyWithoutDisable(a => a.ApplicationUserId.Equals(applicationUserId))
+            return _ORM.GetManyWithoutDisable(a =>
+                a.ApplicationUserId.Equals(applicationUserId) &&
+                a.IsViaRoboTrader == isViaRoboTrader &&
+                a.OrderType == orderType)
                .Include(order => order.BaseAsset)
                .Include(order => order.QuoteAsset)
                .Include(order => order.Exchange)
-               .Include(order => order.OrderItems)
-               .ThenInclude(orderItems => orderItems.FeeAsset).ToListAsync();
+               .Include(order => order.RelatedOrder).ThenInclude(relatedOrder => relatedOrder.OrderItems)
+               .Include(order => order.OrderItems).ThenInclude(orderItems => orderItems.FeeAsset)
+               .ToListAsync();
         }
     }
 }

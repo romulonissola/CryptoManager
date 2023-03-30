@@ -26,10 +26,19 @@ namespace CryptoManager.Domain.Entities
         [ForeignKey("Exchange")]
         public Guid ExchangeId { get; set; }
         public virtual Exchange Exchange { get; set; }
+
+        public bool IsViaRoboTrader { get; set; }
+        public OrderType OrderType { get; set; }
+
+        [ForeignKey("RelatedOrder")]
+        public Guid? RelatedOrderId { get; set; }
+        public virtual Order RelatedOrder { get; set; }
+
         public bool IsExcluded { get; set; }
         public bool IsEnabled { get; set; }
         public DateTime RegistryDate { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<Order> RelatedOrders { get; set; }
     }
 }

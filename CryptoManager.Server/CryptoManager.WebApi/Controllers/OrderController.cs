@@ -34,9 +34,9 @@ namespace CryptoManager.WebApi.Controllers
         [HttpGet]
         [Route("GetOrderDetailsByApplicationUser")]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> GetOrderDetailsByApplicationUser()
+        public async Task<IActionResult> GetOrderDetailsByApplicationUser(bool isViaRoboTrader)
         {
-            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(GetUserId()));
+            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(GetUserId(), isViaRoboTrader));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace CryptoManager.WebApi.Controllers
         {
             var order = _mapper.Map<Order>(entity);
             order.ApplicationUserId = GetUserId();
-            return Ok(_mapper.Map<OrderDTO>(await _repository.InsertAsync(order)));
+            return Ok(_mapper.Map<OrderDTO>(await _business.CreateOrderAsync(order)));
         }
 
         /// <summary>

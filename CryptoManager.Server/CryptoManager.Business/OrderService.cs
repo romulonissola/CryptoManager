@@ -30,10 +30,10 @@ namespace CryptoManager.Business
             return _repository.InsertAsync(order);
         }
 
-        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId)
+        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId, bool isViaRoboTrader)
         {
             var orderTaskList = new List<Task<OrderDetailDTO>>();
-            var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId);
+            var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId, isViaRoboTrader);
             orders.ForEach(order =>
             {
                 orderTaskList.Add(BuildOrderDetailAsync(order));
@@ -46,13 +46,24 @@ namespace CryptoManager.Business
         {
             var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
             var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
-            var currentPrice = await _exchangeIntegrationStrategyContext.GetCurrentPriceAsync(
-                order.BaseAsset.Symbol,
-                order.QuoteAsset.Symbol,
-                order.Exchange.ExchangeType);
+            decimal currentPrice = 0;
+            bool isCompleted = false;
+            if (order.RelatedOrder != null)
+            {
+                isCompleted = true;
+                currentPrice = CalculateAveragePrice(order.RelatedOrder.OrderItems.ToList());
+            }
+            else
+            {
+                currentPrice = await _exchangeIntegrationStrategyContext.GetCurrentPriceAsync(
+                    order.BaseAsset.Symbol,
+                    order.QuoteAsset.Symbol,
+                    order.Exchange.ExchangeType);
+            }
 
             var valuePaidWithFees = orderPrice * orderQuantity;
             var valueSoldWithFees = currentPrice * orderQuantity;
+
             return new OrderDetailDTO()
             {
                 Id = order.Id,
@@ -65,7 +76,8 @@ namespace CryptoManager.Business
                 ValuePaidWithFees = valuePaidWithFees,
                 ValueSoldWithFees = valueSoldWithFees,
                 CurrentPrice = currentPrice,
-                Profit = valueSoldWithFees - valuePaidWithFees
+                Profit = valueSoldWithFees - valuePaidWithFees,
+                IsCompleted = isCompleted
             };
         }
 

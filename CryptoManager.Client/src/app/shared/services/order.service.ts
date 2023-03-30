@@ -18,8 +18,8 @@ export class OrderService {
     return this.apiService.post(this.serviceURL, order);
   }
 
-  getAllByLoggedUser(): Observable<any>{
-    return this.apiService.get(`${this.serviceURL}/GetOrderDetailsByApplicationUser`);
+  getAllByLoggedUser(isViaRoboTrader: boolean): Observable<any>{
+    return this.apiService.get(`${this.serviceURL}/GetOrderDetailsByApplicationUser?isViaRoboTrader=${isViaRoboTrader}`);
   }
 
   delete(id:string){

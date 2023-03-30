@@ -21,7 +21,7 @@ export class OrderComponent implements OnInit {
     private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.orderService.getAllByLoggedUser()
+    this.orderService.getAllByLoggedUser(false)
       .subscribe(
         data => this.orders = data,
         () => this.alertHandlerService.createAlert(AlertType.Danger, this.translate.instant('CouldNotProcess')));

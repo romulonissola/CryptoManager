@@ -148,7 +148,7 @@ namespace CryptoManager.Repository.Test
             await repository.InsertAsync(order);
             await repository.InsertAsync(MockOrder.GetEntityFake());
 
-            var result = await repository.GetAllByApplicationUserAsync(applicationUserId);
+            var result = await repository.GetAllByApplicationUserAsync(applicationUserId, false);
             Assert.Equal(2, result.Count);
         }
 
@@ -177,7 +177,7 @@ namespace CryptoManager.Repository.Test
             await repository.InsertAsync(order);
             await repository.InsertAsync(MockOrder.GetEntityFake());
 
-            var result = await repository.GetAllByApplicationUserAsync(applicationUserId);
+            var result = await repository.GetAllByApplicationUserAsync(applicationUserId, false);
             Assert.Equal(2, result.Count);
             Assert.True(result.First().OrderItems.Any());
         }

@@ -149,12 +149,12 @@ namespace CryptoManager.Business.Test
             _strategyContext.Setup(strategy => strategy.GetCurrentPriceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ExchangesIntegratedType>()))
                 .ReturnsAsync(10);
 
-            _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(applicationUserId))
+            _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(applicationUserId, false, OrderType.Buy))
                 .ReturnsAsync(orderList);
 
-            var ordersDetails = await _orderService.GetOrdersDetailsByApplicationUserAsync(applicationUserId);
+            var ordersDetails = await _orderService.GetOrdersDetailsByApplicationUserAsync(applicationUserId, false);
 
-            _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(applicationUserId), Times.Once);
+            _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(applicationUserId, false, OrderType.Buy), Times.Once);
             Assert.Equal(2, ordersDetails.Count());
         }
 
