@@ -1,45 +1,49 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 
 const routes: Routes = [
-    { 
-        path: '', 
+    {
+        path: '',
         loadChildren: () => import('./layout/layout.module')
-                                    .then(m => m.LayoutModule) , 
-        canActivate: [AuthGuard], 
-        canActivateChild: [AuthGuard] 
+            .then(m => m.LayoutModule),
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard]
     },
-    { 
-        path: 'login', 
+    {
+        path: 'login',
         loadChildren: () => import('./login/login.module')
-                                    .then(m => m.LoginModule)
+            .then(m => m.LoginModule)
     },
-    { 
-        path: 'signup', 
+    {
+        path: 'signup',
         loadChildren: () => import('./signup/signup.module')
-                                    .then(m => m.SignupModule) 
+            .then(m => m.SignupModule)
     },
-    { 
-        path: 'error', 
+    {
+        path: 'error',
         loadChildren: () => import('./server-error/server-error.module')
-                                    .then(m => m.ServerErrorModule) 
+            .then(m => m.ServerErrorModule)
     },
-    { 
-        path: 'access-denied', 
+    {
+        path: 'access-denied',
         loadChildren: () => import('./access-denied/access-denied.module')
-                                    .then(m => m.AccessDeniedModule) 
+            .then(m => m.AccessDeniedModule)
     },
-    { 
-        path: 'not-found', 
+    {
+        path: 'not-found',
         loadChildren: () => import('./not-found/not-found.module')
-                                    .then(m => m.NotFoundModule)
+            .then(m => m.NotFoundModule)
     },
-    { 
-        path: 'health', 
+    {
+        path: 'health',
         loadChildren: () => import('./health/health.module')
-                            .then(m => m.HealthModule)
+            .then(m => m.HealthModule)
+    },
+    {
+        path: 'privacy-policy',
+        loadChildren: () => import('./privacy-policy/privacy-policy.module')
+            .then(m => m.PrivacyPolicyModule)
     },
     { path: '**', redirectTo: 'not-found' }
 ];
@@ -48,4 +52,4 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
     exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
