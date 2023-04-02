@@ -10,18 +10,20 @@ import { LoaderComponent } from './components/loader/loader.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApiService,
-        AuthGuard,
-        JwtService,
-        AccountService,
-        ExchangeService,
-        AssetService,
-        OrderService,
-        JwtHelper,
-        HttpErrorInterceptor,
-        HTTPStatus,  
-        HealthService,
-        AlertHandlerService} from './shared';
+import {
+    ApiService,
+    AuthGuard,
+    JwtService,
+    AccountService,
+    ExchangeService,
+    AssetService,
+    OrderService,
+    JwtHelper,
+    HttpErrorInterceptor,
+    HTTPStatus,
+    HealthService,
+    AlertHandlerService
+} from './shared';
 
 const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
 // AoT requires an exported function for factories
@@ -49,22 +51,22 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     declarations: [AppComponent, LoaderComponent],
     providers: [ApiService,
-                AuthGuard,
-                JwtService,
-                AccountService,
-                ExchangeService,
-                AssetService,
-                OrderService,
-                JwtHelper,
-                HealthService,
-                AlertHandlerService,
-                Interceptors_Services,
-                {
-                    provide: HTTP_INTERCEPTORS,
-                    useClass: HttpErrorInterceptor,
-                    multi: true
-                }
-            ],
+        AuthGuard,
+        JwtService,
+        AccountService,
+        ExchangeService,
+        AssetService,
+        OrderService,
+        JwtHelper,
+        HealthService,
+        AlertHandlerService,
+        Interceptors_Services,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HttpErrorInterceptor,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CryptoDBLite.sqlite" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\CryptoManager.Business\CryptoManager.Business.csproj" />
     <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
     <ProjectReference Include="..\CryptoManager.Repository\CryptoManager.Repository.csproj" />
