@@ -51,3 +51,4 @@ CryptoManager.Server/CryptoManager.WebApi/bin
 CryptoManager.Server/CryptoManager.WebApi.Test/bin
 *.sqlite-shm
 *.sqlite-wal
+CryptoManager.Client/.angular

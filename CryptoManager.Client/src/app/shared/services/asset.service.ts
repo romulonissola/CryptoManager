@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable ,  BehaviorSubject ,  ReplaySubject } from 'rxjs';
 
 import { ApiService } from './api.service';
-import { Asset } from '../models/index';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { HttpParams } from '@angular/common/http';
+import { Asset, ApiType } from '../models/index';
 
 @Injectable()
 export class AssetService {
@@ -14,23 +12,23 @@ export class AssetService {
   constructor (private apiService: ApiService) {}
 
   getAll() : Observable<any> {
-    return this.apiService.get(this.serviceURL);
+    return this.apiService.get(this.serviceURL, null, ApiType.CryptoManagerServerApi);
   }
 
   get(id:string) : Observable<any> {
-    return this.apiService.get(this.getUrl(id));
+    return this.apiService.get(this.getUrl(id), null, ApiType.CryptoManagerServerApi);
   }
 
   add(asset:Asset): Observable<Asset>{
-    return this.apiService.post(this.serviceURL, asset);
+    return this.apiService.post(this.serviceURL, asset, null, ApiType.CryptoManagerServerApi);
   }
 
   update(asset:Asset){
-    return this.apiService.put(this.serviceURL, asset);
+    return this.apiService.put(this.serviceURL, asset, ApiType.CryptoManagerServerApi);
   }
 
   delete(id:string){
-    return this.apiService.delete(this.getUrl(id));
+    return this.apiService.delete(this.getUrl(id), ApiType.CryptoManagerServerApi);
   }
 
   private getUrl(id){

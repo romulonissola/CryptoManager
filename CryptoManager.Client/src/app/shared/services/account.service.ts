@@ -8,6 +8,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 import { JwtHelper } from '../helpers/index';
 import { HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ApiType } from '../models/api-type.enum';
 declare const FB: any;
 
 @Injectable()
@@ -103,7 +104,7 @@ export class AccountService {
 
   authFacebookUser(accessToken: string): Observable<boolean> {
     let httpParams = new HttpParams().append("accessToken", accessToken);
-    return this.apiService.post(this.serviceURL + '/ExternalLoginFacebook', null, httpParams)
+    return this.apiService.post(this.serviceURL + '/ExternalLoginFacebook', null, httpParams, ApiType.CryptoManagerServerApi)
         .pipe(map(data => {
           let user = this.createUserModel(data);
           this.setAuth(user);

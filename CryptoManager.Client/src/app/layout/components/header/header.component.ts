@@ -14,11 +14,7 @@ export class HeaderComponent implements OnInit {
 
     constructor(private translate: TranslateService, public router: Router, private accountService: AccountService) {
         this.router.events.subscribe(val => {
-            if (
-                val instanceof NavigationEnd &&
-                window.innerWidth <= 992 &&
-                this.isToggled()
-            ) {
+            if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
                 this.toggleSidebar();
             }
         });

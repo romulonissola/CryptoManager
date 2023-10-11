@@ -1,165 +1,228 @@
 <form #form="ngForm" (ngSubmit)="save()" [@routerTransition]>
-    <div class="row">    
-        <div class="col-md-4" [formGroup]="orderGroup">
-            <div class="card">
-                <div class="card-header">{{ 'Order Data' | translate }}</div>
-                <div class="card-body">
-                <!--Order-->
-                    <div>
-                        <fieldset class="form-group">
-                            <label>{{ 'Transaction Date' | translate }}</label>
-                            <div class="input-group datepicker-input">
-                                <input class="form-control" formControlName="date" [(ngModel)]="order.date" type="date">
-                            </div>
-                            <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">                 
-                                <div *ngIf="date.errors.required || date.errors.ngbDate">
-                                    {{ "Invalid Date" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Exchange' | translate }}</label>
-                            <ng-select [items]="exchanges"
-                                    bindLabel="name"
-                                    bindValue="id"
-                                    [(ngModel)]="order.exchangeId"
-                                    formControlName="exchange">
-                            </ng-select>
-                            <div *ngIf="exchange.invalid && (exchange.dirty || exchange.touched)" class="alert alert-danger">                 
-                                <div *ngIf="exchange.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Base Asset' | translate }}</label>
-                            <ng-select [items]="assets"
-                                    bindLabel="name"
-                                    bindValue="id"
-                                    [(ngModel)]="order.baseAssetId"
-                                    formControlName="baseAsset">
-                            </ng-select>
-                            <div *ngIf="baseAsset.invalid && (baseAsset.dirty || baseAsset.touched)" class="alert alert-danger">                 
-                                <div *ngIf="baseAsset.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Quote Asset' | translate }}</label>
-                            <ng-select [items]="assets"
-                                    bindLabel="name"
-                                    bindValue="id"
-                                    [(ngModel)]="order.quoteAssetId"
-                                    formControlName="quoteAsset">
-                            </ng-select>
-                            <div *ngIf="quoteAsset.invalid && (quoteAsset.dirty || quoteAsset.touched)" class="alert alert-danger">                 
-                                <div *ngIf="quoteAsset.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
+  <div class="row">
+    <div class="col-md-4" [formGroup]="orderGroup">
+      <div class="card">
+        <div class="card-header">{{ "Order Data" | translate }}</div>
+        <div class="card-body">
+          <!--Order-->
+          <div>
+            <fieldset class="form-group">
+              <label>{{ "Transaction Date" | translate }}</label>
+              <div class="input-group datepicker-input">
+                <input
+                  class="form-control"
+                  formControlName="date"
+                  [(ngModel)]="order.date"
+                  type="date"
+                />
+              </div>
+              <div
+                *ngIf="date.invalid && (date.dirty || date.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="date.errors.required || date.errors.ngbDate">
+                  {{ "Invalid Date" | translate }}
                 </div>
-                <!--Order-->
-            </div>
-            <br>            
-            <button type="submit" class="btn btn-secondary" [disabled]="!(orderGroup.valid && orderItems.length > 0)">{{ 'Create Order' | translate }}</button>
-            <button class="btn btn-secondary" routerLink="/order">{{ 'Back' | translate }}</button>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Exchange" | translate }}</label>
+              <ng-select
+                [items]="exchanges"
+                bindLabel="name"
+                bindValue="id"
+                [(ngModel)]="order.exchangeId"
+                formControlName="exchange"
+              >
+              </ng-select>
+              <div
+                *ngIf="exchange.invalid && (exchange.dirty || exchange.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="exchange.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Base Asset" | translate }}</label>
+              <ng-select
+                [items]="assets"
+                bindLabel="name"
+                bindValue="id"
+                [(ngModel)]="order.baseAssetId"
+                formControlName="baseAsset"
+              >
+              </ng-select>
+              <div
+                *ngIf="
+                  baseAsset.invalid && (baseAsset.dirty || baseAsset.touched)
+                "
+                class="alert alert-danger"
+              >
+                <div *ngIf="baseAsset.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Quote Asset" | translate }}</label>
+              <ng-select
+                [items]="assets"
+                bindLabel="name"
+                bindValue="id"
+                [(ngModel)]="order.quoteAssetId"
+                formControlName="quoteAsset"
+              >
+              </ng-select>
+              <div
+                *ngIf="
+                  quoteAsset.invalid && (quoteAsset.dirty || quoteAsset.touched)
+                "
+                class="alert alert-danger"
+              >
+                <div *ngIf="quoteAsset.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+          </div>
         </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ 'Items' | translate }}</div>
-                <div class="card-body">
-                <!--OrderItens-->
-                    <div [formGroup]="orderItemGroup">
-                        <fieldset class="form-group">
-                            <label>{{ 'Price' | translate }}</label>
-                            <input
-                                formControlName="price"
-                                [(ngModel)]="orderItem.price"
-                                [textMask]="{mask: mask}"
-                                type="text"
-                                class="form-control"/> 
-                            <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">                 
-                                <div *ngIf="price.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Quantity' | translate }}</label>
-                            <input
-                                formControlName="quantity"
-                                [(ngModel)]="orderItem.quantity"
-                                [textMask]="{mask: mask}"
-                                type="text"
-                                class="form-control"/> 
-                            <div *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)" class="alert alert-danger">                 
-                                <div *ngIf="quantity.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Fee' | translate }}</label>
-                            <input
-                                formControlName="fee"
-                                [(ngModel)]="orderItem.fee"
-                                [textMask]="{mask: mask}"
-                                type="text"
-                                class="form-control"/>
-                            <div *ngIf="fee.invalid && (fee.dirty || fee.touched)" class="alert alert-danger">                 
-                                <div *ngIf="fee.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label>{{ 'Fee Asset' | translate }}</label>
-                            <ng-select [items]="assets"
-                                    bindLabel="name"
-                                    [(ngModel)]="select"
-                                    formControlName="feeAsset" (change)="changeFeeAsset(select)">
-                            </ng-select>
-                            <div *ngIf="feeAsset.invalid && (feeAsset.dirty || feeAsset.touched)" class="alert alert-danger">                 
-                                <div *ngIf="feeAsset.errors.required">
-                                    {{ "Field required" | translate }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <button type="button" class="btn btn-secondary" [disabled]="!orderItemGroup.valid" (click)="addItem()" >{{ 'Add' | translate }}</button>
-                        <br/>
-                        <br/>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th data-field="price">{{ 'Price' | translate }}</th>
-                                        <th data-field="quantity">{{ 'Quantity' | translate }}</th>
-                                        <th data-field="fee">{{ 'Fee' | translate }}</th>
-                                        <th data-field="feeAsset">{{ 'Fee Asset' | translate }}</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                            
-                                <tbody>
-                                    <tr *ngFor="let orderItem of orderItems">
-                                        <td>{{ orderItem.price }}</td>
-                                        <td>{{ orderItem.quantity }}</td>
-                                        <td>{{ orderItem.fee }}</td>
-                                        <td>{{ orderItem.feeAssetName }}</td>
-                                        <td>
-                                            <i (click)="deleteItem(orderItem)" class="fa fa-fw fa-times"></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <!--OrderItens-->
-                </div>            
-            </div>        
-        </div>
+        <!--Order-->
+      </div>
+      <br />
+      <button
+        type="submit"
+        class="btn btn-secondary"
+        [disabled]="!(orderGroup.valid && orderItems.length > 0)"
+      >
+        {{ "Create Order" | translate }}
+      </button>
+      <button class="btn btn-secondary" routerLink="/order">
+        {{ "Back" | translate }}
+      </button>
     </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">{{ "Items" | translate }}</div>
+        <div class="card-body">
+          <!--OrderItens-->
+          <div [formGroup]="orderItemGroup">
+            <fieldset class="form-group">
+              <label>{{ "Price" | translate }}</label>
+              <input
+                formControlName="price"
+                [(ngModel)]="orderItem.price"
+                step=".00000001"
+                type="number"
+                class="form-control"
+              />
+              <div
+                *ngIf="price.invalid && (price.dirty || price.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="price.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Quantity" | translate }}</label>
+              <input
+                formControlName="quantity"
+                [(ngModel)]="orderItem.quantity"
+                step=".00000001"
+                type="number"
+                class="form-control"
+              />
+              <div
+                *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="quantity.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Fee" | translate }}</label>
+              <input
+                formControlName="fee"
+                [(ngModel)]="orderItem.fee"
+                step=".00000001"
+                type="number"
+                class="form-control"
+              />
+              <div
+                *ngIf="fee.invalid && (fee.dirty || fee.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="fee.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="form-group">
+              <label>{{ "Fee Asset" | translate }}</label>
+              <ng-select
+                [items]="assets"
+                bindLabel="name"
+                [(ngModel)]="select"
+                formControlName="feeAsset"
+                (change)="changeFeeAsset(select)"
+              >
+              </ng-select>
+              <div
+                *ngIf="feeAsset.invalid && (feeAsset.dirty || feeAsset.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="feeAsset.errors.required">
+                  {{ "Field required" | translate }}
+                </div>
+              </div>
+            </fieldset>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              [disabled]="!orderItemGroup.valid"
+              (click)="addItem()"
+            >
+              {{ "Add" | translate }}
+            </button>
+            <br />
+            <br />
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th data-field="price">{{ "Price" | translate }}</th>
+                    <th data-field="quantity">{{ "Quantity" | translate }}</th>
+                    <th data-field="fee">{{ "Fee" | translate }}</th>
+                    <th data-field="feeAsset">{{ "Fee Asset" | translate }}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let orderItem of orderItems">
+                    <td>{{ orderItem.price }}</td>
+                    <td>{{ orderItem.quantity }}</td>
+                    <td>{{ orderItem.fee }}</td>
+                    <td>{{ orderItem.feeAssetName }}</td>
+                    <td>
+                      <i
+                        (click)="deleteItem(orderItem)"
+                        class="fa fa-fw fa-times"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!--OrderItens-->
+        </div>
+      </div>
+    </div>
+  </div>
 </form>

@@ -1,11 +1,25 @@
-table th.price,td.price {
-    text-align: right;
+table th.price,
+td.price {
+  text-align: right;
 }
 
 .redColor {
-    color: red;
+  color: red;
 }
 
 .greenColor {
-    color: green;
+  color: green;
+}
+
+.dropdown {
+  padding: 0px 10px;
+  width: 180px;
+}
+
+.date-filter {
+  align-items: center;
+  padding: 0px 20px;
+  li {
+    padding: 0px 5px;
+  }
 }
