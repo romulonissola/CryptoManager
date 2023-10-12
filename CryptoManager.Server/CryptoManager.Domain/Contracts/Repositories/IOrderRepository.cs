@@ -1,7 +1,6 @@
 ﻿using CryptoManager.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CryptoManager.Domain.Contracts.Repositories
@@ -11,6 +10,9 @@ namespace CryptoManager.Domain.Contracts.Repositories
         Task<List<Order>> GetAllByApplicationUserAsync(
             Guid applicationUserId,
             bool isViaRoboTrader,
+            string setupTraderId,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
             OrderType orderType = OrderType.Buy);
     }
 }

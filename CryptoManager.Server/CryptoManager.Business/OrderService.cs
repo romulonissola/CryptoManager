@@ -30,28 +30,31 @@ namespace CryptoManager.Business
             return _repository.InsertAsync(order);
         }
 
-        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId, bool isViaRoboTrader)
+        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId, bool isViaRoboTrader = false, string setupTraderId = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             var orderTaskList = new List<Task<OrderDetailDTO>>();
-            var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId, isViaRoboTrader);
+            var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId, isViaRoboTrader, setupTraderId, startDate, endDate);
             orders.ForEach(order =>
             {
                 orderTaskList.Add(BuildOrderDetailAsync(order));
             });
             await Task.WhenAll(orderTaskList.ToArray());
-            return orderTaskList.Select(a=> a.Result);
+            return orderTaskList.Select(a=> a.Result).OrderBy(a => a.Date);
         }
 
         private async Task<OrderDetailDTO> BuildOrderDetailAsync(Order order)
         {
-            var orderQuantity = order.OrderItems.Sum(a => a.Quantity);
+            var paidOrderQuantity = order.OrderItems.Sum(a => a.Quantity);
+            var soldOrderQuantity = paidOrderQuantity;
             var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
             decimal currentPrice = 0;
             bool isCompleted = false;
-            if (order.RelatedOrder != null)
+            if (order.RelatedOrders != null && order.RelatedOrders.Any())
             {
                 isCompleted = true;
-                currentPrice = CalculateAveragePrice(order.RelatedOrder.OrderItems.ToList());
+                var relatedOrder = order.RelatedOrders.First();
+                currentPrice = CalculateAveragePrice(relatedOrder.OrderItems.ToList());
+                soldOrderQuantity = relatedOrder.OrderItems.Sum(a => a.Quantity);
             }
             else
             {
@@ -61,17 +64,17 @@ namespace CryptoManager.Business
                     order.Exchange.ExchangeType);
             }
 
-            var valuePaidWithFees = orderPrice * orderQuantity;
-            var valueSoldWithFees = currentPrice * orderQuantity;
+            var valuePaidWithFees = orderPrice * paidOrderQuantity;
+            var valueSoldWithFees = currentPrice * soldOrderQuantity;
 
-            return new OrderDetailDTO()
+            return new OrderDetailDTO
             {
                 Id = order.Id,
                 Date = order.Date,
                 ExchangeName = order.Exchange.Name,
                 BaseAssetSymbol = order.BaseAsset.Symbol,
                 QuoteAssetSymbol = order.QuoteAsset.Symbol,
-                Quantity = orderQuantity,
+                Quantity = paidOrderQuantity,
                 AvgPrice = orderPrice,
                 ValuePaidWithFees = valuePaidWithFees,
                 ValueSoldWithFees = valueSoldWithFees,
