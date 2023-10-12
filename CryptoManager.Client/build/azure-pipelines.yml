@@ -2,7 +2,7 @@ trigger:
   - master
 
 variables:
-  azureSubscription: "Pago pelo Uso (5c65a8f1-1d3e-4d83-a214-7c4b6dfc9179)"
+  azureSubscription: "subscription test env"
   webAppName: "cryptomanager-client"
 
 stages:
