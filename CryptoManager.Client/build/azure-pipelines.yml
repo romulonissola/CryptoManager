@@ -2,7 +2,7 @@ trigger:
   - master
 
 variables:
-  azureSubscription: "subscription test env"
+  azureSubscription: "all items"
   webAppName: "cryptomanager-client"
 
 stages:
