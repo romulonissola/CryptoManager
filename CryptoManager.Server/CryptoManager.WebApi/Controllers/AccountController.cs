@@ -81,7 +81,7 @@ namespace CryptoManager.WebApi.Controllers
                 }
 
                 // 3. we've got a valid token so we can request user data from fb
-                var userInfoResponse = await _client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={accessToken}");
+                var userInfoResponse = await _client.GetStringAsync($"https://graph.facebook.com/v17.0/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={accessToken}");
                 var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
 
                 // 4. ready to create the local user account (if necessary) and jwt

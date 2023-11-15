@@ -1,6 +1,7 @@
 export const environment = {
   api: {
     baseUrl: "#{cryptomanager_server_base_url}#",
+    roboTraderBaseUrl: "#{robotrader_base_url}#",
     version: "1.0.0"
   },
   login: {

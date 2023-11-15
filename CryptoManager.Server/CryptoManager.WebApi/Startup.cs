@@ -55,7 +55,7 @@ namespace CryptoManager.WebApi
             {
                 services.AddSQLServerDbContexts(_configuration.GetConnectionString("DefaultConnection"));
             }
-            
+
             services.AddORM();
             services.AddRepositories();
             services.AddBusiness();
@@ -99,7 +99,7 @@ namespace CryptoManager.WebApi
 
                         ClockSkew = TimeSpan.FromMinutes(5), //5 minute tolerance for the expiration date
                     };
-            });
+                });
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
@@ -152,7 +152,7 @@ namespace CryptoManager.WebApi
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
-            
+
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseRouting();

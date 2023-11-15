@@ -1,75 +1,72 @@
 ﻿trigger:
--   master
+  - master
 
 variables:
-    azureSubscription: 'Pago pelo Uso (5c65a8f1-1d3e-4d83-a214-7c4b6dfc9179)'
-    webAppName: 'cryptomanager-server'
+  azureSubscription: "all items"
+  webAppName: "cryptomanager-server"
 
 stages:
--   stage: Build
+  - stage: Build
     displayName: Build stage
 
     jobs:
-    -   job: Build
+      - job: Build
         displayName: Build
         pool:
-            vmImage: windows-latest
+          vmImage: windows-latest
 
         steps:
-
-        -   task: mattlabrum.build-task.custom-build-task.downloadsSecureFile@0
-            displayName: 'Download appsettings from library file secrets'
+          - task: mattlabrum.build-task.custom-build-task.downloadsSecureFile@0
+            displayName: "Download appsettings from library file secrets"
             inputs:
-                fileInput: secrets.json
-                targetPath: CryptoManager.Server/CryptoManager.WebApi/
-                targetName: appsettings.json
+              fileInput: secrets.json
+              targetPath: CryptoManager.Server/CryptoManager.WebApi/
+              targetName: appsettings.json
 
-        -   task: DotNetCoreCLI@2
+          - task: DotNetCoreCLI@2
             displayName: Restore
             inputs:
-                command: restore
-                projects: '**/*.csproj'
+              command: restore
+              projects: "**/*.csproj"
 
-        -   task: DotNetCoreCLI@2
+          - task: DotNetCoreCLI@2
             displayName: Build
             inputs:
-                projects: '**/*.csproj'
-                arguments: '--configuration $(BuildConfiguration)'
+              projects: "**/*.csproj"
+              arguments: "--configuration $(BuildConfiguration)"
 
-        -   task: DotNetCoreCLI@2
-            displayName: 'dotnet test'
+          - task: DotNetCoreCLI@2
+            displayName: "dotnet test"
             inputs:
-                command: test
-                projects: '**/*Test/*.csproj'
-                arguments: '--collect "Code coverage"'
+              command: test
+              projects: "**/*Test/*.csproj"
+              arguments: '--collect "Code coverage"'
 
-        -   task: DotNetCoreCLI@2
+          - task: DotNetCoreCLI@2
             displayName: Publish
             inputs:
-                command: publish
-                arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+              command: publish
+              arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
 
-        -   task: PublishBuildArtifacts@1
-            displayName: 'Publish Artifact: drop'
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact: drop"
             inputs:
-                PathtoPublish: '$(build.artifactstagingdirectory)'
+              PathtoPublish: "$(build.artifactstagingdirectory)"
 
--   stage: Test_deployment
+  - stage: Test_deployment
     displayName: Test deployment
     jobs:
-
-    -   template: azure-deploy.yml
+      - template: azure-deploy.yml
         parameters:
-            environment: 'test'
-            azureSubscription: $(azureSubscription)
-            webAppName: $(webAppName)
+          environment: "test"
+          azureSubscription: $(azureSubscription)
+          webAppName: $(webAppName)
 
--   stage: Prod_deployment
+  - stage: Prod_deployment
     displayName: Prod deployment
     jobs:
-
-    -   template: azure-deploy.yml
+      - template: azure-deploy.yml
         parameters:
-            environment: 'prod'
-            azureSubscription: $(azureSubscription)
-            webAppName: $(webAppName)
+          environment: "prod"
+          azureSubscription: $(azureSubscription)
+          webAppName: $(webAppName)

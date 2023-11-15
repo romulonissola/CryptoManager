@@ -28,6 +28,7 @@ namespace CryptoManager.Domain.Entities
         public virtual Exchange Exchange { get; set; }
 
         public bool IsViaRoboTrader { get; set; }
+        public string SetupTraderId { get; set; }
         public OrderType OrderType { get; set; }
 
         [ForeignKey("RelatedOrder")]

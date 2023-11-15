@@ -47,16 +47,22 @@ namespace CryptoManager.Repository.Repositories
         public Task<List<Order>> GetAllByApplicationUserAsync(
             Guid applicationUserId,
             bool isViaRoboTrader,
+            string setupTraderId,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
             OrderType orderType = OrderType.Buy)
         {
             return _ORM.GetManyWithoutDisable(a =>
                 a.ApplicationUserId.Equals(applicationUserId) &&
                 a.IsViaRoboTrader == isViaRoboTrader &&
+                (string.IsNullOrWhiteSpace(setupTraderId) || a.SetupTraderId == setupTraderId) &&
+                (!startDate.HasValue || !endDate.HasValue || a.Date >= startDate && a.Date <= endDate) &&
                 a.OrderType == orderType)
                .Include(order => order.BaseAsset)
                .Include(order => order.QuoteAsset)
                .Include(order => order.Exchange)
                .Include(order => order.RelatedOrder).ThenInclude(relatedOrder => relatedOrder.OrderItems)
+               .Include(order => order.RelatedOrders).ThenInclude(relatedOrders => relatedOrders.OrderItems)
                .Include(order => order.OrderItems).ThenInclude(orderItems => orderItems.FeeAsset)
                .ToListAsync();
         }

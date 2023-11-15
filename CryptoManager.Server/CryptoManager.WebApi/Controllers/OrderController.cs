@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using AutoMapper;
 using CryptoManager.Domain.Contracts.Business;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
+using CryptoManager.WebApi.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoManager.WebApi.Controllers
@@ -34,9 +36,13 @@ namespace CryptoManager.WebApi.Controllers
         [HttpGet]
         [Route("GetOrderDetailsByApplicationUser")]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> GetOrderDetailsByApplicationUser(bool isViaRoboTrader)
+        public async Task<IActionResult> GetOrderDetailsByApplicationUser(
+            bool isViaRoboTrader = false,
+            string setupTraderId = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null)
         {
-            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(GetUserId(), isViaRoboTrader));
+            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(GetUserId(), isViaRoboTrader, setupTraderId, startDate, endDate));
         }
 
         /// <summary>
@@ -49,8 +55,20 @@ namespace CryptoManager.WebApi.Controllers
         public async Task<IActionResult> Post([FromBody]OrderDTO entity)
         {
             var order = _mapper.Map<Order>(entity);
-            order.ApplicationUserId = GetUserId();
+            order.ApplicationUserId = order.ApplicationUserId == Guid.Empty ? GetUserId() : order.ApplicationUserId;
             return Ok(_mapper.Map<OrderDTO>(await _business.CreateOrderAsync(order)));
+        }
+
+        /// <summary>
+        /// update an order in database
+        /// </summary>
+        /// <param name="entity">Order to update</param>
+        /// <response code="200">if success</response>
+        [HttpPut]
+        [ProducesResponseType(typeof(ObjectResult), 200)]
+        public async Task<IActionResult> Put([FromBody] OrderDTO entity)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
