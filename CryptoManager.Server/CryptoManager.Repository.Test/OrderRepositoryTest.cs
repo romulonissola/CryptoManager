@@ -1,4 +1,5 @@
-﻿using CryptoManager.Domain.Entities;
+﻿using CryptoManager.Domain.DTOs;
+using CryptoManager.Domain.Entities;
 using CryptoManager.Repository.Test.Mocks;
 using CryptoManager.Repository.Test.Mocks.Entities;
 using System;
@@ -148,7 +149,10 @@ namespace CryptoManager.Repository.Test
             await repository.InsertAsync(order);
             await repository.InsertAsync(MockOrder.GetEntityFake());
 
-            var result = await repository.GetAllByApplicationUserAsync(applicationUserId, false, null);
+            var result = await repository.GetAllByApplicationUserAsync(new GetOrdersCriteria
+            {
+                ApplicationUserId = applicationUserId
+            });
             Assert.Equal(2, result.Count);
         }
 
@@ -177,7 +181,10 @@ namespace CryptoManager.Repository.Test
             await repository.InsertAsync(order);
             await repository.InsertAsync(MockOrder.GetEntityFake());
 
-            var result = await repository.GetAllByApplicationUserAsync(applicationUserId, false, null);
+            var result = await repository.GetAllByApplicationUserAsync(new GetOrdersCriteria
+            {
+                ApplicationUserId = applicationUserId
+            });
             Assert.Equal(2, result.Count);
             Assert.True(result.First().OrderItems.Any());
         }

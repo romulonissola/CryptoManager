@@ -11,14 +11,17 @@ import {
 import { OrderDetail } from "../../shared/models/orderDetail.model";
 import { take } from "rxjs/operators";
 import { routerTransition } from "../../router.animations";
+import { BackTestSetupTraderService } from "../../shared/services/back-test-setup-trader.service";
+import { BackTestStatusType } from "../../shared/models/back-test-status-type.enum";
+import { BackTestSetupTrader } from "../../shared/models/back-test-setup-trader.model";
 
 @Component({
-  selector: "app-robo-trader-order",
-  templateUrl: "./robo-trader-order.component.html",
-  styleUrls: ["./robo-trader-order.component.scss"],
+  selector: "app-back-test-trader-order",
+  templateUrl: "./back-test-trader-order.component.html",
+  styleUrls: ["./back-test-trader-order.component.scss"],
   animations: [routerTransition()],
 })
-export class RoboTraderOrderComponent implements OnInit {
+export class BackTestTraderOrderComponent implements OnInit {
   orders: OrderDetail[] = [];
   setupTraders: SetupTrader[] = [];
   selectedSetupTraderId: string = null;
@@ -26,11 +29,14 @@ export class RoboTraderOrderComponent implements OnInit {
   endDate = this.formatDate(this.addDaysToDate(new Date(), 1));
   numberOfTrades = 0;
   totalProfits = 0;
+  backTestStatus: BackTestStatusType = null;
+  backTests: BackTestSetupTrader[] = [];
 
   constructor(
     private translate: TranslateService,
     private orderService: OrderService,
     private setupTraderService: SetupTraderService,
+    private backTestSetupTraderService: BackTestSetupTraderService,
     private alertHandlerService: AlertHandlerService
   ) {}
 
@@ -49,11 +55,28 @@ export class RoboTraderOrderComponent implements OnInit {
     this.search();
   }
 
+  searchBackTests() {
+    this.backTestSetupTraderService
+      .getByCriteria({
+        setupTraderId: this.selectedSetupTraderId,
+        status: this.backTestStatus,
+      })
+      .pipe(take(1))
+      .subscribe(
+        (data) => (this.backTests = data),
+        () =>
+          this.alertHandlerService.createAlert(
+            AlertType.Danger,
+            this.translate.instant("CouldNotProcess")
+          )
+      );
+  }
+
   search() {
     this.orderService
       .getAllByLoggedUser({
         isViaRoboTrader: true,
-        isBackTest: false,
+        isBackTest: true,
         setupTraderId: this.selectedSetupTraderId
           ? this.selectedSetupTraderId
           : "",

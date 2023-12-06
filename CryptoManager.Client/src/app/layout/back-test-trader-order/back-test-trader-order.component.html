@@ -26,6 +26,7 @@
             placeholder="Setup Trader"
             [(ngModel)]="selectedSetupTraderId"
             appendTo="body"
+            (change)="searchBackTests()"
           >
           </ng-select>
           <button

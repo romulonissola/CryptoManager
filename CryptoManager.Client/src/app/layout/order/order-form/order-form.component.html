@@ -33,6 +33,7 @@
                 bindValue="id"
                 [(ngModel)]="order.exchangeId"
                 formControlName="exchange"
+                appendTo="body"
               >
               </ng-select>
               <div
@@ -52,6 +53,7 @@
                 bindValue="id"
                 [(ngModel)]="order.baseAssetId"
                 formControlName="baseAsset"
+                appendTo="body"
               >
               </ng-select>
               <div
@@ -73,6 +75,7 @@
                 bindValue="id"
                 [(ngModel)]="order.quoteAssetId"
                 formControlName="quoteAsset"
+                appendTo="body"
               >
               </ng-select>
               <div
@@ -170,6 +173,7 @@
                 [(ngModel)]="select"
                 formControlName="feeAsset"
                 (change)="changeFeeAsset(select)"
+                appendTo="body"
               >
               </ng-select>
               <div

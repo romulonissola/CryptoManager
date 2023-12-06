@@ -28,6 +28,7 @@ import {
   HTTPStatus,
   HealthService,
   AlertHandlerService,
+  BackTestSetupTraderService,
 } from "./shared";
 
 const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
@@ -64,6 +65,7 @@ export function createTranslateLoader(http: HttpClient) {
     AssetService,
     OrderService,
     SetupTraderService,
+    BackTestSetupTraderService,
     JwtHelper,
     HealthService,
     AlertHandlerService,

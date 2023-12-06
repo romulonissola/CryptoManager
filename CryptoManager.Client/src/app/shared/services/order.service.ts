@@ -6,6 +6,7 @@ import { ApiType, Order } from "../models/index";
 import { distinctUntilChanged, map } from "rxjs/operators";
 import { HttpParams } from "@angular/common/http";
 import { OrderDetail } from "../models/orderDetail.model";
+import { GetOrdersCriteria } from "../models/get-orders-criteria.model";
 
 @Injectable()
 export class OrderService {
@@ -22,15 +23,10 @@ export class OrderService {
     );
   }
 
-  getAllByLoggedUser(
-    isViaRoboTrader: boolean,
-    setupTraderId: string = "",
-    startDate: string = "",
-    endDate: string = ""
-  ): Observable<any> {
-    const params = `isViaRoboTrader=${isViaRoboTrader}&setupTraderId=${setupTraderId}&startDate=${startDate}&endDate=${endDate}`;
+  getAllByLoggedUser(getOrdersCriteria: GetOrdersCriteria): Observable<any> {
+    var queryString = new URLSearchParams(getOrdersCriteria as {}).toString();
     return this.apiService.get(
-      `${this.serviceURL}/GetOrderDetailsByApplicationUser?${params}`,
+      `${this.serviceURL}/GetOrderDetailsByApplicationUser?${queryString}`,
       null,
       ApiType.CryptoManagerServerApi
     );

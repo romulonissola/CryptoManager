@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CryptoManager.Domain.Contracts.Integration;
 using CryptoManager.Domain.Contracts.Repositories;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Domain.IntegrationEntities.Exchanges;
 using Moq;
@@ -149,12 +150,20 @@ namespace CryptoManager.Business.Test
             _strategyContext.Setup(strategy => strategy.GetCurrentPriceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ExchangesIntegratedType>()))
                 .ReturnsAsync(10);
 
-            _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(applicationUserId, false, null, null, null, OrderType.Buy))
-                .ReturnsAsync(orderList);
+            _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(new GetOrdersCriteria
+            {
+                ApplicationUserId = applicationUserId
+            })).ReturnsAsync(orderList);
 
-            var ordersDetails = await _orderService.GetOrdersDetailsByApplicationUserAsync(applicationUserId, false);
+            var ordersDetails = await _orderService.GetOrdersDetailsByApplicationUserAsync(new GetOrdersCriteria
+            {
+                ApplicationUserId = applicationUserId
+            });
 
-            _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(applicationUserId, false, null, null, null, OrderType.Buy), Times.Once);
+            _repositoryMock.Verify(repo => repo.GetAllByApplicationUserAsync(new GetOrdersCriteria
+            {
+                ApplicationUserId = applicationUserId
+            }), Times.Once);
             Assert.Equal(2, ordersDetails.Count());
         }
 
@@ -184,7 +193,7 @@ namespace CryptoManager.Business.Test
                     Quantity = 1000
                 }
             };
-            var result = _orderService.CalculateAveragePrice(orderItems);
+            var result = OrderService.CalculateAveragePrice(orderItems);
             Assert.Equal(2.4M, result);
         }
     }

@@ -1,71 +1,111 @@
-<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
-    <div class="list-group">
-        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-dashboard"></i>{{ 'Dashboard' | translate }}
-        </a>
-        <a routerLink="/exchange" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-university"></i>{{ 'Exchanges Register' | translate }}
-        </a>
-        <a routerLink="/asset" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-money"></i>{{ 'Assets Register' | translate }}
-        </a>
-        <a routerLink="/order" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-bitcoin"></i>{{ 'My Investments' | translate }}
-        </a>
-        <a routerLink="/robo-trader-order" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-android"></i>{{ 'Robo Trader Trades' | translate }}
-        </a>
-    </div>
-    <div class="header-fields">
-        <div class="nested-menu">
-            <a class="list-group-item" (click)="addExpandClass('languages')">
-                <span><i class="fa fa-language"></i>&nbsp; {{ 'Language' | translate }} <b class="caret"></b></span>
+<nav class="sidebar" [ngClass]="{ sidebarPushRight: isActive }">
+  <div class="list-group">
+    <a
+      routerLink="/dashboard"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-dashboard"></i>{{ "Dashboard" | translate }}
+    </a>
+    <a
+      routerLink="/exchange"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-university"></i
+      >{{ "Exchanges Register" | translate }}
+    </a>
+    <a
+      routerLink="/asset"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-money"></i>{{ "Assets Register" | translate }}
+    </a>
+    <a
+      routerLink="/order"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-bitcoin"></i>{{ "My Investments" | translate }}
+    </a>
+    <a
+      routerLink="/robo-trader-order"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-android"></i>{{ "Robo Trader Trades" | translate }}
+    </a>
+    <a
+      routerLink="/back-test-trader-order"
+      [routerLinkActive]="['router-link-active']"
+      class="list-group-item"
+    >
+      <i class="fa fa-fw fa-line-chart"></i
+      >{{ "Back Test Trader Trades" | translate }}
+    </a>
+  </div>
+  <div class="header-fields">
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('languages')">
+        <span
+          ><i class="fa fa-language"></i>&nbsp; {{ "Language" | translate }}
+          <b class="caret"></b
+        ></span>
+      </a>
+      <li class="nested" [class.expand]="showMenu === 'languages'">
+        <ul class="submenu">
+          <li>
+            <a href="javascript:void(0)" (click)="changeLang('en')">
+              {{ "English" | translate }}
             </a>
-            <li class="nested" [class.expand]="showMenu === 'languages'">
-                <ul class="submenu">
-                    <li>
-                        <a href="javascript:void(0)" (click)="changeLang('en')">
-                            {{ 'English' | translate }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" (click)="changeLang('pt')">
-                            {{ 'Portuguese' | translate }}
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </div>
-        <div class="nested-menu">
-            <a class="list-group-item" (click)="addExpandClass('profile')">
-                <span>
-                    <img [src]="currentUser.imageURL" *ngIf="currentUser.imageURL" width="25px" />
-                    {{ currentUser.username }}<b class="caret"></b>
-                </span>
+          </li>
+          <li>
+            <a href="javascript:void(0)" (click)="changeLang('pt')">
+              {{ "Portuguese" | translate }}
             </a>
-            <li class="nested" [class.expand]="showMenu === 'profile'">
-                <ul class="submenu">
-                    <li>
-                        <a [routerLink]="['/health']">
-                            <span>
-                                <i class="fa fa-fw fa-heartbeat"></i> {{ 'Health' | translate }}
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['/privacy-policy']">
-                            <span>
-                                <i class="fa fa-fw fa-lock"></i> {{ 'Privacy Policy' | translate }}
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a (click)="onLoggedout()">
-                            <span><i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </div>
+          </li>
+        </ul>
+      </li>
     </div>
+    <div class="nested-menu">
+      <a class="list-group-item" (click)="addExpandClass('profile')">
+        <span>
+          <img
+            [src]="currentUser.imageURL"
+            *ngIf="currentUser.imageURL"
+            width="25px"
+          />
+          {{ currentUser.username }}<b class="caret"></b>
+        </span>
+      </a>
+      <li class="nested" [class.expand]="showMenu === 'profile'">
+        <ul class="submenu">
+          <li>
+            <a [routerLink]="['/health']">
+              <span>
+                <i class="fa fa-fw fa-heartbeat"></i> {{ "Health" | translate }}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/privacy-policy']">
+              <span>
+                <i class="fa fa-fw fa-lock"></i>
+                {{ "Privacy Policy" | translate }}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a (click)="onLoggedout()">
+              <span
+                ><i class="fa fa-fw fa-power-off"></i>
+                {{ "Log Out" | translate }}</span
+              >
+            </a>
+          </li>
+        </ul>
+      </li>
+    </div>
+  </div>
 </nav>
