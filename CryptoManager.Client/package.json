@@ -17,7 +17,6 @@
     "@angular/compiler": "^17.0.5",
     "@angular/core": "^17.0.5",
     "@angular/forms": "^17.0.5",
-    "@angular/http": "^7.2.12",
     "@angular/localize": "^17.0.5",
     "@angular/platform-browser": "^17.0.5",
     "@angular/platform-browser-dynamic": "^17.0.5",
@@ -44,7 +43,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.10",
+    "@angular-devkit/build-angular": "^17.0.5",
     "@angular/cli": "^17.0.5",
     "@angular/compiler-cli": "^17.0.5",
     "@angular/language-service": "^17.0.5",
