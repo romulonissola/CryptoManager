@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { TranslateService } from "@ngx-translate/core";
 import {
   AlertHandlerService,
@@ -22,11 +21,10 @@ import { BackTestSetupTrader } from "../../shared/models/back-test-setup-trader.
   animations: [routerTransition()],
 })
 export class BackTestTraderOrderComponent implements OnInit {
+  backTestStatusType = BackTestStatusType;
   orders: OrderDetail[] = [];
   setupTraders: SetupTrader[] = [];
   selectedSetupTraderId: string = null;
-  startDate = this.formatDate(new Date());
-  endDate = this.formatDate(this.addDaysToDate(new Date(), 1));
   numberOfTrades = 0;
   totalProfits = 0;
   backTestStatus: BackTestStatusType = null;
@@ -52,7 +50,6 @@ export class BackTestTraderOrderComponent implements OnInit {
             this.translate.instant("CouldNotProcess")
           )
       );
-    this.search();
   }
 
   searchBackTests() {
@@ -72,7 +69,7 @@ export class BackTestTraderOrderComponent implements OnInit {
       );
   }
 
-  search() {
+  search(startDate: string, endDate: string) {
     this.orderService
       .getAllByLoggedUser({
         isViaRoboTrader: true,
@@ -80,8 +77,8 @@ export class BackTestTraderOrderComponent implements OnInit {
         setupTraderId: this.selectedSetupTraderId
           ? this.selectedSetupTraderId
           : "",
-        startDate: this.startDate ? this.startDate.toString() : "",
-        endDate: this.endDate ? this.endDate.toString() : "",
+        startDate,
+        endDate,
       })
       .pipe(take(1))
       .subscribe(
@@ -102,6 +99,31 @@ export class BackTestTraderOrderComponent implements OnInit {
       );
   }
 
+  continueFaulty(backTestSetupTraderId: string) {
+    this.backTestSetupTraderService
+      .continueFaulty(backTestSetupTraderId)
+      .pipe(take(1))
+      .subscribe(
+        (data) => {
+          if (!data.hasSucceded) {
+            this.alertHandlerService.createAlert(
+              AlertType.Danger,
+              data.errorMessage
+            );
+          }
+          this.alertHandlerService.createAlert(
+            AlertType.Success,
+            this.translate.instant("Succeded")
+          );
+        },
+        () =>
+          this.alertHandlerService.createAlert(
+            AlertType.Danger,
+            this.translate.instant("CouldNotProcess")
+          )
+      );
+  }
+
   getProfitColor(profit: number) {
     if (profit >= 0) {
       return "green";
@@ -109,19 +131,14 @@ export class BackTestTraderOrderComponent implements OnInit {
     return "red";
   }
 
-  private formatDate(date: Date) {
-    const d = new Date(date);
-    let month = "" + (d.getMonth() + 1);
-    let day = "" + d.getDate();
-    const year = d.getFullYear();
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-    return [year, month, day].join("-");
-  }
-
-  addDaysToDate(date: Date, days: number): Date {
-    var date = new Date(date);
-    date.setDate(date.getDate() + days);
-    return date;
+  getBackTestStatusDescription(status: BackTestStatusType) {
+    switch (status) {
+      case BackTestStatusType.Running:
+        return "Running";
+      case BackTestStatusType.Faulty:
+        return "Faulty";
+      case BackTestStatusType.Finished:
+        return "Finished";
+    }
   }
 }

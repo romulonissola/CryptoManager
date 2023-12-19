@@ -18,9 +18,19 @@ td.right {
 }
 
 .date-filter {
-  align-items: center;
+  align-items: start;
   padding: 0px 20px;
   li {
     padding: 0px 5px;
   }
+}
+
+.back-test-items {
+  display: flex;
+  padding: 10px;
+}
+
+.back-test-item {
+  display: flex;
+  padding: 10px;
 }

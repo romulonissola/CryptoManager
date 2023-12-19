@@ -29,6 +29,7 @@ import {
   HealthService,
   AlertHandlerService,
   BackTestSetupTraderService,
+  SharedPipesModule,
 } from "./shared";
 
 const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
@@ -54,6 +55,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     AppRoutingModule,
     FormsModule,
+    SharedPipesModule,
   ],
   declarations: [AppComponent, LoaderComponent],
   providers: [

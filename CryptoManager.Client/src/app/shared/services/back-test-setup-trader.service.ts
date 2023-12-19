@@ -6,6 +6,7 @@ import { ApiType } from "../models/index";
 import { BackTestSetupTraderSearchCriteria } from "../models/back-test-setup-trader-search-criteria.model";
 import { BackTestSetupTrader } from "../models/back-test-setup-trader.model";
 import queryString from "query-string";
+import { SimpleObjectResult } from "../models/robo-trader/simple-object-result.model";
 
 @Injectable()
 export class BackTestSetupTraderService {
@@ -19,6 +20,17 @@ export class BackTestSetupTraderService {
     var query = queryString.stringify(criteria);
     return this.apiService.get(
       `${this.serviceURL}/GetByCriteria?${query}`,
+      null,
+      ApiType.RoboTraderApi
+    );
+  }
+
+  continueFaulty(
+    backTestSetupTraderId: string
+  ): Observable<SimpleObjectResult> {
+    return this.apiService.post(
+      `${this.serviceURL}/continueFaulty`,
+      { backTestSetupTraderId },
       null,
       ApiType.RoboTraderApi
     );

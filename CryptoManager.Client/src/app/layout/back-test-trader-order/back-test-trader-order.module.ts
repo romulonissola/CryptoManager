@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackTestTraderOrderRoutingModule } from "./back-test-trader-order-routing.module";
 import { NgSelectModule } from "@ng-select/ng-select";
-import { PageHeaderModule } from "../../shared";
+import { PageHeaderModule, SharedPipesModule } from "../../shared";
 import { TranslateModule } from "@ngx-translate/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -19,6 +19,7 @@ import { BackTestTraderOrderComponent } from "./back-test-trader-order.component
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
+    SharedPipesModule,
   ],
 })
 export class BackTestTraderOrderModule {}
