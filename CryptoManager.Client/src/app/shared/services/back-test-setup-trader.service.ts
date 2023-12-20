@@ -29,8 +29,8 @@ export class BackTestSetupTraderService {
     backTestSetupTraderId: string
   ): Observable<SimpleObjectResult> {
     return this.apiService.post(
-      `${this.serviceURL}/continueFaulty`,
-      { backTestSetupTraderId },
+      `${this.serviceURL}/continueFaulty?backTestSetupTraderId=${backTestSetupTraderId}`,
+      null,
       null,
       ApiType.RoboTraderApi
     );

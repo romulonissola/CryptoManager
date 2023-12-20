@@ -32,5 +32,17 @@ td.right {
 
 .back-test-item {
   display: flex;
-  padding: 10px;
+  padding: 0.375rem 0.75rem;
+}
+
+.ng-select.custom {
+  border: 0px;
+  min-height: 0px;
+  border-radius: 0;
+  width: 100%;
+}
+
+.ng-select.custom .ng-select-container {
+  min-height: 0px;
+  border-radius: 0;
 }

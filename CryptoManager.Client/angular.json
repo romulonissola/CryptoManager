@@ -21,7 +21,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": ["zone.js"],
+            "polyfills": ["src/polyfills.ts", "zone.js"],
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
               "node_modules/font-awesome/css/font-awesome.css",

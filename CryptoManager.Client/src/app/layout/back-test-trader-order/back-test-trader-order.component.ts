@@ -53,20 +53,23 @@ export class BackTestTraderOrderComponent implements OnInit {
   }
 
   searchBackTests() {
-    this.backTestSetupTraderService
-      .getByCriteria({
-        setupTraderId: this.selectedSetupTraderId,
-        status: this.backTestStatus,
-      })
-      .pipe(take(1))
-      .subscribe(
-        (data) => (this.backTests = data),
-        () =>
-          this.alertHandlerService.createAlert(
-            AlertType.Danger,
-            this.translate.instant("CouldNotProcess")
-          )
-      );
+    this.backTests = [];
+    if (this.selectedSetupTraderId) {
+      this.backTestSetupTraderService
+        .getByCriteria({
+          setupTraderId: this.selectedSetupTraderId,
+          status: this.backTestStatus,
+        })
+        .pipe(take(1))
+        .subscribe(
+          (data) => (this.backTests = data),
+          () =>
+            this.alertHandlerService.createAlert(
+              AlertType.Danger,
+              this.translate.instant("CouldNotProcess")
+            )
+        );
+    }
   }
 
   search(startDate: string, endDate: string) {

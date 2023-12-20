@@ -1,12 +1,12 @@
 <div [@routerTransition]>
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-12">
       <div class="card mb-3">
         <div class="card-body">
           <fieldset class="form-group">
             <label>{{ "Select the setup" | translate }}</label>
             <ng-select
-              class="dropdown"
+              class="dropdown custom"
               [items]="setupTraders"
               bindLabel="strategyName"
               bindValue="id"
@@ -20,11 +20,11 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8">
+    <div *ngIf="backTests.length > 0" class="col-sm-12">
       <div class="card mb-3">
         <div class="card-body">
           <div class="back-test-items" *ngFor="let backTest of backTests">
-            <div class="back-test-item">
+            <div>
               <button
                 class="btn btn-outline-success my-2 my-sm-0"
                 type="submit"
@@ -41,10 +41,7 @@
             <div class="back-test-item">
               {{ getBackTestStatusDescription(backTest.status) }}
             </div>
-            <div
-              *ngIf="backTest.status === backTestStatusType.Faulty"
-              class="back-test-item"
-            >
+            <div *ngIf="backTest.status === backTestStatusType.Faulty">
               <button
                 class="btn btn-outline-success my-2 my-sm-0"
                 type="submit"
@@ -61,7 +58,9 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card mb-3">
-        <div class="card-header">{{ "Robot Trader Trades" | translate }}</div>
+        <div class="card-header">
+          {{ "Back Test Trader Trades" | translate }}
+        </div>
         <div class="card-body">
           <br />
           <br />
