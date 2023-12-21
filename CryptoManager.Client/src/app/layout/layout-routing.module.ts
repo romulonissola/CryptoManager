@@ -40,6 +40,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: "back-test-trader-order",
+        loadChildren: () =>
+          import("./back-test-trader-order/back-test-trader-order.module").then(
+            (m) => m.BackTestTraderOrderModule
+          ),
+      },
+      {
         path: "tables",
         loadChildren: () =>
           import("./tables/tables.module").then((m) => m.TablesModule),

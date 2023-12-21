@@ -1,16 +1,11 @@
 {
   "extends": "../tsconfig.json",
+  "files": ["polyfills.ts", "main.ts"],
   "compilerOptions": {
-    "lib": [
-        "es6",
-        "dom"
-    ],
+    "lib": ["es6", "dom"],
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "types": []
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["test.ts", "**/*.spec.ts"]
 }

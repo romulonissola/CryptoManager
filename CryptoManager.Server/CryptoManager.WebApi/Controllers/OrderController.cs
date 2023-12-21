@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using AutoMapper;
 using CryptoManager.Domain.Contracts.Business;
 using CryptoManager.Domain.Contracts.Repositories;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
-using CryptoManager.WebApi.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CryptoManager.WebApi.Controllers
@@ -36,13 +33,10 @@ namespace CryptoManager.WebApi.Controllers
         [HttpGet]
         [Route("GetOrderDetailsByApplicationUser")]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> GetOrderDetailsByApplicationUser(
-            bool isViaRoboTrader = false,
-            string setupTraderId = null,
-            DateTime? startDate = null,
-            DateTime? endDate = null)
+        public async Task<IActionResult> GetOrderDetailsByApplicationUser([FromQuery] GetOrdersCriteria getOrdersCriteria)
         {
-            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(GetUserId(), isViaRoboTrader, setupTraderId, startDate, endDate));
+            getOrdersCriteria.ApplicationUserId = GetUserId();
+            return Ok(await _business.GetOrdersDetailsByApplicationUserAsync(getOrdersCriteria));
         }
 
         /// <summary>
@@ -52,7 +46,7 @@ namespace CryptoManager.WebApi.Controllers
         /// <response code="200">if success</response>
         [HttpPost]
         [ProducesResponseType(typeof(ObjectResult), 200)]
-        public async Task<IActionResult> Post([FromBody]OrderDTO entity)
+        public async Task<IActionResult> Post([FromBody] OrderDTO entity)
         {
             var order = _mapper.Map<Order>(entity);
             order.ApplicationUserId = order.ApplicationUserId == Guid.Empty ? GetUserId() : order.ApplicationUserId;

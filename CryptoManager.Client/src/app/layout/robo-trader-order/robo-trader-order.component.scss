@@ -1,10 +1,11 @@
 table th.price,
-td.price {
+td.price,
+td.right {
   text-align: right;
 }
 
 .redColor {
-  color: red;
+  color: rgb(255, 0, 0);
 }
 
 .greenColor {

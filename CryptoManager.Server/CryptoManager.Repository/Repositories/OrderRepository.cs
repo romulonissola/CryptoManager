@@ -1,4 +1,5 @@
 ﻿using CryptoManager.Domain.Contracts.Repositories;
+using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Repository.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -45,19 +46,16 @@ namespace CryptoManager.Repository.Repositories
         }
 
         public Task<List<Order>> GetAllByApplicationUserAsync(
-            Guid applicationUserId,
-            bool isViaRoboTrader,
-            string setupTraderId,
-            DateTime? startDate = null,
-            DateTime? endDate = null,
-            OrderType orderType = OrderType.Buy)
+            GetOrdersCriteria getOrdersCriteria)
         {
             return _ORM.GetManyWithoutDisable(a =>
-                a.ApplicationUserId.Equals(applicationUserId) &&
-                a.IsViaRoboTrader == isViaRoboTrader &&
-                (string.IsNullOrWhiteSpace(setupTraderId) || a.SetupTraderId == setupTraderId) &&
-                (!startDate.HasValue || !endDate.HasValue || a.Date >= startDate && a.Date <= endDate) &&
-                a.OrderType == orderType)
+                a.ApplicationUserId.Equals(getOrdersCriteria.ApplicationUserId) &&
+                a.IsViaRoboTrader == getOrdersCriteria.IsViaRoboTrader &&
+                a.IsBackTest == getOrdersCriteria.IsBackTest &&
+                (string.IsNullOrWhiteSpace(getOrdersCriteria.SetupTraderId) || a.SetupTraderId == getOrdersCriteria.SetupTraderId) &&
+                (!getOrdersCriteria.StartDate.HasValue || !getOrdersCriteria.EndDate.HasValue ||
+                a.Date >= getOrdersCriteria.StartDate && a.Date <= getOrdersCriteria.EndDate) &&
+                a.OrderType == getOrdersCriteria.OrderType)
                .Include(order => order.BaseAsset)
                .Include(order => order.QuoteAsset)
                .Include(order => order.Exchange)

@@ -13,6 +13,7 @@ namespace CryptoManager.Domain.DTOs
         public DateTime Date { get; set; }
         public Guid ExchangeId { get; set; }
         public bool IsViaRoboTrader { get; set; }
+        public bool IsBackTest { get; set; }
         public string SetupTraderId { get; set; }
         public OrderType OrderType { get; set; }
         public Guid? RelatedOrderId { get; set; }

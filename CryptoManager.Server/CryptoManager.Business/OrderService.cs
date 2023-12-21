@@ -30,10 +30,10 @@ namespace CryptoManager.Business
             return _repository.InsertAsync(order);
         }
 
-        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(Guid applicationUserId, bool isViaRoboTrader = false, string setupTraderId = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IEnumerable<OrderDetailDTO>> GetOrdersDetailsByApplicationUserAsync(GetOrdersCriteria getOrdersCriteria)
         {
             var orderTaskList = new List<Task<OrderDetailDTO>>();
-            var orders = await _repository.GetAllByApplicationUserAsync(applicationUserId, isViaRoboTrader, setupTraderId, startDate, endDate);
+            var orders = await _repository.GetAllByApplicationUserAsync(getOrdersCriteria);
             orders.ForEach(order =>
             {
                 orderTaskList.Add(BuildOrderDetailAsync(order));
@@ -84,9 +84,10 @@ namespace CryptoManager.Business
             };
         }
 
-        public decimal CalculateAveragePrice(List<OrderItem> orderItems)
+        public static decimal CalculateAveragePrice(List<OrderItem> orderItems)
         {
-            return orderItems.Sum(order => order.Price * order.Quantity) / orderItems.Sum(order => order.Quantity);
+            var quantity = orderItems.Sum(order => order.Quantity);
+            return orderItems.Sum(order => order.Price * order.Quantity) / (quantity == decimal.Zero ? decimal.One : quantity);
         }
     }
 }

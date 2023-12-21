@@ -1,0 +1,161 @@
+<div [@routerTransition]>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          <fieldset class="form-group">
+            <label>{{ "Select the setup" | translate }}</label>
+            <ng-select
+              class="dropdown custom"
+              [items]="setupTraders"
+              bindLabel="strategyName"
+              bindValue="id"
+              placeholder="Setup Trader"
+              [(ngModel)]="selectedSetupTraderId"
+              appendTo="body"
+              (change)="searchBackTests()"
+            >
+            </ng-select>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="backTests.length > 0" class="col-sm-12">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="back-test-items" *ngFor="let backTest of backTests">
+            <div>
+              <button
+                class="btn btn-outline-success my-2 my-sm-0"
+                type="submit"
+                (click)="search(backTest.fromDate, backTest.toDate)"
+              >
+                {{ "See Results" | translate }}
+              </button>
+            </div>
+            <div class="back-test-item">
+              {{ backTest.fromDate | appDate }} -
+              {{ backTest.toDate | appDate }}
+            </div>
+            <div class="back-test-item">{{ "Status" | translate }}</div>
+            <div class="back-test-item">
+              {{ getBackTestStatusDescription(backTest.status) }}
+            </div>
+            <div *ngIf="backTest.status === backTestStatusType.Faulty">
+              <button
+                class="btn btn-outline-success my-2 my-sm-0"
+                type="submit"
+                (click)="continueFaulty(backTest.id)"
+              >
+                {{ "Continue" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card mb-3">
+        <div class="card-header">
+          {{ "Back Test Trader Trades" | translate }}
+        </div>
+        <div class="card-body">
+          <br />
+          <br />
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th data-field="exchange">{{ "Exchange" | translate }}</th>
+                  <th data-field="pair">{{ "Pair" | translate }}</th>
+                  <th data-field="avgPrice" class="price">
+                    {{ "Avg Price" | translate }}
+                  </th>
+                  <th data-field="quantity" class="price">
+                    {{ "Quantity" | translate }}
+                  </th>
+                  <th data-field="valuePaidWithFees" class="price">
+                    {{ "Value Paid With Fees" | translate }}
+                  </th>
+                  <th data-field="currentPrice" class="price">
+                    {{ "Current Price" | translate }}
+                  </th>
+                  <th data-field="valueSoldWithFees" class="price">
+                    {{ "Value Sold With Fees" | translate }}
+                  </th>
+                  <th data-field="profit" class="price">
+                    {{ "Profit" | translate }}
+                  </th>
+                  <th data-field="status">{{ "Status" | translate }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr
+                  *ngFor="let order of orders"
+                  [style.color]="getProfitColor(order.profit)"
+                >
+                  <td>{{ order.exchangeName }}</td>
+                  <td>
+                    {{ order.baseAssetSymbol }}/{{ order.quoteAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.avgPrice | number : "1.2-8" }}
+                    {{ order.quoteAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.quantity | number : "1.2-8" }}
+                    {{ order.baseAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.valuePaidWithFees | number : "1.2-8" }}
+                    {{ order.quoteAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.currentPrice | number : "1.2-8" }}
+                    {{ order.quoteAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.valueSoldWithFees | number : "1.2-8" }}
+                    {{ order.quoteAssetSymbol }}
+                  </td>
+                  <td class="price">
+                    {{ order.profit | number : "1.2-8" }}
+                    {{ order.quoteAssetSymbol }}
+                  </td>
+
+                  <td>
+                    {{
+                      order.isCompleted
+                        ? ("Sold" | translate)
+                        : ("Live" | translate)
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="right">Number of Trades:</td>
+                  <td>
+                    {{ numberOfTrades }}
+                  </td>
+                  <td class="right">{{ "Profit" | translate }}:</td>
+                  <td class="price">
+                    {{ totalProfits | number : "1.2-2" }}
+                  </td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

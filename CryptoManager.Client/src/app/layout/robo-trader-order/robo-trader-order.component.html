@@ -25,6 +25,7 @@
             bindValue="id"
             placeholder="Setup Trader"
             [(ngModel)]="selectedSetupTraderId"
+            appendTo="body"
           >
           </ng-select>
           <button
@@ -113,6 +114,23 @@
                 </td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="right">Number of Trades:</td>
+                <td>
+                  {{ numberOfTrades }}
+                </td>
+                <td class="right">{{ "Profit" | translate }}:</td>
+                <td class="price">
+                  {{ totalProfits | number : "1.2-2" }}
+                </td>
+                <td></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>

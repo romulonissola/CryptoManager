@@ -24,6 +24,8 @@ export class RoboTraderOrderComponent implements OnInit {
   selectedSetupTraderId: string = null;
   startDate = this.formatDate(new Date());
   endDate = this.formatDate(this.addDaysToDate(new Date(), 1));
+  numberOfTrades = 0;
+  totalProfits = 0;
 
   constructor(
     private translate: TranslateService,
@@ -49,15 +51,26 @@ export class RoboTraderOrderComponent implements OnInit {
 
   search() {
     this.orderService
-      .getAllByLoggedUser(
-        true,
-        this.selectedSetupTraderId ? this.selectedSetupTraderId : "",
-        this.startDate ? this.startDate.toString() : "",
-        this.endDate ? this.endDate.toString() : ""
-      )
+      .getAllByLoggedUser({
+        isViaRoboTrader: true,
+        isBackTest: false,
+        setupTraderId: this.selectedSetupTraderId
+          ? this.selectedSetupTraderId
+          : "",
+        startDate: this.startDate ? this.startDate.toString() : "",
+        endDate: this.endDate ? this.endDate.toString() : "",
+      })
       .pipe(take(1))
       .subscribe(
-        (data) => (this.orders = data),
+        (data) => {
+          this.orders = data;
+
+          this.numberOfTrades = this.orders.length;
+          this.totalProfits = this.orders.reduce(
+            (total, s) => total + s.profit,
+            0
+          );
+        },
         () =>
           this.alertHandlerService.createAlert(
             AlertType.Danger,

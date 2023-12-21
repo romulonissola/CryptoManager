@@ -1,0 +1,48 @@
+table th.price,
+td.price,
+td.right {
+  text-align: right;
+}
+
+.redColor {
+  color: rgb(255, 0, 0);
+}
+
+.greenColor {
+  color: green;
+}
+
+.dropdown {
+  padding: 0px 10px;
+  width: 180px;
+}
+
+.date-filter {
+  align-items: start;
+  padding: 0px 20px;
+  li {
+    padding: 0px 5px;
+  }
+}
+
+.back-test-items {
+  display: flex;
+  padding: 10px;
+}
+
+.back-test-item {
+  display: flex;
+  padding: 0.375rem 0.75rem;
+}
+
+.ng-select.custom {
+  border: 0px;
+  min-height: 0px;
+  border-radius: 0;
+  width: 100%;
+}
+
+.ng-select.custom .ng-select-container {
+  min-height: 0px;
+  border-radius: 0;
+}
