@@ -17,12 +17,14 @@ namespace CryptoManager.Repository
         {
             services.AddDbContextPool<ApplicationIdentityDbContext>(options =>
             {
-                options.UseSqlite(connectionString);
+                options.UseSqlite(connectionString, 
+                    sqlOptios => sqlOptios.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
 
             services.AddDbContextPool<EntityContext>(options =>
             {
-                options.UseSqlite(connectionString);
+                options.UseSqlite(connectionString, 
+                    sqlOptios => sqlOptios.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
 
             return services;
@@ -32,12 +34,14 @@ namespace CryptoManager.Repository
         {
             services.AddDbContextPool<ApplicationIdentityDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString, 
+                    sqlOptios => sqlOptios.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
 
             services.AddDbContextPool<EntityContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionString, 
+                    sqlOptios => sqlOptios.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
 
             return services;

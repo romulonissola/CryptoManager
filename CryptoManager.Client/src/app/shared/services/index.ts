@@ -8,3 +8,4 @@ export * from "./health.service";
 export * from "./alert-handler.service";
 export * from "./setup-trader.service";
 export * from "./back-test-setup-trader.service";
+export * from "./chart.service";

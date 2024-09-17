@@ -39,7 +39,7 @@ namespace CryptoManager.Business
                 orderTaskList.Add(BuildOrderDetailAsync(order));
             });
             await Task.WhenAll(orderTaskList.ToArray());
-            return orderTaskList.Select(a=> a.Result).OrderBy(a => a.Date);
+            return orderTaskList.Select(a=> a.Result).OrderBy(a => a.BoughtDate);
         }
 
         private async Task<OrderDetailDTO> BuildOrderDetailAsync(Order order)
@@ -49,12 +49,14 @@ namespace CryptoManager.Business
             var orderPrice = CalculateAveragePrice(order.OrderItems.ToList());
             decimal currentPrice = 0;
             bool isCompleted = false;
+            DateTime? soldDate = null;
             if (order.RelatedOrders != null && order.RelatedOrders.Any())
             {
                 isCompleted = true;
                 var relatedOrder = order.RelatedOrders.First();
                 currentPrice = CalculateAveragePrice(relatedOrder.OrderItems.ToList());
                 soldOrderQuantity = relatedOrder.OrderItems.Sum(a => a.Quantity);
+                soldDate = relatedOrder.Date;
             }
             else
             {
@@ -70,7 +72,7 @@ namespace CryptoManager.Business
             return new OrderDetailDTO
             {
                 Id = order.Id,
-                Date = order.Date,
+                BoughtDate = order.Date,
                 ExchangeName = order.Exchange.Name,
                 BaseAssetSymbol = order.BaseAsset.Symbol,
                 QuoteAssetSymbol = order.QuoteAsset.Symbol,
@@ -80,7 +82,8 @@ namespace CryptoManager.Business
                 ValueSoldWithFees = valueSoldWithFees,
                 CurrentPrice = currentPrice,
                 Profit = valueSoldWithFees - valuePaidWithFees,
-                IsCompleted = isCompleted
+                IsCompleted = isCompleted,
+                SoldDate = soldDate
             };
         }
 

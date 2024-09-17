@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import {
   AlertHandlerService,
@@ -11,8 +11,12 @@ import { OrderDetail } from "../../shared/models/orderDetail.model";
 import { take } from "rxjs/operators";
 import { routerTransition } from "../../router.animations";
 import { BackTestSetupTraderService } from "../../shared/services/back-test-setup-trader.service";
-import { BackTestStatusType } from "../../shared/models/back-test-status-type.enum";
-import { BackTestSetupTrader } from "../../shared/models/back-test-setup-trader.model";
+import { BackTestStatusType } from "../../shared/models/robo-trader/back-test-status-type.enum";
+import { BackTestSetupTrader } from "../../shared/models/robo-trader/back-test-setup-trader.model";
+import { ChartService } from "../../shared/services/chart.service";
+import { IntervalType } from "../../shared/models/robo-trader/interval-type.enum";
+import { CandleStick } from "../../shared/models/robo-trader/candle-stick.model";
+import { CandleStickChartComponent } from "../../shared/candle-stick-chart/candle-stick-chart.component";
 
 @Component({
   selector: "app-back-test-trader-order",
@@ -29,12 +33,15 @@ export class BackTestTraderOrderComponent implements OnInit {
   totalProfits = 0;
   backTestStatus: BackTestStatusType = null;
   backTests: BackTestSetupTrader[] = [];
+  candles: CandleStick[] = [];
 
+  @ViewChild("chart") chart: CandleStickChartComponent;
   constructor(
     private translate: TranslateService,
     private orderService: OrderService,
     private setupTraderService: SetupTraderService,
     private backTestSetupTraderService: BackTestSetupTraderService,
+    private chartService: ChartService,
     private alertHandlerService: AlertHandlerService
   ) {}
 
@@ -72,7 +79,11 @@ export class BackTestTraderOrderComponent implements OnInit {
     }
   }
 
-  search(startDate: string, endDate: string) {
+  search(backTest: BackTestSetupTrader) {
+    this.getCandles(backTest);
+  }
+
+  getOrders(startDate: string, endDate: string) {
     this.orderService
       .getAllByLoggedUser({
         isViaRoboTrader: true,
@@ -93,6 +104,7 @@ export class BackTestTraderOrderComponent implements OnInit {
             (total, s) => total + s.profit,
             0
           );
+          this.chart.renderChart(this.candles, this.orders);
         },
         () =>
           this.alertHandlerService.createAlert(
@@ -143,5 +155,35 @@ export class BackTestTraderOrderComponent implements OnInit {
       case BackTestStatusType.Finished:
         return "Finished";
     }
+  }
+
+  getCandles(backTest: BackTestSetupTrader) {
+    this.chartService
+      .getCandles({
+        baseAssetSymbol: "SOL",
+        quoteAssetSymbol: "BTC",
+        fromDate: backTest.fromDate,
+        toDate: backTest.toDate,
+        intervalType: IntervalType.FiveMinutes,
+      })
+      .pipe(take(1))
+      .subscribe(
+        (data) => {
+          if (!data.hasSucceded) {
+            this.alertHandlerService.createAlert(
+              AlertType.Danger,
+              data.errorMessage
+            );
+          } else {
+            this.candles = data.item;
+            this.getOrders(backTest.fromDate, backTest.toDate);
+          }
+        },
+        () =>
+          this.alertHandlerService.createAlert(
+            AlertType.Danger,
+            this.translate.instant("CouldNotProcess")
+          )
+      );
   }
 }

@@ -10,7 +10,6 @@ import {
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { FormsModule } from "@angular/forms";
-import { LoaderComponent } from "./components/loader/loader.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -30,6 +29,7 @@ import {
   AlertHandlerService,
   BackTestSetupTraderService,
   SharedPipesModule,
+  ChartService,
 } from "./shared";
 
 const Interceptors_Services = [HttpErrorInterceptor, HTTPStatus];
@@ -57,7 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     FormsModule,
     SharedPipesModule,
   ],
-  declarations: [AppComponent, LoaderComponent],
+  declarations: [AppComponent],
   providers: [
     ApiService,
     AuthGuard,
@@ -71,6 +71,7 @@ export function createTranslateLoader(http: HttpClient) {
     JwtHelper,
     HealthService,
     AlertHandlerService,
+    ChartService,
     Interceptors_Services,
     {
       provide: HTTP_INTERCEPTORS,

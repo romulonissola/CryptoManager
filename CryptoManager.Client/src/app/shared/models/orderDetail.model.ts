@@ -1,6 +1,7 @@
 export class OrderDetail {
   id: string;
-  date: Date;
+  boughtDate: Date;
+  soldDate: Date | null;
   exchangeName: string;
   baseAssetSymbol: string;
   quoteAssetSymbol: string;

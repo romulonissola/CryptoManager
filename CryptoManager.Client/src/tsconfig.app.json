@@ -2,7 +2,7 @@
   "extends": "../tsconfig.json",
   "files": ["polyfills.ts", "main.ts"],
   "compilerOptions": {
-    "lib": ["es6", "dom"],
+    "lib": ["es2017", "dom"],
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "types": []

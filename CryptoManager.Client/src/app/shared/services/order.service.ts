@@ -23,7 +23,9 @@ export class OrderService {
     );
   }
 
-  getAllByLoggedUser(getOrdersCriteria: GetOrdersCriteria): Observable<any> {
+  getAllByLoggedUser(
+    getOrdersCriteria: GetOrdersCriteria
+  ): Observable<OrderDetail[]> {
     var queryString = new URLSearchParams(getOrdersCriteria as {}).toString();
     return this.apiService.get(
       `${this.serviceURL}/GetOrderDetailsByApplicationUser?${queryString}`,
