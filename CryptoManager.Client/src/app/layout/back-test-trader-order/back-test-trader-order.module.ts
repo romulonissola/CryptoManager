@@ -7,7 +7,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { BackTestTraderOrderComponent } from "./back-test-trader-order.component";
-
+import { CandleStickChartModule } from "../../shared/candle-stick-chart/candle-stick-chart.module";
 @NgModule({
   declarations: [BackTestTraderOrderComponent],
   imports: [
@@ -20,6 +20,7 @@ import { BackTestTraderOrderComponent } from "./back-test-trader-order.component
     NgbModule,
     ReactiveFormsModule,
     SharedPipesModule,
+    CandleStickChartModule,
   ],
 })
 export class BackTestTraderOrderModule {}

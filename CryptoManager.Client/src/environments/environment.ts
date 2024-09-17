@@ -5,16 +5,16 @@
 
 export const environment = {
   api: {
-    baseUrl: "https://localhost:62329/api",
-    roboTraderBaseUrl: "https://localhost:7170/api",
-    version: "1.0.0"
+    baseUrl: "https://192.168.1.82:62329/api",
+    roboTraderBaseUrl: "https://192.168.1.82:7170/api",
+    version: "1.0.0",
   },
   login: {
-    path: 'login',
-    defaultRedirectTo: 'dash',
-    facebook:{
-      appId: '1293953147938399'
-    }
+    path: "login",
+    defaultRedirectTo: "dash",
+    facebook: {
+      appId: "1293953147938399",
+    },
   },
-  production: false
+  production: false,
 };
