@@ -50,6 +50,7 @@ namespace CryptoManager.Business
             decimal currentPrice = 0;
             bool isCompleted = false;
             DateTime? soldDate = null;
+            var currentPriceErrorMessage = string.Empty;
             if (order.RelatedOrders != null && order.RelatedOrders.Any())
             {
                 isCompleted = true;
@@ -60,10 +61,19 @@ namespace CryptoManager.Business
             }
             else
             {
-                currentPrice = await _exchangeIntegrationStrategyContext.GetCurrentPriceAsync(
+                var priceResult = await _exchangeIntegrationStrategyContext.GetCurrentPriceAsync(
                     order.BaseAsset.Symbol,
                     order.QuoteAsset.Symbol,
                     order.Exchange.ExchangeType);
+
+                if (priceResult.HasSucceded)
+                {
+                    currentPrice = priceResult.Item;
+                }
+                else
+                {
+                    currentPriceErrorMessage = priceResult.ErrorMessage;
+                }
             }
 
             var valuePaidWithFees = orderPrice * paidOrderQuantity;
@@ -83,7 +93,8 @@ namespace CryptoManager.Business
                 CurrentPrice = currentPrice,
                 Profit = valueSoldWithFees - valuePaidWithFees,
                 IsCompleted = isCompleted,
-                SoldDate = soldDate
+                SoldDate = soldDate,
+                CurrentPriceErrorMessage = currentPriceErrorMessage
             };
         }
 

@@ -15,6 +15,10 @@ export const environment = {
     facebook: {
       appId: "1293953147938399",
     },
+    google: {
+      appId:
+        "385478011304-h6bcrfgf57vp90prfe83el2pp1l2phla.apps.googleusercontent.com",
+    },
   },
   production: false,
 };

@@ -1,26 +1,35 @@
 <div [@routerTransition] id="particles-js">
-    <div class="row mainlogin">
-        <div>
-            <a [routerLink]="['/health']">
-                <i class="fa fa-fw fa-heartbeat" [ngClass]="getColorByStatus(generalStatus)"></i>
-            </a>
-            <h1>Estou Rico</h1>
-            <app-list-errors [errors]="errors"></app-list-errors>
-            <form role="form">
-                <!-- <div class="form-content">
-                    <div class="form-group">
-                        <input type="text" ng-model="name" class="form-control input-underline input-lg" placeholder="Email">
-                    </div>
+  <div class="row mainlogin">
+    <div>
+      <a [routerLink]="['/health']">
+        <i
+          class="fa fa-fw fa-heartbeat"
+          [ngClass]="getColorByStatus(generalStatus)"
+        ></i>
+      </a>
+      <h1>Estou Rico</h1>
+      <app-list-errors [errors]="errors"></app-list-errors>
+      <form role="form">
+        <!-- facebook integration has been disabled, to reenabled we will need to pass the facebook screen
+         <a class="btn rounded-btn" (click)="onFacebookLogin()">
+          {{ "Facebook Login" | translate }}
+          <img
+            src="assets/images/facebooklogo.png"
+            width="30px"
+            class="facebook-logo"
+        /></a> -->
 
-                    <div class="form-group">
-                        <input type="password" class="form-control input-underline input-lg" placeholder="Password">
-                    </div>
-                </div>
-                <a class="btn rounded-btn" (click)="onLoggedin()"> Log in </a>
-                &nbsp;
-                <a class="btn rounded-btn" [routerLink]="['/signup']">Register</a> -->
-                <a class="btn rounded-btn" (click)="onFacebookLogin()"> {{ 'Facebook Login' | translate }} <img src="assets/images/facebooklogo.png" width="30px" class="facebook-logo"/></a>
-            </form>
-        </div>
+        <div
+          class="btn rounded-btn"
+          id="buttonDiv"
+          data-type="standard"
+          data-shape="pill"
+          data-theme="filled_black"
+          data-text="signin_with"
+          data-size="large"
+          data-logo_alignment="right"
+        ></div>
+      </form>
     </div>
+  </div>
 </div>

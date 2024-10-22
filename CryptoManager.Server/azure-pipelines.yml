@@ -2,8 +2,8 @@
   - master
 
 variables:
-  azureSubscription: "all items"
-  webAppName: "cryptomanager-server"
+  azureSubscription: 'all items'
+  webAppName: 'cryptomanager-server'
 
 stages:
   - stage: Build
@@ -17,7 +17,7 @@ stages:
 
         steps:
           - task: mattlabrum.build-task.custom-build-task.downloadsSecureFile@0
-            displayName: "Download appsettings from library file secrets"
+            displayName: 'Download appsettings from library file secrets'
             inputs:
               fileInput: secrets.json
               targetPath: CryptoManager.Server/CryptoManager.WebApi/
@@ -27,38 +27,32 @@ stages:
             displayName: Restore
             inputs:
               command: restore
-              projects: "**/*.csproj"
+              projects: '**/*.csproj'
 
           - task: DotNetCoreCLI@2
-            displayName: Build
-            inputs:
-              projects: "**/*.csproj"
-              arguments: "--configuration $(BuildConfiguration)"
-
-          - task: DotNetCoreCLI@2
-            displayName: "dotnet test"
+            displayName: 'dotnet test'
             inputs:
               command: test
-              projects: "**/*Test/*.csproj"
+              projects: '**/*Test/*.csproj'
               arguments: '--collect "Code coverage"'
 
           - task: DotNetCoreCLI@2
             displayName: Publish
             inputs:
               command: publish
-              arguments: "--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)"
+              arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
 
           - task: PublishBuildArtifacts@1
-            displayName: "Publish Artifact: drop"
+            displayName: 'Publish Artifact: drop'
             inputs:
-              PathtoPublish: "$(build.artifactstagingdirectory)"
+              PathtoPublish: '$(build.artifactstagingdirectory)'
 
   - stage: Test_deployment
     displayName: Test deployment
     jobs:
       - template: azure-deploy.yml
         parameters:
-          environment: "test"
+          environment: 'test'
           azureSubscription: $(azureSubscription)
           webAppName: $(webAppName)
 
@@ -67,6 +61,6 @@ stages:
     jobs:
       - template: azure-deploy.yml
         parameters:
-          environment: "prod"
+          environment: 'prod'
           azureSubscription: $(azureSubscription)
           webAppName: $(webAppName)

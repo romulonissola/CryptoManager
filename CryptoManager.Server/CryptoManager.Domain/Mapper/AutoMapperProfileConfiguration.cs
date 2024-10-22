@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CryptoManager.Domain.DTOs;
 using CryptoManager.Domain.Entities;
+using CryptoManager.Domain.IntegrationEntities.Facebook;
+using Google.Apis.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +28,19 @@ namespace CryptoManager.Domain.Mapper
             CreateMap<OrderDTO, Order>();
             CreateMap<OrderItem, OrderItemDTO>();
             CreateMap<OrderItemDTO, OrderItem>();
-            //CreateMap<ProductViewModel, SimpleKeyValueViewModel>().ForMember(dest => dest.Name,
-            //                                                                    opt => opt.MapFrom(src => src.UnitofMeasureName))
-            //                                                                    .ForMember(dest => dest.Id,
-            //                                                                    opt => opt.MapFrom(src => src.UnitofMeasureId));
-            //CreateMap<ProductUnitofMeasureConversion, SimpleKeyValueViewModel>().ForMember(dest => dest.Name,
-            //                                                                    opt => opt.MapFrom(src => src.UnitofMeasure.Name))
-            //                                                                    .ForMember(dest => dest.Id,
-            //                                                                    opt => opt.MapFrom(src => src.UnitofMeasureId));
+            CreateMap<FacebookUserData, ApplicationUser>()
+                .ForMember(dest => dest.FacebookId, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.PictureUrl, opts => opts.MapFrom(src => src.Picture.Data.Url))
+                .ForMember(dest => dest.Id, opts => opts.Ignore());
+            CreateMap<GoogleJsonWebSignature.Payload, ApplicationUser>()
+                .ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.Email))
+                .ForMember(dest => dest.GoogleId, opts => opts.MapFrom(src => src.Subject))
+                .ForMember(dest => dest.EmailConfirmed, opts => opts.MapFrom(src => src.EmailVerified))
+                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.GivenName))
+                .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.FamilyName))
+                .ForMember(dest => dest.Locale, opts => opts.MapFrom(src => src.Locale))
+                .ForMember(dest => dest.PictureUrl, opts => opts.MapFrom(src => src.Picture));
         }
     }
 }

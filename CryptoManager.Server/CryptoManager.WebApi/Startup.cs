@@ -46,6 +46,8 @@ namespace CryptoManager.WebApi
             WebUtil.FacebookAppId = _configuration["Authentication:Facebook:AppId"];
             WebUtil.FacebookAppSecret = _configuration["Authentication:Facebook:AppSecret"];
             WebUtil.SuperUserEmail = _configuration["Authentication:SuperUserEmail"];
+            WebUtil.GoogleAppId = _configuration["Authentication:Google:AppId"];
+            WebUtil.GoogleAppSecret = _configuration["Authentication:Google:AppSecret"];
 
             if (_configuration["DatabaseProvider"] == "SQLite")
             {
@@ -63,12 +65,6 @@ namespace CryptoManager.WebApi
             services.AddHealthChecks()
                 .AddCheck<ExchangeIntegrationHealthCheck>("ExchangeIntegrationPing");
 
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = WebUtil.FacebookAppId;
-                facebookOptions.AppSecret = WebUtil.FacebookAppSecret;
-            });
-
             services.AddSingleton<JwtFactory>();
 
             services.AddCors();
@@ -83,23 +79,30 @@ namespace CryptoManager.WebApi
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
+            {
+                options.Authority = _configuration["IdentityUrl"];
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.Authority = _configuration["IdentityUrl"];
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false,
-                        //ValidAudience = "the audience you want to validate",
-                        ValidateIssuer = false,
-                        //ValidIssuer = "https://www.facebook.com/",
+                    ValidateAudience = false,
+                    //ValidAudience = "the audience you want to validate",
+                    ValidateIssuer = false,
 
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebUtil.JwtKeyName)),
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(WebUtil.JwtKeyName)),
 
-                        ValidateLifetime = true, //validate the expiration and not before values in the token
+                    ValidateLifetime = true, //validate the expiration and not before values in the token
 
-                        ClockSkew = TimeSpan.FromMinutes(5), //5 minute tolerance for the expiration date
-                    };
-                });
+                    ClockSkew = TimeSpan.FromMinutes(5), //5 minute tolerance for the expiration date
+                };
+            }).AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = WebUtil.FacebookAppId;
+                facebookOptions.AppSecret = WebUtil.FacebookAppSecret;
+            }).AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = WebUtil.GoogleAppId;;
+                googleOptions.ClientSecret = WebUtil.GoogleAppSecret;;
+            });
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {

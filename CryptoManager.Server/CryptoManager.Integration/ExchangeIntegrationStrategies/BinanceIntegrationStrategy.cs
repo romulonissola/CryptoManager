@@ -25,7 +25,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 throw new ArgumentNullException(nameof(binanceIntegrationClient));
         }
 
-        public async Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
+        public async Task<ObjectResult<decimal>> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
         {
             var symbol = $"{baseAssetSymbol}{quoteAssetSymbol}";
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.Binance, symbol);
@@ -36,22 +36,17 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 await _cache.AddAsync(listPrices, ExchangesIntegratedType.Binance, a => a.Symbol);
                 if(price == null)
                 {
-                    throw new InvalidOperationException($"symbol {symbol} not exists in Binance");
+                    return ObjectResult<decimal>.Error($"symbol {symbol} not exists in Binance");
                 }
             }
-            return decimal.Parse(price.Price);
+            return ObjectResult<decimal>.Success(decimal.Parse(price.Price));
         }
 
         public async Task<SimpleObjectResult> TestIntegrationUpAsync()
         {
             try
             {
-                var response = await GetCurrentPriceAsync("BTC", "USDT");
-                if (response == decimal.Zero)
-                {
-                    return SimpleObjectResult.Error("BTCUSDT = 0");
-                }
-                return SimpleObjectResult.Success();
+                return await GetCurrentPriceAsync("BTC", "USDT");
             }
             catch (Exception ex)
             {

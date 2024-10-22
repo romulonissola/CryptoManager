@@ -7,5 +7,7 @@
         public static string FacebookAppId { get; set; }
         public static string FacebookAppSecret { get; set; }
         public static string SuperUserEmail { get; set; }
+        public static string GoogleAppId { get; set; }
+        public static string GoogleAppSecret { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             _bitcoinTradeIntegrationClient = bitcoinTradeIntegrationClient;
         }
 
-        public async Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
+        public async Task<ObjectResult<decimal>> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
         {
             //bitcointrade has pairs inverted use BRLBTC instead BTCBRL
             var symbol = $"{quoteAssetSymbol}{baseAssetSymbol}";
@@ -40,12 +40,12 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
 
                 if(response.Data == null)
                 {
-                    throw new InvalidOperationException($"symbol {symbol} not exists in Bitcointrade");
+                    return ObjectResult<decimal>.Error($"symbol {symbol} not exists in Bitcointrade");
                 }
                 price = response.Data;
                 await _cache.AddAsync(price, ExchangesIntegratedType.BitcoinTrade, symbol);
             }
-            return price.Sell;
+            return ObjectResult<decimal>.Success(price.Sell);
         }
 
         public async Task<SimpleObjectResult> TestIntegrationUpAsync()

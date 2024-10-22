@@ -2,7 +2,6 @@ using CryptoManager.Domain.DTOs;
 using CryptoManager.WebApi.Test.Mocks;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;

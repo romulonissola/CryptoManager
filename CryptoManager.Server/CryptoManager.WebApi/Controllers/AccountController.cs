@@ -8,6 +8,7 @@ using AutoMapper;
 using CryptoManager.Domain.Entities;
 using CryptoManager.Domain.IntegrationEntities.Facebook;
 using CryptoManager.WebApi.Utils;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -85,63 +86,71 @@ namespace CryptoManager.WebApi.Controllers
                 var userInfo = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
 
                 // 4. ready to create the local user account (if necessary) and jwt
-                var user = await _userManager.FindByEmailAsync(userInfo.Email);
-
-                if (user == null)
-                {
-                    var appUser = new ApplicationUser
-                    {
-                        FirstName = userInfo.FirstName,
-                        LastName = userInfo.LastName,
-                        FacebookId = userInfo.Id,
-                        Email = userInfo.Email,
-                        UserName = userInfo.Email,
-                        Gender = userInfo.Gender,
-                        Locale = userInfo.Locale,
-                        PictureUrl = userInfo.Picture.Data.Url
-                    };
-
-                    var result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));                    
-                    if (!result.Succeeded)
-                        return new BadRequestObjectResult(result);
-
-                    result = await AddSuperUserInRoleAdmin(appUser);
-                    if (result != null && !result.Succeeded)
-                        return new BadRequestObjectResult(result);
-                }
-                else
-                {
-                    user.FirstName = userInfo.FirstName;
-                    user.LastName = userInfo.LastName;
-                    user.FacebookId = userInfo.Id;
-                    user.Email = userInfo.Email;
-                    user.UserName = userInfo.Email;
-                    user.Gender = userInfo.Gender;
-                    user.Locale = userInfo.Locale;
-                    user.PictureUrl = userInfo.Picture.Data.Url;
-
-                    var result = await _userManager.UpdateAsync(user);
-                    if (!result.Succeeded)
-                        return new BadRequestObjectResult(result);
-
-                    result = await AddSuperUserInRoleAdmin(user);
-                    if (result != null && !result.Succeeded)
-                        return new BadRequestObjectResult(result);
-                }
-
-                var localUser = await _userManager.FindByEmailAsync(userInfo.Email);
-
-                if (localUser == null)
-                {
-                    return new BadRequestObjectResult("login_failure - message:Failed to create local user account.");
-                }
-                await _signInManager.SignInAsync(localUser, true, "Bearer");
-                return new OkObjectResult(await GenerateToken(localUser));
+                return await GetOrCreateUser(_mapper.Map<ApplicationUser>(userInfo));
             }
             catch (Exception ex)
             {
                 return new BadRequestObjectResult(ex.Message);
             }
+        }
+
+        [HttpPost("ExternalLoginGoogle")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ObjectResult), 400)]
+        [ProducesResponseType(typeof(ObjectResult), 200)]
+        public async Task<IActionResult> ExternalLoginGoogle(string token)
+        {
+            try
+            {
+                var userInfo = await GoogleJsonWebSignature.ValidateAsync(token);
+                return await GetOrCreateUser(_mapper.Map<ApplicationUser>(userInfo));
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        private async Task<IActionResult> GetOrCreateUser(ApplicationUser userInfo)
+        {
+            var user = await _userManager.FindByEmailAsync(userInfo.Email);
+
+            if (user == null)
+            {
+                var result = await _userManager.CreateAsync(userInfo, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));                    
+                if (!result.Succeeded)
+                    return new BadRequestObjectResult(result);
+
+                result = await AddSuperUserInRoleAdmin(userInfo);
+                if (result != null && !result.Succeeded)
+                    return new BadRequestObjectResult(result);
+            }
+            else
+            {
+                user.FacebookId = userInfo.FacebookId;
+                user.GoogleId = userInfo.GoogleId;
+                user.FirstName = userInfo.FirstName;
+                user.LastName = userInfo.LastName;
+                user.PictureUrl = userInfo.PictureUrl;
+                user.Gender = userInfo.Gender;
+                user.Locale = userInfo.Locale;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                    return new BadRequestObjectResult(result);
+
+                result = await AddSuperUserInRoleAdmin(user);
+                if (result != null && !result.Succeeded)
+                    return new BadRequestObjectResult(result);
+            }
+
+            user = await _userManager.FindByEmailAsync(userInfo.Email);
+
+            if (user == null)
+            {
+                return new BadRequestObjectResult("login_failure - message:Failed to create local user account.");
+            }
+            await _signInManager.SignInAsync(user, true, "Bearer");
+            return new OkObjectResult(await GenerateToken(user));
         }
 
         private async Task<IdentityResult> AddSuperUserInRoleAdmin(ApplicationUser user)
