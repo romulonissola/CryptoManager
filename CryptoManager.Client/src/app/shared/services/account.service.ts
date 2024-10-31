@@ -38,7 +38,7 @@ export class AccountService {
         let user = this.createUserModel(this.jwtService.getToken());
         this.setAuth(user);
       }
-    } else {
+    } else if (localStorage.getItem("isLoggedin") == "true") {
       this.purgeAuth();
     }
   }
@@ -102,11 +102,43 @@ export class AccountService {
     });
   }
 
+  googleLogin(token: string): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      return this.authGoogleUser(token).subscribe(
+        (data) => {
+          observer.next(data);
+        },
+        (error) => {
+          observer.error(error);
+          this.purgeAuth();
+        }
+      );
+    });
+  }
+
   authFacebookUser(accessToken: string): Observable<boolean> {
     let httpParams = new HttpParams().append("accessToken", accessToken);
     return this.apiService
       .post(
         this.serviceURL + "/ExternalLoginFacebook",
+        null,
+        httpParams,
+        ApiType.CryptoManagerServerApi
+      )
+      .pipe(
+        map((data) => {
+          let user = this.createUserModel(data);
+          this.setAuth(user);
+          return true;
+        })
+      );
+  }
+
+  authGoogleUser(accessToken: string): Observable<boolean> {
+    let httpParams = new HttpParams().append("token", accessToken);
+    return this.apiService
+      .post(
+        this.serviceURL + "/ExternalLoginGoogle",
         null,
         httpParams,
         ApiType.CryptoManagerServerApi

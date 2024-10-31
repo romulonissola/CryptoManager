@@ -4,8 +4,8 @@ namespace CryptoManager.Domain.DTOs
     public class SimpleObjectResult
     {
         public bool HasSucceded => string.IsNullOrWhiteSpace(ErrorMessage);
-        public string ErrorMessage { get; private set; }
-        public string SuccessMessage { get; private set; }
+        public string ErrorMessage { get; protected set; }
+        public string SuccessMessage { get; protected set; }
 
         public static SimpleObjectResult Success(string successMessage = null)
         {

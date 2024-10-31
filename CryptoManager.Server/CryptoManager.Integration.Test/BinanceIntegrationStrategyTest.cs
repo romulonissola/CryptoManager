@@ -33,12 +33,12 @@ namespace CryptoManager.Integration.Test
 
             var strategy = new BinanceIntegrationStrategy(cacheMock.Object, clientMock.Object);
             var price = await strategy.GetCurrentPriceAsync("LTC","BTC");
-            Assert.True(price > 0);
+            Assert.True(price.Item > 0);
         }
 
 
         [Fact]
-        public async Task Should_Return_Exception_When_Symbol_Not_Exists_In_Exchange_Async()
+        public async Task Should_Return_Error_When_Symbol_Not_Exists_In_Exchange_Async()
         {
             TickerPrice ticker = null;
             var symbol = "nuncaterajsdhjkdhsajkdh";
@@ -56,8 +56,9 @@ namespace CryptoManager.Integration.Test
                 .ReturnsAsync(new[] { new TickerPrice { Price = "1", Symbol = "LTCBTC" } });
 
             var strategy = new BinanceIntegrationStrategy(cacheMock.Object, clientMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh"));
-            Assert.Equal($"symbol {symbol} not exists in Binance", ex.Message);
+            var result = await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh");
+            Assert.False(result.HasSucceded);
+            Assert.Equal($"symbol {symbol} not exists in Binance", result.ErrorMessage);
         }
     }
 }

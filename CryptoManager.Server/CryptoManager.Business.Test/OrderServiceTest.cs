@@ -148,7 +148,7 @@ namespace CryptoManager.Business.Test
             };
 
             _strategyContext.Setup(strategy => strategy.GetCurrentPriceAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ExchangesIntegratedType>()))
-                .ReturnsAsync(10);
+                .ReturnsAsync(ObjectResult<decimal>.Success(10));
 
             _repositoryMock.Setup(repo => repo.GetAllByApplicationUserAsync(It.IsAny<GetOrdersCriteria>())).ReturnsAsync(orderList);
 

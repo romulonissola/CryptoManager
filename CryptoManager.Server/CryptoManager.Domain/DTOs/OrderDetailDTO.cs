@@ -19,5 +19,6 @@ namespace CryptoManager.Domain.DTOs
         public DateTime BoughtDate { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime? SoldDate { get; set; }
+        public string CurrentPriceErrorMessage { get; set; }
     }
 }

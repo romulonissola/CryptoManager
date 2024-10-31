@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CryptoManager.Domain\CryptoManager.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Refit" Version="6.3.2" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
-    <PackageReference Include="Polly" Version="7.2.3" />
+    <PackageReference Include="Refit" Version="7.2.1" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="7.2.1" />
+    <PackageReference Include="Polly" Version="8.4.1" />
   </ItemGroup>
 </Project>

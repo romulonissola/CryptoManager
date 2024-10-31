@@ -35,7 +35,7 @@ namespace CryptoManager.Integration.Test
 
             var strategy = new BitcoinTradeIntegrationStrategy(cacheMock.Object, clientMock.Object);
             var price = await strategy.GetCurrentPriceAsync("BTC", "BRL");
-            Assert.True(price > 0);
+            Assert.True(price.Item > 0);
         }
 
 
@@ -58,8 +58,9 @@ namespace CryptoManager.Integration.Test
                 .ReturnsAsync(new ResponseData<TickerPrice> { Code = "200", Data = null });
 
             var strategy = new BitcoinTradeIntegrationStrategy(cacheMock.Object, clientMock.Object);
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(async () => await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh"));
-            Assert.Equal($"symbol {symbol} not exists in Bitcointrade", ex.Message);
+            var result = await strategy.GetCurrentPriceAsync("nuncatera", "jsdhjkdhsajkdh");
+            Assert.False(result.HasSucceded);
+            Assert.Equal($"symbol {symbol} not exists in Bitcointrade", result.ErrorMessage);
         }
     }
 }

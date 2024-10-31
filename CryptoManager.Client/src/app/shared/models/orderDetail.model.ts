@@ -12,4 +12,5 @@ export class OrderDetail {
   valueSoldWithFees: number;
   profit: number;
   isCompleted: boolean;
+  currentPriceErrorMessage: string;
 }

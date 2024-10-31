@@ -17,7 +17,7 @@ namespace CryptoManager.Integration
             _strategies = strategies ?? throw new ArgumentNullException(nameof(strategies));
         }
 
-        public Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol, ExchangesIntegratedType exchangesIntegratedType)
+        public Task<ObjectResult<decimal>> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol, ExchangesIntegratedType exchangesIntegratedType)
         {
             var strategy = ResolveStrategy(exchangesIntegratedType);
             return strategy.GetCurrentPriceAsync(baseAssetSymbol, quoteAssetSymbol);

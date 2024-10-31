@@ -6,7 +6,7 @@ namespace CryptoManager.Domain.Contracts.Integration
 {
     public interface IExchangeIntegrationStrategyContext
     {
-        Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol, ExchangesIntegratedType exchangesIntegratedType);
+        Task<ObjectResult<decimal>> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol, ExchangesIntegratedType exchangesIntegratedType);
         Task<SimpleObjectResult> TestIntegrationUpAsync(ExchangesIntegratedType exchangesIntegratedType);
     }
 }

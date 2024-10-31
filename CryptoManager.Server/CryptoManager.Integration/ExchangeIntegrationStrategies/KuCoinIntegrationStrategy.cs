@@ -22,7 +22,7 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
             _kuCoinIntegrationClient = kuCoinIntegrationClient;
         }
 
-        public async Task<decimal> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
+        public async Task<ObjectResult<decimal>> GetCurrentPriceAsync(string baseAssetSymbol, string quoteAssetSymbol)
         {
             var symbol = $"{baseAssetSymbol}-{quoteAssetSymbol}";
             var price = await _cache.GetAsync<TickerPrice>(ExchangesIntegratedType.KuCoin, symbol);
@@ -31,12 +31,12 @@ namespace CryptoManager.Integration.ExchangeIntegrationStrategies
                 var response = await _kuCoinIntegrationClient.GetTickerPriceAsync(symbol);
                 if(response.Data == null)
                 {
-                    throw new System.InvalidOperationException($"symbol {symbol} not exists in KuCoin");
+                    return ObjectResult<decimal>.Error($"symbol {symbol} not exists in KuCoin");
                 }
                 price = response.Data;
                 await _cache.AddAsync(price, ExchangesIntegratedType.KuCoin, symbol);
             }
-            return decimal.Parse(price.Price);
+            return ObjectResult<decimal>.Success(decimal.Parse(price.Price));
         }
 
         public async Task<SimpleObjectResult> TestIntegrationUpAsync()
