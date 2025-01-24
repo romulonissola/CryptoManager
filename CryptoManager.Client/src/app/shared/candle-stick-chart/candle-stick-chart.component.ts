@@ -90,7 +90,7 @@ export class CandleStickChartComponent {
         price: customSeriesOrder.sold,
       };
       const defaultOptions = {
-        labelBackgroundColor: "rgba(0, 0, 0, 0.85)",
+        labelBackgroundColor: "rgba(0, 0, 0, 0.25)",
         labelTextColor: "rgb(255, 255, 255)",
         profitableTradeColor: "rgba(100, 200, 50, 0.5)",
         unprofitableTradeColor: "rgba(242, 54, 69, 0.5)",

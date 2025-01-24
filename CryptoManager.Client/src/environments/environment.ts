@@ -5,8 +5,8 @@
 
 export const environment = {
   api: {
-    baseUrl: "https://192.168.1.82:62329/api",
-    roboTraderBaseUrl: "https://192.168.1.82:7170/api",
+    baseUrl: "https://localhost:62329/api",
+    roboTraderBaseUrl: "https://localhost:7170/api",
     version: "1.0.0",
   },
   login: {

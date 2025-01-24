@@ -28,6 +28,9 @@ td.right {
 .back-test-items {
   display: flex;
   padding: 10px;
+  div {
+    padding-right: 10px;
+  }
 }
 
 .back-test-item {
