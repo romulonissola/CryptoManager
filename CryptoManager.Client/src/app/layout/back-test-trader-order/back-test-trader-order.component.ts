@@ -80,10 +80,10 @@ export class BackTestTraderOrderComponent implements OnInit {
   }
 
   search(backTest: BackTestSetupTrader) {
-    this.getCandles(backTest);
+    this.getOrders(backTest, backTest.fromDate, backTest.toDate);
   }
 
-  getOrders(startDate: string, endDate: string) {
+  getOrders(backTest: BackTestSetupTrader, startDate: string, endDate: string) {
     this.orderService
       .getAllByLoggedUser({
         isViaRoboTrader: true,
@@ -104,7 +104,7 @@ export class BackTestTraderOrderComponent implements OnInit {
             (total, s) => total + s.profit,
             0
           );
-          this.chart.renderChart(this.candles, this.orders);
+          this.getCandles(backTest);
         },
         () =>
           this.alertHandlerService.createAlert(
@@ -158,32 +158,35 @@ export class BackTestTraderOrderComponent implements OnInit {
   }
 
   getCandles(backTest: BackTestSetupTrader) {
-    this.chartService
-      .getCandles({
-        baseAssetSymbol: "SOL",
-        quoteAssetSymbol: "BTC",
-        fromDate: backTest.fromDate,
-        toDate: backTest.toDate,
-        intervalType: IntervalType.FiveMinutes,
-      })
-      .pipe(take(1))
-      .subscribe(
-        (data) => {
-          if (!data.hasSucceded) {
+    var order = this.orders[0]; //TODO: it can have more pairs, create chart for each
+    if (order) {
+      this.chartService
+        .getCandles({
+          baseAssetSymbol: order.baseAssetSymbol,
+          quoteAssetSymbol: order.quoteAssetSymbol,
+          fromDate: backTest.fromDate,
+          toDate: backTest.toDate,
+          intervalType: IntervalType.OneHour,
+        })
+        .pipe(take(1))
+        .subscribe(
+          (data) => {
+            if (!data.hasSucceded) {
+              this.alertHandlerService.createAlert(
+                AlertType.Danger,
+                data.errorMessage
+              );
+            } else {
+              this.candles = data.item;
+              this.chart.renderChart(this.candles, this.orders);
+            }
+          },
+          () =>
             this.alertHandlerService.createAlert(
               AlertType.Danger,
-              data.errorMessage
-            );
-          } else {
-            this.candles = data.item;
-            this.getOrders(backTest.fromDate, backTest.toDate);
-          }
-        },
-        () =>
-          this.alertHandlerService.createAlert(
-            AlertType.Danger,
-            this.translate.instant("CouldNotProcess")
-          )
-      );
+              this.translate.instant("CouldNotProcess")
+            )
+        );
+    }
   }
 }

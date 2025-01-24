@@ -27,7 +27,16 @@
             <div>
               <button
                 class="btn btn-outline-success my-2 my-sm-0"
-                type="submit"
+                type="button"
+                (click)="searchBackTests()"
+              >
+                {{ "Refresh" | translate }}
+              </button>
+            </div>
+            <div>
+              <button
+                class="btn btn-outline-success my-2 my-sm-0"
+                type="button"
                 (click)="search(backTest)"
               >
                 {{ "See Results" | translate }}
@@ -47,12 +56,13 @@
             <div *ngIf="backTest.status === backTestStatusType.Faulty">
               <button
                 class="btn btn-outline-success my-2 my-sm-0"
-                type="submit"
+                type="button"
                 (click)="continueFaulty(backTest.id)"
               >
                 {{ "Continue" | translate }}
               </button>
             </div>
+            <div class="back-test-item">{{ backTest.errorMessage }}</div>
           </div>
         </div>
       </div>
@@ -71,7 +81,7 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th data-field="exchange">{{ "Exchange" | translate }}</th>
+                  <th data-field="date">{{ "Bought on" | translate }}</th>
                   <th data-field="pair">{{ "Pair" | translate }}</th>
                   <th data-field="avgPrice" class="price">
                     {{ "Avg Price" | translate }}
@@ -100,7 +110,7 @@
                   *ngFor="let order of orders"
                   [style.color]="getProfitColor(order.profit)"
                 >
-                  <td>{{ order.exchangeName }}</td>
+                  <td>{{ order.boughtDate }}</td>
                   <td>
                     {{ order.baseAssetSymbol }}/{{ order.quoteAssetSymbol }}
                   </td>
@@ -161,7 +171,7 @@
       </div>
     </div>
   </div>
-  <div class="row" [hidden]="backTests.length === 0">
+  <div class="row" [hidden]="orders.length === 0">
     <div class="col-sm-12">
       <div class="card mb-3">
         <div class="card-header">

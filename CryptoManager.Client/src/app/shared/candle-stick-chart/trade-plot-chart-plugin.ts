@@ -113,17 +113,17 @@ class TradePlotChartPluginPaneRenderer implements ISeriesPrimitivePaneRenderer {
     y: number,
     left: boolean
   ) {
-    scope.context.font = "12px Arial";
+    const offset = 7 * scope.horizontalPixelRatio;
+    scope.context.font = `${offset}px Arial`;
     scope.context.beginPath();
-    const offset = 5 * scope.horizontalPixelRatio;
     const textWidth = scope.context.measureText(text);
     const leftAdjustment = left ? textWidth.width + offset * 4 : 0;
     scope.context.fillStyle = this._options.labelBackgroundColor;
     scope.context.roundRect(
       x + offset - leftAdjustment,
-      y - 24,
+      y - 16,
       textWidth.width + offset * 2,
-      24 + offset,
+      16 + offset,
       5
     );
     scope.context.fill();
@@ -219,7 +219,7 @@ export interface TradePlotChartPluginOptions {
 }
 
 const defaultOptions: TradePlotChartPluginOptions = {
-  labelBackgroundColor: "rgba(0, 0, 0, 0.85)",
+  labelBackgroundColor: "rgba(0, 0, 0, 0.80)",
   labelTextColor: "rgb(255, 255, 255)",
   profitableTradeColor: "rgba(100, 200, 50, 0.5)",
   unprofitableTradeColor: "rgba(242, 54, 69, 0.5)",

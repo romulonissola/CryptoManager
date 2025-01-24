@@ -57,7 +57,7 @@ namespace CryptoManager.Business
                 var relatedOrder = order.RelatedOrders.First();
                 currentPrice = CalculateAveragePrice(relatedOrder.OrderItems.ToList());
                 soldOrderQuantity = relatedOrder.OrderItems.Sum(a => a.Quantity);
-                soldDate = relatedOrder.Date;
+                soldDate = new(relatedOrder.Date.Ticks, DateTimeKind.Utc);
             }
             else
             {
@@ -78,11 +78,10 @@ namespace CryptoManager.Business
 
             var valuePaidWithFees = orderPrice * paidOrderQuantity;
             var valueSoldWithFees = currentPrice * soldOrderQuantity;
-
             return new OrderDetailDTO
             {
                 Id = order.Id,
-                BoughtDate = order.Date,
+                BoughtDate = new(order.Date.Ticks, DateTimeKind.Utc),
                 ExchangeName = order.Exchange.Name,
                 BaseAssetSymbol = order.BaseAsset.Symbol,
                 QuoteAssetSymbol = order.QuoteAsset.Symbol,
